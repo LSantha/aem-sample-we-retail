@@ -57,7 +57,7 @@ public class ProductGridItemTest {
         when(resourceResolver.map(request, "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"))
             .thenReturn("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg");
 
-        ProductGridItem item = ProductGridItem.fromProductListItem(listItem, page, request);
+        ProductGridItem item = ProductGridItem.fromProductListItem(listItem, page, request, listItem.getURL());
 
         assertTrue(item.exists());
         assertEquals("footwear", item.getDescription());

@@ -60,6 +60,10 @@ public class ProductGridItem {
     }
 
     public static ProductGridItem fromProduct(Product product, Page page, SlingHttpServletRequest request) {
+        return fromProduct(product, page, request, null);
+    }
+
+    public static ProductGridItem fromProduct(Product product, Page page, SlingHttpServletRequest request, String resolvedPath) {
         ProductInterface productData = CifProductViewSupport.fetchProduct(product);
         Optional<Metadata> metadata = LegacyProductPresentationSupport.metadata(LegacyProductPresentationSupport.productResource(page), page);
         String image = LegacyProductPresentationSupport.resolveImageReference(
@@ -78,11 +82,12 @@ public class ProductGridItem {
             product.getName(),
             LegacyProductPresentationSupport.legacyDescription(metadata, CifProductViewSupport.descriptionLabel(productData)),
             resolvedPrice,
-            pagePath,
+            StringUtils.defaultIfBlank(resolvedPath, pagePath),
             buildFilters(productData, resolvedPrice));
     }
 
-    public static ProductGridItem fromProductListItem(ProductListItem productListItem, Page page, SlingHttpServletRequest request) {
+    public static ProductGridItem fromProductListItem(ProductListItem productListItem, Page page, SlingHttpServletRequest request,
+        String resolvedUrl) {
         ProductInterface product = productListItem.getProduct();
         String resolvedPrice = CifProductViewSupport.formatPrice(productListItem.getPriceRange());
         Optional<Metadata> metadata = LegacyProductPresentationSupport.metadata(LegacyProductPresentationSupport.productResource(page), page);
@@ -97,7 +102,7 @@ public class ProductGridItem {
             productListItem.getTitle(),
             LegacyProductPresentationSupport.legacyDescription(metadata, CifProductViewSupport.descriptionLabel(product)),
             resolvedPrice,
-            StringUtils.defaultIfBlank(productListItem.getURL(), productListItem.getPath()),
+            StringUtils.defaultIfBlank(resolvedUrl, StringUtils.defaultIfBlank(productListItem.getURL(), productListItem.getPath())),
             buildFilters(product, resolvedPrice));
     }
 

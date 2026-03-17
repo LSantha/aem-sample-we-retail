@@ -33,7 +33,6 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.via.ResourceSuperType;
 import org.apache.sling.models.factory.ModelFactory;
-
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
@@ -42,6 +41,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 import we.retail.core.commerce.cif.models.CifModelAdapter;
+import we.retail.core.commerce.cif.models.GenericRouteSupport;
 import we.retail.core.commerce.cif.models.LegacyCommercePageSupport;
 
 @Model(
@@ -75,6 +75,11 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     private void initModel() {
         if (LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
             items = buildRouteItems();
+            if (hasUsableRouteItems(items)) {
+                return;
+            }
+
+            items = buildLegacyRouteItems();
             if (!items.isEmpty()) {
                 return;
             }
@@ -99,6 +104,9 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             if (productList == null || productList.getCategoryRetriever() == null) {
                 return routeItems;
             }
+            if (GenericRouteSupport.isPlaceholderCategoryTitle(productList.getTitle())) {
+                return Collections.emptyList();
+            }
 
             productList.getCategoryRetriever().extendProductQueryWith(query -> query
                 .shortDescription(description -> description.html())
@@ -112,14 +120,53 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
                         .defaultLabel()))));
 
             for (ProductListItem productListItem : productList.getProducts()) {
+                String productUrl = rewriteRouteUrl(StringUtils.defaultIfBlank(productListItem.getURL(), productListItem.getPath()),
+                    "cq:cifProductPage");
                 ProductGridItem item = ProductGridItem.fromProductListItem(productListItem,
-                    resolveProductPage(StringUtils.defaultIfBlank(productListItem.getURL(), productListItem.getPath())), request);
+                    resolveProductPage(productUrl),
+                    request,
+                    productUrl);
                 if (item.exists()) {
                     routeItems.add(item);
                 }
             }
         } catch (RuntimeException e) {
             return Collections.emptyList();
+        }
+
+        return routeItems;
+    }
+
+    private java.util.List<ProductGridItem> buildLegacyRouteItems() {
+        Page categoryPage = GenericRouteSupport.resolveLegacyCategoryPage(pageManager, currentPage, request);
+        Page productsRoot = GenericRouteSupport.findLegacyProductsRoot(pageManager, currentPage);
+        if (categoryPage == null || productsRoot == null) {
+            return Collections.emptyList();
+        }
+
+        java.util.List<ProductGridItem> routeItems = new ArrayList<ProductGridItem>();
+        List<Page> productPages = GenericRouteSupport.collectProductPages(categoryPage);
+
+        for (Page page : productPages) {
+            String sku = LegacyCommercePageSupport.extractSku(page.getContentResource(), page).orElse(null);
+            if (StringUtils.isBlank(sku)) {
+                continue;
+            }
+
+            try {
+                Product product = CifModelAdapter.adaptToProduct(modelFactory, request, resource, sku);
+                if (product == null || !Boolean.TRUE.equals(product.getFound())) {
+                    continue;
+                }
+
+                String routeUrl = buildLegacyRouteProductUrl(page, productsRoot);
+                ProductGridItem item = ProductGridItem.fromProduct(product, page, request, routeUrl);
+                if (item.exists()) {
+                    routeItems.add(item);
+                }
+            } catch (RuntimeException e) {
+                // Ignore broken route references so a single product does not fail the entire grid.
+            }
         }
 
         return routeItems;
@@ -169,6 +216,68 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
         resolvedPath = StringUtils.substringBefore(resolvedPath, "#");
         resolvedPath = StringUtils.substringBefore(resolvedPath, ".html");
         return pageManager.getPage(resolvedPath);
+    }
+
+    private String rewriteRouteUrl(String pathOrUrl, String routePropertyName) {
+        if (StringUtils.isBlank(pathOrUrl)) {
+            return pathOrUrl;
+        }
+
+        String configuredRoute = findConfiguredRoute(routePropertyName);
+        if (StringUtils.isBlank(configuredRoute)) {
+            return pathOrUrl;
+        }
+
+        String configuredPrefix = configuredRoute + ".html";
+        if (StringUtils.startsWith(pathOrUrl, configuredPrefix)) {
+            return pathOrUrl;
+        }
+
+        int htmlIndex = pathOrUrl.indexOf(".html");
+        if (htmlIndex < 0) {
+            return pathOrUrl;
+        }
+
+        return configuredPrefix + pathOrUrl.substring(htmlIndex + ".html".length());
+    }
+
+    private String buildLegacyRouteProductUrl(Page productPage, Page productsRoot) {
+        String configuredRoute = findConfiguredRoute("cq:cifProductPage");
+        String relativePath = GenericRouteSupport.relativeProductPath(productsRoot, productPage);
+        if (StringUtils.isBlank(configuredRoute) || StringUtils.isBlank(relativePath)) {
+            return StringUtils.EMPTY;
+        }
+
+        return configuredRoute + ".html/" + relativePath + ".html";
+    }
+
+    private String findConfiguredRoute(String routePropertyName) {
+        Page page = currentPage;
+        while (page != null) {
+            Resource contentResource = page.getContentResource();
+            if (contentResource != null) {
+                String configuredRoute = contentResource.getValueMap().get(routePropertyName, String.class);
+                if (StringUtils.isNotBlank(configuredRoute)) {
+                    return configuredRoute;
+                }
+            }
+            page = page.getParent();
+        }
+        return StringUtils.EMPTY;
+    }
+
+    private boolean hasUsableRouteItems(List<ProductGridItem> routeItems) {
+        if (routeItems.isEmpty()) {
+            return false;
+        }
+
+        for (ProductGridItem item : routeItems) {
+            if (!GenericRouteSupport.isPlaceholderProductListItem(item.getName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

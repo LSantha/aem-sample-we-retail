@@ -25,19 +25,17 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 
 import we.retail.core.commerce.cif.models.CifModelAdapter;
+import we.retail.core.commerce.cif.models.GenericRouteSupport;
 import we.retail.core.commerce.cif.models.LegacyCommercePageSupport;
+import we.retail.core.commerce.cif.models.LegacyProductPresentationSupport;
 
 @Model(adaptables = SlingHttpServletRequest.class)
 public class ProductModel {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductModel.class);
 
     @SlingObject
     private Resource resource;
@@ -48,6 +46,9 @@ public class ProductModel {
     @ScriptVariable
     private Page currentPage;
 
+    @ScriptVariable
+    private PageManager pageManager;
+
     @OSGiService
     private ModelFactory modelFactory;
 
@@ -56,13 +57,33 @@ public class ProductModel {
     @PostConstruct
     private void initModel() {
         try {
+            if (LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage")) {
+                Product routeProduct = CifModelAdapter.adaptToProduct(modelFactory, request, resource, null);
+                if (isUsableRouteProduct(routeProduct)) {
+                    productItem = new ProductItem(routeProduct, request, currentPage, resource);
+                    return;
+                }
+
+                Page legacyProductPage = GenericRouteSupport.resolveLegacyProductPage(pageManager, currentPage, request);
+                if (legacyProductPage != null) {
+                    String routeSku = LegacyCommercePageSupport.extractSku(legacyProductPage.getContentResource(), legacyProductPage)
+                        .orElse(null);
+                    Product legacyRouteProduct = CifModelAdapter.adaptToProduct(modelFactory, request, resource, routeSku);
+                    if (legacyRouteProduct != null && Boolean.TRUE.equals(legacyRouteProduct.getFound())) {
+                        productItem = new ProductItem(legacyRouteProduct, request, legacyProductPage,
+                            LegacyProductPresentationSupport.productResource(legacyProductPage));
+                        return;
+                    }
+                }
+            }
+
             String sku = LegacyCommercePageSupport.extractSku(resource, currentPage).orElse(null);
             Product product = CifModelAdapter.adaptToProduct(modelFactory, request, resource, sku);
-            if (product != null && Boolean.TRUE.equals(product.getFound())) {
+            if (product != null && Boolean.TRUE.equals(product.getFound()) && !GenericRouteSupport.isPlaceholderProductName(product.getName())) {
                 productItem = new ProductItem(product, request, currentPage, resource);
             }
         } catch (RuntimeException e) {
-            LOGGER.error("Can't extract CIF product from page", e);
+            // Fail soft so route pages can render surrounding authored content even when commerce data is unavailable.
         }
     }
 
@@ -83,5 +104,11 @@ public class ProductModel {
             return StringUtils.substringBefore(productItem.getPagePath(), ".html");
         }
         return currentPage != null ? currentPage.getPath() : resource.getPath();
+    }
+
+    private boolean isUsableRouteProduct(Product product) {
+        return product != null
+            && Boolean.TRUE.equals(product.getFound())
+            && !GenericRouteSupport.isPlaceholderProductName(product.getName());
     }
 }

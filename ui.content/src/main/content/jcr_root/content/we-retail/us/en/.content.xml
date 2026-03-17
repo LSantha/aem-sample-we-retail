@@ -473,6 +473,7 @@
     <equipment/>
     <about-us/>
     <products/>
+    <cif-products/>
     <community/>
     <test-page/>
     <activitystreams jcr:primaryType="nt:unstructured">
