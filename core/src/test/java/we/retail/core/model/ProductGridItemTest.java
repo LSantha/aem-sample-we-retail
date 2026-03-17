@@ -1,57 +1,118 @@
-/*
- *   Copyright 2018 Adobe Systems Incorporated
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
 package we.retail.core.model;
 
-import com.adobe.cq.sightly.WCMBindings;
-import common.AppAemContext;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.wrappers.ValueMapDecorator;
+
+import com.adobe.cq.commerce.core.components.models.common.Price;
+import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
+import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
+import com.adobe.cq.commerce.magento.graphql.ComplexTextValue;
+import com.adobe.cq.commerce.magento.graphql.ConfigurableProduct;
+import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptions;
+import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptionsValues;
+import com.adobe.cq.commerce.magento.graphql.ProductInterface;
+import com.day.cq.wcm.api.Page;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ProductGridItemTest {
 
-    @Rule
-    public final AemContext context = AppAemContext.newAemContext();
+    @Test
+    public void testBuildsFiltersFromConfigurableProduct() {
+        ProductListItem listItem = mock(ProductListItem.class);
+        SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
+        ResourceResolver resourceResolver = mock(ResourceResolver.class);
+        Page page = mock(Page.class);
+        Resource productResource = mock(Resource.class);
+        Resource imageResource = mock(Resource.class);
+        Price price = createPrice("$64.99");
+        ConfigurableProduct product = createConfigurableProduct();
 
-    @Before
-    public void setup() {
-        SlingBindings slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.PAGE_MANAGER, context.pageManager());
+        when(listItem.getImageURL()).thenReturn("https://cdn.example.com/current-cif-image.jpg");
+        when(listItem.getTitle()).thenReturn("Sussex Rain Boots");
+        when(listItem.getURL()).thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots.html");
+        when(listItem.getPriceRange()).thenReturn(price);
+        when(listItem.getProduct()).thenReturn(product);
+        when(request.getResourceResolver()).thenReturn(resourceResolver);
+        when(page.getPath()).thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots");
+        when(page.getContentResource("root/product")).thenReturn(productResource);
+        when(productResource.getValueMap()).thenReturn(valueMap("productData",
+            "/var/commerce/products/we-retail/me/footwear/meotwisus"));
+        when(productResource.getChild("image")).thenReturn(imageResource);
+        when(imageResource.getPath())
+            .thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product/image");
+        when(imageResource.getValueMap()).thenReturn(valueMap("fileReference",
+            "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"));
+        when(resourceResolver.map(request, "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"))
+            .thenReturn("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg");
+
+        ProductGridItem item = ProductGridItem.fromProductListItem(listItem, page, request);
+
+        assertTrue(item.exists());
+        assertEquals("footwear", item.getDescription());
+        assertEquals("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product/image",
+            item.getImageResourcePath());
+        assertTrue(item.getFilters().getColors().contains("red"));
+        assertTrue(item.getFilters().getSizes().contains("9"));
+        assertTrue(item.getFilters().getPrices().contains("$64.99"));
     }
 
-    @Test
-    public void testExists() {
-        context.currentResource("/content/we-retail/us/en/products/equipment/running/fleet-cross-training-shoe/jcr:content");
-        ProductGridItem gridItem = context.request().adaptTo(ProductGridItem.class);
-        assertNotNull(gridItem);
-        assertTrue(gridItem.exists());
-        assertEquals("/var/commerce/products/we-retail/eq/running/eqrusufle/image", gridItem.getImage());
-        assertEquals("Fleet Cross-Training Shoe", gridItem.getName());
-        assertEquals("footwear", gridItem.getDescription());
+    private ConfigurableProduct createConfigurableProduct() {
+        ConfigurableProduct product = mock(ConfigurableProduct.class);
+        CategoryInterface category = createCategory("Men");
+        ComplexTextValue shortDescription = createTextValue("<p>Lightweight training shoe</p>");
+        ConfigurableProductOptions colorOption = createOption("color", "Red");
+        ConfigurableProductOptions sizeOption = createOption("size", "9");
+
+        when(product.getCategories()).thenReturn(Collections.singletonList(category));
+        when(product.getShortDescription()).thenReturn(shortDescription);
+        when(product.getConfigurableOptions()).thenReturn(Arrays.asList(colorOption, sizeOption));
+        return product;
     }
 
-    @Test
-    public void testNotExists() {
-        context.currentResource("/content/we-retail/us/en/about-us/jcr:content");
-        ProductGridItem gridItem = context.request().adaptTo(ProductGridItem.class);
-        assertNotNull(gridItem);
-        assertFalse(gridItem.exists());
+    private ConfigurableProductOptions createOption(String attributeCode, String label) {
+        ConfigurableProductOptions option = mock(ConfigurableProductOptions.class);
+        ConfigurableProductOptionsValues value = mock(ConfigurableProductOptionsValues.class);
+        when(value.getLabel()).thenReturn(label);
+        when(option.getAttributeCode()).thenReturn(attributeCode);
+        when(option.getValues()).thenReturn(Collections.singletonList(value));
+        return option;
+    }
+
+    private CategoryInterface createCategory(String name) {
+        CategoryInterface category = mock(CategoryInterface.class);
+        when(category.getName()).thenReturn(name);
+        return category;
+    }
+
+    private ComplexTextValue createTextValue(String html) {
+        ComplexTextValue textValue = mock(ComplexTextValue.class);
+        when(textValue.getHtml()).thenReturn(html);
+        return textValue;
+    }
+
+    private Price createPrice(String formattedFinalPrice) {
+        Price price = mock(Price.class);
+        when(price.isEmpty()).thenReturn(false);
+        when(price.isRange()).thenReturn(Boolean.FALSE);
+        when(price.getFormattedFinalPrice()).thenReturn(formattedFinalPrice);
+        return price;
+    }
+
+    private ValueMapDecorator valueMap(String key, String value) {
+        Map<String, Object> values = new HashMap<String, Object>();
+        values.put(key, value);
+        return new ValueMapDecorator(values);
     }
 }

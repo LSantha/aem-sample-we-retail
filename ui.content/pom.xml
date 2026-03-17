@@ -117,18 +117,6 @@
                     <properties>
                         <acHandling>merge_preserve</acHandling>
                     </properties>
-                    <dependencies>
-                        <dependency>
-                            <group>adobe/aem6/sample</group>
-                            <name>we.retail.ui.apps</name>
-                            <version>[4.0.0,)</version>
-                        </dependency>
-                        <dependency>
-                            <group>adobe/aem6/sample</group>
-                            <name>we.retail.commons.content</name>
-                            <version>[4.0.0,)</version>
-                        </dependency>
-                    </dependencies>
                 </configuration>
             </plugin>
         </plugins>

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package we.retail.core.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
@@ -41,4 +42,17 @@ public class Button {
         return cssClass;
     }
 
+    public boolean isVisible() {
+        return !isCheckoutFlowLink(linkTo);
+    }
+
+    private boolean isCheckoutFlowLink(String link) {
+        if (StringUtils.isBlank(link) || LINK_TO_DEFAULT.equals(link)) {
+            return false;
+        }
+
+        String normalizedLink = StringUtils.removeEnd(link, ".html");
+        return StringUtils.contains(normalizedLink, "/user/cart")
+            || StringUtils.contains(normalizedLink, "/user/checkout");
+    }
 }

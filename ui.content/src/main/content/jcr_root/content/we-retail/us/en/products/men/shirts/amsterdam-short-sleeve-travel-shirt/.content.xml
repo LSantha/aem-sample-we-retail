@@ -31,7 +31,7 @@
                 cq:lastRolledout="{Date}2016-06-29T14:20:50.564+02:00"
                 cq:lastRolledoutBy="admin"
                 jcr:lastModified="{Date}2016-04-12T01:19:38.272+02:00"
-                jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                jcr:mixinTypes="[cq:LiveRelationship]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="weretail/components/structure/product"
                 productData="/var/commerce/products/we-retail/me/shirts/meotsuamt">
@@ -39,7 +39,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:50.596+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shirts/meotsuamt/size-xs">
@@ -48,14 +48,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:13:36.284-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shirts/Amsterdam.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:50.607+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotsuamt-xs>
@@ -63,7 +63,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:50.609+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shirts/meotsuamt/size-s">
@@ -72,14 +72,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:13:36.284-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shirts/Amsterdam.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:50.620+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotsuamt-s>
@@ -87,7 +87,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:50.622+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shirts/meotsuamt/size-m">
@@ -96,14 +96,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:13:36.284-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shirts/Amsterdam.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:50.632+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotsuamt-m>
@@ -111,7 +111,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:50.634+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shirts/meotsuamt/size-l">
@@ -120,14 +120,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:13:36.284-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shirts/Amsterdam.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:50.646+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotsuamt-l>
@@ -135,7 +135,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:50.649+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shirts/meotsuamt/size-xl">
@@ -144,14 +144,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:13:36.284-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shirts/Amsterdam.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:50.661+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotsuamt-xl>
@@ -159,7 +159,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:50.663+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shirts/meotsuamt/size-xxl">
@@ -168,14 +168,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:13:36.284-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shirts/Amsterdam.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:50.674+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotsuamt-xxl>
@@ -184,14 +184,14 @@
                     cq:lastRolledoutBy="admin"
                     jcr:lastModified="{Date}2016-01-11T16:13:36.284-08:00"
                     jcr:lastModifiedBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="commerce/components/product/image"
                     fileReference="/content/dam/we-retail/en/products/apparel/shirts/Amsterdam.jpg"/>
                 <assets
                     cq:lastRolledout="{Date}2016-06-29T14:20:50.677+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product/assets"/>
             </product>

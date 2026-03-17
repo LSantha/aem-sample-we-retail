@@ -36,7 +36,6 @@ import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.social.community.api.CommunityContext;
 import com.adobe.granite.security.user.UserManagementService;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
@@ -103,6 +102,10 @@ public class Header {
     private String languageRoot;
     private Language currentLanguage;
     private boolean isCommunitiesPage;
+    private boolean profileAvailable;
+    private boolean messagingAvailable;
+    private boolean notificationAvailable;
+    private boolean moderationAvailable;
     private String userPath;
     private Page root;
     private UserManagementService ums;
@@ -131,10 +134,9 @@ public class Header {
             String anonymousId = ums != null ? ums.getAnonymousId() : UserConstants.DEFAULT_ANONYMOUS_ID;
             String userId = resolver.getUserID();
 
-            CommunityContext communityContext = currentPage.adaptTo(CommunityContext.class);
-            if (communityContext != null) {
-                isModerator = communityContext.checkIfUserIsModerator(resolver.adaptTo(UserManager.class), userId);
-            }
+            // Communities APIs are not available on the target SDK, so keep
+            // moderator-specific header behavior disabled when that runtime is absent.
+            isModerator = false;
             isAnonymous = userId == null || userId.equals(anonymousId);
             currentPath = currentPage.getPath();
             signInPath = computePagePath(SIGN_IN_PATH);
@@ -145,6 +147,10 @@ public class Header {
             moderationPath = computePagePath(MODERATION_PATH);
             profilePath = computePagePath(PROFILE_PATH);
             accountPath = ACCOUNT_PATH;
+            profileAvailable = pageExists(profilePath);
+            messagingAvailable = pageExists(messagingPath);
+            notificationAvailable = pageExists(notificationPath);
+            moderationAvailable = pageExists(moderationPath);
 
             UserManager userManager = resolver.adaptTo(UserManager.class);
             if (userManager != null) {
@@ -223,6 +229,22 @@ public class Header {
 
     public String getProfilePath() {
         return profilePath;
+    }
+
+    public boolean isProfileAvailable() {
+        return profileAvailable;
+    }
+
+    public boolean isMessagingAvailable() {
+        return messagingAvailable;
+    }
+
+    public boolean isNotificationAvailable() {
+        return notificationAvailable;
+    }
+
+    public boolean isModerationAvailable() {
+        return moderationAvailable;
     }
 
     public String getAccountPath() {

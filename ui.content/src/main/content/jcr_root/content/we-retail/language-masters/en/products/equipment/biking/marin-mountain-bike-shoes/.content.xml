@@ -31,7 +31,7 @@
                 cq:lastRolledout="{Date}2016-07-04T11:35:22.357+02:00"
                 cq:lastRolledoutBy="admin"
                 jcr:lastModified="{Date}2016-04-12T01:19:39.459+02:00"
-                jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                jcr:mixinTypes="[cq:LiveRelationship]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="weretail/components/structure/product"
                 productData="/var/commerce/products/we-retail/eq/biking/eqbisumas">
@@ -39,7 +39,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-07-04T11:35:22.383+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/eq/biking/eqbisumas/size-7">
@@ -48,14 +48,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:33:06.931-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/footwear/Marin.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-07-04T11:35:22.390+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </eqbisumas-7>
@@ -63,7 +63,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-07-04T11:35:22.390+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/eq/biking/eqbisumas/size-8">
@@ -72,14 +72,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:33:06.931-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/footwear/Marin.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-07-04T11:35:22.397+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </eqbisumas-8>
@@ -87,7 +87,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-07-04T11:35:22.397+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/eq/biking/eqbisumas/size-9">
@@ -96,14 +96,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:33:06.931-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/footwear/Marin.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-07-04T11:35:22.405+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </eqbisumas-9>
@@ -111,7 +111,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-07-04T11:35:22.405+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/eq/biking/eqbisumas/size-10">
@@ -120,14 +120,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:33:06.931-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/footwear/Marin.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-07-04T11:35:22.413+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </eqbisumas-10>
@@ -135,7 +135,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-07-04T11:35:22.413+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/eq/biking/eqbisumas/size-11">
@@ -144,14 +144,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:33:06.931-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/footwear/Marin.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-07-04T11:35:22.420+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </eqbisumas-11>
@@ -159,7 +159,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-07-04T11:35:22.421+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/eq/biking/eqbisumas/size-12">
@@ -168,14 +168,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:33:06.931-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/footwear/Marin.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-07-04T11:35:22.428+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </eqbisumas-12>
@@ -184,14 +184,14 @@
                     cq:lastRolledoutBy="admin"
                     jcr:lastModified="{Date}2016-01-11T16:33:06.931-08:00"
                     jcr:lastModifiedBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="commerce/components/product/image"
                     fileReference="/content/dam/we-retail/en/products/apparel/footwear/Marin.jpg"/>
                 <assets
                     cq:lastRolledout="{Date}2016-07-04T11:35:22.428+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product/assets"/>
             </product>

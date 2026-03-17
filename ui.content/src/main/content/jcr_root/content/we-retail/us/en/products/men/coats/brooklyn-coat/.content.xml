@@ -31,7 +31,7 @@
                 cq:lastRolledout="{Date}2016-06-29T14:20:48.888+02:00"
                 cq:lastRolledoutBy="admin"
                 jcr:lastModified="{Date}2016-04-12T01:19:38.157+02:00"
-                jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                jcr:mixinTypes="[cq:LiveRelationship]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="weretail/components/structure/product"
                 productData="/var/commerce/products/we-retail/me/coats/meotwibrt">
@@ -39,7 +39,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:48.920+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/coats/meotwibrt/size-s">
@@ -48,14 +48,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:15:31.879-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/coats/Brooklyn.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:48.935+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotwibrt-s>
@@ -63,7 +63,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:48.938+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/coats/meotwibrt/size-m">
@@ -72,14 +72,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:15:31.879-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/coats/Brooklyn.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:48.951+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotwibrt-m>
@@ -87,7 +87,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:48.953+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/coats/meotwibrt/size-l">
@@ -96,14 +96,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:15:31.879-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/coats/Brooklyn.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:48.968+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotwibrt-l>
@@ -111,7 +111,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:20:48.970+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/coats/meotwibrt/size-xl">
@@ -120,14 +120,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:15:31.879-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/coats/Brooklyn.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:20:48.982+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </meotwibrt-xl>
@@ -136,14 +136,14 @@
                     cq:lastRolledoutBy="admin"
                     jcr:lastModified="{Date}2016-01-11T16:15:31.879-08:00"
                     jcr:lastModifiedBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="commerce/components/product/image"
                     fileReference="/content/dam/we-retail/en/products/apparel/coats/Brooklyn.jpg"/>
                 <assets
                     cq:lastRolledout="{Date}2016-06-29T14:20:48.985+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product/assets"/>
             </product>

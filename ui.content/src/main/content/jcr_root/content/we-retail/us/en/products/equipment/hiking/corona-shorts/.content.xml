@@ -31,7 +31,7 @@
                 cq:lastRolledout="{Date}2016-06-29T14:21:00.882+02:00"
                 cq:lastRolledoutBy="admin"
                 jcr:lastModified="{Date}2016-04-12T01:19:39.284+02:00"
-                jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                jcr:mixinTypes="[cq:LiveRelationship]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="weretail/components/structure/product"
                 productData="/var/commerce/products/we-retail/me/shorts/mehisucos">
@@ -39,7 +39,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:21:00.914+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shorts/mehisucos/size-xs">
@@ -48,14 +48,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:21:26.209-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shorts/Corona.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:21:00.926+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </mehisucos-xs>
@@ -63,7 +63,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:21:00.928+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shorts/mehisucos/size-s">
@@ -72,14 +72,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:21:26.209-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shorts/Corona.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:21:00.940+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </mehisucos-s>
@@ -87,7 +87,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:21:00.942+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shorts/mehisucos/size-m">
@@ -96,14 +96,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:21:26.209-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shorts/Corona.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:21:00.954+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </mehisucos-m>
@@ -111,7 +111,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:21:00.956+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shorts/mehisucos/size-l">
@@ -120,14 +120,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:21:26.209-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shorts/Corona.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:21:00.967+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </mehisucos-l>
@@ -135,7 +135,7 @@
                     cq:commerceType="variant"
                     cq:lastRolledout="{Date}2016-06-29T14:21:00.969+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product"
                     productData="/var/commerce/products/we-retail/me/shorts/mehisucos/size-xl">
@@ -144,14 +144,14 @@
                         cq:lastRolledoutBy="admin"
                         jcr:lastModified="{Date}2016-01-11T16:21:26.209-08:00"
                         jcr:lastModifiedBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="commerce/components/product/image"
                         fileReference="/content/dam/we-retail/en/products/apparel/shorts/Corona.jpg"/>
                     <assets
                         cq:lastRolledout="{Date}2016-06-29T14:21:00.981+02:00"
                         cq:lastRolledoutBy="admin"
-                        jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                        jcr:mixinTypes="[cq:LiveRelationship]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="weretail/components/structure/product/assets"/>
                 </mehisucos-xl>
@@ -160,14 +160,14 @@
                     cq:lastRolledoutBy="admin"
                     jcr:lastModified="{Date}2016-01-11T16:21:26.209-08:00"
                     jcr:lastModifiedBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="commerce/components/product/image"
                     fileReference="/content/dam/we-retail/en/products/apparel/shorts/Corona.jpg"/>
                 <assets
                     cq:lastRolledout="{Date}2016-06-29T14:21:00.985+02:00"
                     cq:lastRolledoutBy="admin"
-                    jcr:mixinTypes="[cq:CatalogSyncAction,cq:LiveRelationship]"
+                    jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/structure/product/assets"/>
             </product>

@@ -16,6 +16,10 @@
 (function(SCF) {
     "use strict";
 
+    if (!SCF || !SCF.registerComponent) {
+        return;
+    }
+
     SCF.registerComponent("weretail/components/hbs/rating", SCF.Rating, SCF.RatingView);
 
-})(SCF);
+})(window.SCF);

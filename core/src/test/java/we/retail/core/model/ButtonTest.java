@@ -15,50 +15,68 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package we.retail.core.model;
 
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
+import java.lang.reflect.Field;
+
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
-import com.adobe.cq.sightly.WCMBindings;
-import common.AppAemContext;
-import io.wcm.testing.mock.aem.junit.AemContext;
-
-import static common.AppAemContext.BUTTON_PATH;
-
 public class ButtonTest {
-
-    @Rule
-    public final AemContext context = AppAemContext.newAemContext();
-
-    private Button button;
-
-    @Before
-    public void setup() {
-        MockSlingHttpServletRequest request = context.request();
-        Resource buttonRes = context.currentResource(BUTTON_PATH);
-        SlingBindings slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.PROPERTIES, buttonRes.getValueMap());
-        button = request.adaptTo(Button.class);
-    }
 
     /**
      * Test the button link
      */
     @Test
-    public void testGetLinkTo() {
-        Assert.assertEquals(button.getLinkTo(), "/content/we-retail/us/en/products/men");
+    public void testGetLinkTo() throws Exception {
+        Button button = new Button();
+
+        setField(button, "linkTo", "/content/we-retail/us/en/products/men");
+
+        Assert.assertEquals("/content/we-retail/us/en/products/men", button.getLinkTo());
     }
 
     /**
      * Test the button CSS class
      */
     @Test
-    public void testGetCssClass() {
-        Assert.assertEquals(button.getCssClass(), "myClass");
+    public void testGetCssClass() throws Exception {
+        Button button = new Button();
+
+        setField(button, "cssClass", "myClass");
+
+        Assert.assertEquals("myClass", button.getCssClass());
+    }
+
+    @Test
+    public void testKeepsNonTransactionalLinksVisible() throws Exception {
+        Button button = new Button();
+
+        setField(button, "linkTo", "/content/we-retail/us/en/products/men");
+
+        Assert.assertEquals(true, button.isVisible());
+    }
+
+    @Test
+    public void testHidesCheckoutLinks() throws Exception {
+        Button checkoutButton = new Button();
+
+        setField(checkoutButton, "linkTo", "/content/we-retail/us/en/user/checkout");
+
+        Assert.assertFalse(checkoutButton.isVisible());
+    }
+
+    @Test
+    public void testHidesCartLinks() throws Exception {
+        Button cartButton = new Button();
+
+        setField(cartButton, "linkTo", "/content/we-retail/us/en/user/cart");
+
+        Assert.assertFalse(cartButton.isVisible());
+    }
+
+    private void setField(Object target, String fieldName, Object value) throws Exception {
+        Field field = target.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
     }
 
 }

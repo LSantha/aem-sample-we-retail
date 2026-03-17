@@ -7,6 +7,9 @@
         cq:commerceProvider="we-retail"
         cq:contextHubPath="/libs/settings/cloudsettings/legacy/contexthub"
         cq:contextHubSegmentsPath="/conf/we-retail/settings/wcm/segments"
+        cq:cifCategoryPage="/content/we-retail/us/en/products/category-page"
+        cq:cifProductPage="/content/we-retail/us/en/products/product-page"
+        cq:cifSearchResultsPage="/content/we-retail/us/en/products/search"
         cq:lastModified="{Date}2018-08-21T16:48:17.578+03:00"
         cq:lastModifiedBy="admin"
         cq:lastRolledout="{Date}2018-08-21T16:48:17.580+03:00"
@@ -470,9 +473,10 @@
     <equipment/>
     <about-us/>
     <products/>
+    <community/>
+    <test-page/>
     <activitystreams jcr:primaryType="nt:unstructured">
         <activities/>
     </activitystreams>
     <user/>
-    <community/>
 </jcr:root>

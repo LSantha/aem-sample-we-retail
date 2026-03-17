@@ -13,6 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */-->
-<div data-sly-use.productModel="we.retail.core.model.ProductModel">
-    <sly data-sly-resource="${ '{0}/jcr:content/reviews' @ format=[productModel.productTrackingPath], resourceType='social/reviews/components/hbs/reviews', wcmmode='disabled'}"/>
+<div class="we-ProductReviews-placeholder">
+    <a class="btn btn-primary we-ProductReviews-button" href="#" aria-disabled="true" role="button">
+        ${'Create your review' @ i18n}
+    </a>
+    <p class="we-ProductReviews-message">
+        ${'Product reviews are unavailable in this CIF migration.' @ i18n}
+    </p>
 </div>

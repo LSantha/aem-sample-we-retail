@@ -17,26 +17,22 @@ package we.retail.core.model;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.jackrabbit.oak.spi.security.user.UserConstants;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.factory.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.commerce.api.CommerceException;
-import com.adobe.cq.commerce.api.CommerceService;
-import com.adobe.cq.commerce.api.CommerceSession;
-import com.adobe.cq.commerce.api.Product;
-import com.adobe.granite.security.user.UserManagementService;
+import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.day.cq.wcm.api.Page;
-import we.retail.core.model.handler.CommerceHandler;
+
+import we.retail.core.commerce.cif.models.CifModelAdapter;
+import we.retail.core.commerce.cif.models.LegacyCommercePageSupport;
 
 @Model(adaptables = SlingHttpServletRequest.class)
 public class ProductModel {
@@ -49,49 +45,25 @@ public class ProductModel {
     @SlingObject
     private SlingHttpServletRequest request;
 
-    @SlingObject
-    private SlingHttpServletResponse response;
-
-    @SlingObject
-    private ResourceResolver resourceResolver;
-
     @ScriptVariable
     private Page currentPage;
 
-    @Self
-    private CommerceHandler commerceHandler;
-
     @OSGiService
-    private UserManagementService ums;
+    private ModelFactory modelFactory;
 
-    private CommerceService commerceService;
     private ProductItem productItem;
-    private boolean isAnonymous;
 
     @PostConstruct
     private void initModel() {
         try {
-            commerceService = currentPage.getContentResource().adaptTo(CommerceService.class);
-            if (commerceService != null) {
-                CommerceSession commerceSession = commerceService.login(request, response);
-                Product product;
-                //for proxy page use product from commerce handler
-                if (commerceHandler.isProductPageProxy()) {
-                    product = commerceHandler.getProduct();
-                } else {
-                    product = resource.adaptTo(Product.class);
-                }
-
-                if (product != null) {
-                    productItem = new ProductItem(product, commerceSession, request, currentPage);
-                }
+            String sku = LegacyCommercePageSupport.extractSku(resource, currentPage).orElse(null);
+            Product product = CifModelAdapter.adaptToProduct(modelFactory, request, resource, sku);
+            if (product != null && Boolean.TRUE.equals(product.getFound())) {
+                productItem = new ProductItem(product, request, currentPage, resource);
             }
-        } catch (CommerceException e) {
-            LOGGER.error("Can't extract product from page", e);
+        } catch (RuntimeException e) {
+            LOGGER.error("Can't extract CIF product from page", e);
         }
-
-        String anonymousId = ums != null ? ums.getAnonymousId() : UserConstants.DEFAULT_ANONYMOUS_ID;
-        isAnonymous = resourceResolver.getUserID() == null || anonymousId.equals(resourceResolver.getUserID());
     }
 
     public ProductItem getProductItem() {
@@ -103,18 +75,13 @@ public class ProductModel {
     }
 
     public String getAddToCartUrl() {
-        return commerceHandler.getAddToCardUrl();
-    }
-
-    public String getAddToSmartListUrl() {
-        return commerceHandler.getAddToSmartListUrl();
+        return StringUtils.EMPTY;
     }
 
     public String getProductTrackingPath() {
-        return commerceHandler.getProductTrackingPath();
-    }
-
-    public boolean isAnonymous() {
-        return isAnonymous;
+        if (productItem != null && StringUtils.isNotBlank(productItem.getPagePath())) {
+            return StringUtils.substringBefore(productItem.getPagePath(), ".html");
+        }
+        return currentPage != null ? currentPage.getPath() : resource.getPath();
     }
 }

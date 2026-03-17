@@ -24,11 +24,41 @@
 
     var _fixed = null;
 
+    function throttle(callback, wait) {
+        var timeoutId = null;
+        var lastInvocation = 0;
+
+        return function throttled() {
+            var now = Date.now();
+            var remaining = wait - (now - lastInvocation);
+            var context = this;
+            var args = arguments;
+
+            if (remaining <= 0) {
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                    timeoutId = null;
+                }
+                lastInvocation = now;
+                callback.apply(context, args);
+                return;
+            }
+
+            if (!timeoutId) {
+                timeoutId = setTimeout(function () {
+                    timeoutId = null;
+                    lastInvocation = Date.now();
+                    callback.apply(context, args);
+                }, remaining);
+            }
+        };
+    }
+
     var Fixed = function($el) {
         this.$el = $($el);
         this.$window = $(window);
 
-        this._onScroll = _.throttle(this.onScroll.bind(this), 100);
+        this._onScroll = throttle(this.onScroll.bind(this), 100);
     };
 
     Fixed.prototype.onScroll = function() {

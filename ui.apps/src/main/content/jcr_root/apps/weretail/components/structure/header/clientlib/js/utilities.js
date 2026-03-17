@@ -79,6 +79,10 @@
     }
 
     $(document).on('we-header-loaded', function() {
+        if (typeof window.SCF === "undefined") {
+            return;
+        }
+
         unreadCounter($('#we-retail-message-count'),
             "/messaging/jcr:content/content/primary/messagebox_5ab3.social.0.0.json", function(json) {
                 return json["messageCounts"].nonDeletedUnreadCount;

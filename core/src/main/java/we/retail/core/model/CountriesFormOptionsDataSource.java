@@ -16,7 +16,9 @@
 package we.retail.core.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,8 +43,6 @@ import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.adobe.granite.ui.components.ds.ValueMapResource;
 import com.day.cq.i18n.I18n;
 import com.day.cq.wcm.api.Page;
-import com.google.common.collect.ImmutableMap;
-
 @Component(
         service = {Servlet.class},
         property = {
@@ -58,38 +58,42 @@ public class CountriesFormOptionsDataSource extends SlingSafeMethodsServlet {
     private final static String COUNTRY_OPTIONS_HEADER = "Country";
     private final static String PN_TEXT = "text";
     private final static String PN_VALUE = "value";
-    private final static Map<String, String> COUNTRY_MAP = ImmutableMap.<String, String>builder()
-            .put("AR", "Argentina")
-            .put("AU", "Australia")
-            .put("AT", "Austria")
-            .put("BS", "Bahamas")
-            .put("BH", "Bahrain")
-            .put("BR", "Brazil")
-            .put("CA", "Canada")
-            .put("CL", "Chile")
-            .put("CN", "China")
-            .put("CO", "Colombia")
-            .put("EG", "Egypt")
-            .put("FR", "France")
-            .put("DE", "Germany")
-            .put("GI", "Gibraltar")
-            .put("HK", "Hong Kong")
-            .put("IE", "Ireland")
-            .put("IT", "Italy")
-            .put("JP", "Japan")
-            .put("LU", "Luxembourg")
-            .put("MY", "Malaysia")
-            .put("MX", "Mexico")
-            .put("MC", "Monaco")
-            .put("RU", "Russia")
-            .put("SG", "Singapore")
-            .put("ES", "Spain")
-            .put("CH", "Switzerland")
-            .put("US", "United States of America")
-            .put("AE", "United Arab Emirates")
-            .put("GB", "United Kingdom")
-            .put("UY", "Uruguay")
-            .build();
+    private final static Map<String, String> COUNTRY_MAP = createCountryMap();
+
+    private static Map<String, String> createCountryMap() {
+        Map<String, String> countries = new LinkedHashMap<>();
+        countries.put("AR", "Argentina");
+        countries.put("AU", "Australia");
+        countries.put("AT", "Austria");
+        countries.put("BS", "Bahamas");
+        countries.put("BH", "Bahrain");
+        countries.put("BR", "Brazil");
+        countries.put("CA", "Canada");
+        countries.put("CL", "Chile");
+        countries.put("CN", "China");
+        countries.put("CO", "Colombia");
+        countries.put("EG", "Egypt");
+        countries.put("FR", "France");
+        countries.put("DE", "Germany");
+        countries.put("GI", "Gibraltar");
+        countries.put("HK", "Hong Kong");
+        countries.put("IE", "Ireland");
+        countries.put("IT", "Italy");
+        countries.put("JP", "Japan");
+        countries.put("LU", "Luxembourg");
+        countries.put("MY", "Malaysia");
+        countries.put("MX", "Mexico");
+        countries.put("MC", "Monaco");
+        countries.put("RU", "Russia");
+        countries.put("SG", "Singapore");
+        countries.put("ES", "Spain");
+        countries.put("CH", "Switzerland");
+        countries.put("US", "United States of America");
+        countries.put("AE", "United Arab Emirates");
+        countries.put("GB", "United Kingdom");
+        countries.put("UY", "Uruguay");
+        return Collections.unmodifiableMap(countries);
+    }
 
     @Override
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response) {
