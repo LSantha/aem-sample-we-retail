@@ -32,6 +32,9 @@ import com.day.cq.wcm.api.PageManager;
 public final class GenericRouteSupport {
 
     private static final String PRODUCTS_ROOT_NAME = "products";
+    private static final String ROUTE_ALIAS_EQUIPMENT = "eq";
+    private static final String ROUTE_ALIAS_MEN = "me";
+    private static final String ROUTE_ALIAS_WOMEN = "wo";
 
     private GenericRouteSupport() {
     }
@@ -86,6 +89,9 @@ public final class GenericRouteSupport {
         }
 
         Page categoryPage = pageManager.getPage(productsRoot.getPath() + "/" + routePath);
+        if (categoryPage == null) {
+            categoryPage = pageManager.getPage(productsRoot.getPath() + "/" + normalizeLegacyRoutePath(routePath));
+        }
         if (categoryPage == null || isProductPage(categoryPage)) {
             return null;
         }
@@ -101,6 +107,9 @@ public final class GenericRouteSupport {
         }
 
         Page directMatch = pageManager.getPage(productsRoot.getPath() + "/" + routePath);
+        if (!isProductPage(directMatch)) {
+            directMatch = pageManager.getPage(productsRoot.getPath() + "/" + normalizeLegacyRoutePath(routePath));
+        }
         if (isProductPage(directMatch)) {
             return directMatch;
         }
@@ -111,8 +120,9 @@ public final class GenericRouteSupport {
             return null;
         }
 
-        final String productSlug = StringUtils.substringAfterLast(routePath, "/");
-        final String contextPath = StringUtils.substringBeforeLast(routePath, "/");
+        final String normalizedRoutePath = normalizeLegacyRoutePath(routePath);
+        final String productSlug = StringUtils.substringAfterLast(normalizedRoutePath, "/");
+        final String contextPath = StringUtils.substringBeforeLast(normalizedRoutePath, "/");
         Collections.sort(candidates, new Comparator<Page>() {
             @Override
             public int compare(Page left, Page right) {
@@ -122,6 +132,21 @@ public final class GenericRouteSupport {
         });
 
         return scoreProductPage(candidates.get(0), productSlug, contextPath) > 0 ? candidates.get(0) : null;
+    }
+
+    public static String findConfiguredRoute(Page currentPage, String routePropertyName) {
+        Page page = currentPage;
+        while (page != null) {
+            Page routePage = page;
+            if (routePage.getContentResource() != null) {
+                String configuredPath = routePage.getContentResource().getValueMap().get(routePropertyName, String.class);
+                if (StringUtils.isNotBlank(configuredPath)) {
+                    return configuredPath;
+                }
+            }
+            page = page.getParent();
+        }
+        return StringUtils.EMPTY;
     }
 
     public static List<Page> collectProductPages(Page categoryPage) {
@@ -147,6 +172,20 @@ public final class GenericRouteSupport {
         return StringUtils.removeStart(productPage.getPath(), productsRoot.getPath() + "/");
     }
 
+    public static String toCatalogRoutePath(String legacyRoutePath) {
+        if (StringUtils.isBlank(legacyRoutePath)) {
+            return legacyRoutePath;
+        }
+
+        String[] segments = StringUtils.split(legacyRoutePath, '/');
+        if (segments == null || segments.length == 0) {
+            return legacyRoutePath;
+        }
+
+        segments[0] = toCatalogTopLevelRouteSegment(segments[0]);
+        return StringUtils.join(segments, '/');
+    }
+
     public static boolean isPlaceholderCategoryTitle(String title) {
         return StringUtils.equals(title, "Category name");
     }
@@ -157,6 +196,20 @@ public final class GenericRouteSupport {
 
     public static boolean isPlaceholderProductListItem(String name) {
         return StringUtils.startsWith(name, "Product #");
+    }
+
+    public static String normalizeLegacyRoutePath(String routePath) {
+        if (StringUtils.isBlank(routePath)) {
+            return routePath;
+        }
+
+        String[] segments = StringUtils.split(routePath, '/');
+        if (segments == null || segments.length == 0) {
+            return routePath;
+        }
+
+        segments[0] = normalizeTopLevelRouteSegment(segments[0]);
+        return StringUtils.join(segments, '/');
     }
 
     private static Page findSiteRoot(Page currentPage) {
@@ -187,6 +240,32 @@ public final class GenericRouteSupport {
 
     private static boolean isProductPage(Page page) {
         return page != null && LegacyCommercePageSupport.extractSku(page.getContentResource(), page).isPresent();
+    }
+
+    private static String normalizeTopLevelRouteSegment(String segment) {
+        if (StringUtils.equals(segment, ROUTE_ALIAS_EQUIPMENT)) {
+            return "equipment";
+        }
+        if (StringUtils.equals(segment, ROUTE_ALIAS_MEN)) {
+            return "men";
+        }
+        if (StringUtils.equals(segment, ROUTE_ALIAS_WOMEN)) {
+            return "women";
+        }
+        return segment;
+    }
+
+    private static String toCatalogTopLevelRouteSegment(String segment) {
+        if (StringUtils.equals(segment, "equipment")) {
+            return ROUTE_ALIAS_EQUIPMENT;
+        }
+        if (StringUtils.equals(segment, "men")) {
+            return ROUTE_ALIAS_MEN;
+        }
+        if (StringUtils.equals(segment, "women")) {
+            return ROUTE_ALIAS_WOMEN;
+        }
+        return segment;
     }
 
     private static int scoreProductPage(Page page, String productSlug, String contextPath) {

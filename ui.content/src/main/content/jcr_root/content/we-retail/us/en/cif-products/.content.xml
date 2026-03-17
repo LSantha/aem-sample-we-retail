@@ -10,7 +10,8 @@
         cq:template="/conf/we-retail/settings/wcm/templates/hero-page"
         jcr:primaryType="cq:PageContent"
         jcr:title="CIF Products"
-        sling:resourceType="weretail/components/structure/page"
+        showMainCategories="{Boolean}false"
+        sling:resourceType="weretail/components/structure/catalogpage"
         navTitle="CIF Products">
         <root
             jcr:primaryType="nt:unstructured"
@@ -49,7 +50,7 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/us/en/cif-products/category-page.html/women.html"
+                            link="/content/we-retail/us/en/cif-products/category-page.html/wo.html"
                             text="Women"/>
                     </actions>
                 </teaser>
@@ -74,7 +75,7 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/us/en/cif-products/category-page.html/men.html"
+                            link="/content/we-retail/us/en/cif-products/category-page.html/me.html"
                             text="Men"/>
                     </actions>
                 </teaser_1>
@@ -99,7 +100,7 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/us/en/cif-products/category-page.html/equipment.html"
+                            link="/content/we-retail/us/en/cif-products/category-page.html/eq.html"
                             text="Equipment"/>
                     </actions>
                 </teaser_2>

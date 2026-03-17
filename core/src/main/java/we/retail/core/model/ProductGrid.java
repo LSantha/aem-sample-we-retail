@@ -243,7 +243,8 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
 
     private String buildLegacyRouteProductUrl(Page productPage, Page productsRoot) {
         String configuredRoute = findConfiguredRoute("cq:cifProductPage");
-        String relativePath = GenericRouteSupport.relativeProductPath(productsRoot, productPage);
+        String relativePath = GenericRouteSupport.toCatalogRoutePath(
+            GenericRouteSupport.relativeProductPath(productsRoot, productPage));
         if (StringUtils.isBlank(configuredRoute) || StringUtils.isBlank(relativePath)) {
             return StringUtils.EMPTY;
         }

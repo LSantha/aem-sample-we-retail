@@ -58,19 +58,18 @@ public class RouteAwareTitle implements Title {
 
     @Override
     public String getText() {
-        if (hasAuthoredTitle()) {
-            return delegate != null ? delegate.getText() : StringUtils.EMPTY;
+        String delegateText = delegate != null ? delegate.getText() : StringUtils.EMPTY;
+        if (hasMeaningfulAuthoredTitle(delegateText)) {
+            return delegateText;
         }
 
-        if (LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
-            Page legacyCategoryPage = GenericRouteSupport.resolveLegacyCategoryPage(pageManager, currentPage, request);
-            String routeTitle = WeRetailHelper.getTitle(legacyCategoryPage);
-            if (StringUtils.isNotBlank(routeTitle)) {
-                return routeTitle;
-            }
+        Page legacyCategoryPage = GenericRouteSupport.resolveLegacyCategoryPage(pageManager, currentPage, request);
+        String routeTitle = WeRetailHelper.getTitle(legacyCategoryPage);
+        if (StringUtils.isNotBlank(routeTitle)) {
+            return routeTitle;
         }
 
-        return delegate != null ? delegate.getText() : StringUtils.EMPTY;
+        return delegateText;
     }
 
     @Override
@@ -108,7 +107,20 @@ public class RouteAwareTitle implements Title {
         return resource != null ? resource.getResourceType() : null;
     }
 
-    private boolean hasAuthoredTitle() {
-        return resource != null && StringUtils.isNotBlank(resource.getValueMap().get("jcr:title", String.class));
+    private boolean hasMeaningfulAuthoredTitle(String delegateText) {
+        if (resource == null) {
+            return false;
+        }
+
+        String authoredTitle = resource.getValueMap().get("jcr:title", String.class);
+        if (StringUtils.isBlank(authoredTitle)) {
+            return false;
+        }
+
+        return !isPlaceholderTitle(delegateText) && !isPlaceholderTitle(authoredTitle);
+    }
+
+    private boolean isPlaceholderTitle(String text) {
+        return StringUtils.equals(text, "Category Page") || StringUtils.equals(text, "Product Page");
     }
 }
