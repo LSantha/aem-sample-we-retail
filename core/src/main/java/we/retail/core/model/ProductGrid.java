@@ -35,6 +35,7 @@ import org.apache.sling.models.annotations.via.ResourceSuperType;
 import org.apache.sling.models.factory.ModelFactory;
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
 import com.adobe.cq.commerce.core.components.models.product.Product;
+import com.adobe.cq.commerce.magento.graphql.ProductInterface;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
@@ -49,6 +50,7 @@ import we.retail.core.commerce.cif.models.LegacyCommercePageSupport;
     adapters = com.adobe.cq.wcm.core.components.models.List.class,
     resourceType = "weretail/components/content/productgrid")
 public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List {
+    private static final String PN_CATEGORY = "category";
 
     @Self
     private SlingHttpServletRequest request;
@@ -73,15 +75,20 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
 
     @PostConstruct
     private void initModel() {
-        if (LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
+        boolean routeCategoryPage = LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage");
+        boolean explicitCategorySelection = hasExplicitCifCategorySelection();
+
+        if (routeCategoryPage || explicitCategorySelection) {
             items = buildRouteItems();
-            if (hasUsableRouteItems(items)) {
+            if (hasUsableRouteItems(items) || explicitCategorySelection) {
                 return;
             }
 
-            items = buildLegacyRouteItems();
-            if (!items.isEmpty()) {
-                return;
+            if (routeCategoryPage) {
+                items = buildLegacyRouteItems();
+                if (!items.isEmpty()) {
+                    return;
+                }
             }
         }
 
@@ -104,10 +111,6 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             if (productList == null || productList.getCategoryRetriever() == null) {
                 return routeItems;
             }
-            if (GenericRouteSupport.isPlaceholderCategoryTitle(productList.getTitle())) {
-                return Collections.emptyList();
-            }
-
             productList.getCategoryRetriever().extendProductQueryWith(query -> query
                 .shortDescription(description -> description.html())
                 .categories(category -> category.name().urlPath())
@@ -118,16 +121,22 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
                         .label()
                         .valueIndex()
                         .defaultLabel()))));
+            if (GenericRouteSupport.isPlaceholderCategoryTitle(productList.getTitle())) {
+                return Collections.emptyList();
+            }
 
             for (ProductListItem productListItem : productList.getProducts()) {
-                String productUrl = rewriteRouteUrl(StringUtils.defaultIfBlank(productListItem.getURL(), productListItem.getPath()),
-                    "cq:cifProductPage");
-                ProductGridItem item = ProductGridItem.fromProductListItem(productListItem,
-                    resolveProductPage(productUrl),
-                    request,
-                    productUrl);
-                if (item.exists()) {
-                    routeItems.add(item);
+                try {
+                    String productUrl = buildRouteProductUrl(productListItem);
+                    ProductGridItem item = ProductGridItem.fromProductListItem(productListItem,
+                        resolveProductPage(productUrl),
+                        request,
+                        productUrl);
+                    if (item.exists()) {
+                        routeItems.add(item);
+                    }
+                } catch (RuntimeException e) {
+                    // Keep rendering the rest of the catalog if one product has bad URL metadata.
                 }
             }
         } catch (RuntimeException e) {
@@ -265,6 +274,30 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             page = page.getParent();
         }
         return StringUtils.EMPTY;
+    }
+
+    private boolean hasExplicitCifCategorySelection() {
+        return resource != null && StringUtils.isNotBlank(resource.getValueMap().get(PN_CATEGORY, String.class));
+    }
+
+    private String buildRouteProductUrl(ProductListItem productListItem) {
+        ProductInterface product = productListItem != null ? productListItem.getProduct() : null;
+        String configuredRoute = findConfiguredRoute("cq:cifProductPage");
+        String urlPath = product != null ? product.getUrlPath() : null;
+        if (StringUtils.isNotBlank(configuredRoute) && StringUtils.isNotBlank(urlPath)) {
+            return configuredRoute + ".html/" + StringUtils.removeStart(urlPath, "/") + ".html";
+        }
+
+        String safeUrl = StringUtils.EMPTY;
+        if (productListItem != null) {
+            try {
+                safeUrl = productListItem.getURL();
+            } catch (RuntimeException e) {
+                safeUrl = StringUtils.EMPTY;
+            }
+        }
+        return rewriteRouteUrl(StringUtils.defaultIfBlank(safeUrl, productListItem != null ? productListItem.getPath() : StringUtils.EMPTY),
+            "cq:cifProductPage");
     }
 
     private boolean hasUsableRouteItems(List<ProductGridItem> routeItems) {

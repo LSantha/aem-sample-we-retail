@@ -13,12 +13,47 @@ public final class LegacyCommercePageSupport {
     private static final String PN_PRODUCT_DATA = "productData";
     private static final String PN_PRODUCT_MASTER = "cq:productMaster";
     private static final String PN_SELECTION = "selection";
+    private static final String PN_SKU = "sku";
 
     private LegacyCommercePageSupport() {
     }
 
     public static Optional<String> extractSku(Resource resource, Page currentPage) {
+        Optional<String> explicitSku = extractExplicitSku(resource);
+        if (explicitSku.isPresent()) {
+            return explicitSku;
+        }
+
+        if (currentPage != null) {
+            Resource pageContent = currentPage.getContentResource();
+            explicitSku = extractExplicitSku(pageContent);
+            if (explicitSku.isPresent()) {
+                return explicitSku;
+            }
+        }
+
         return extractCommercePath(resource, currentPage).map(LegacyCommercePageSupport::extractProductIdentifier);
+    }
+
+    public static Optional<String> extractExplicitSku(Resource resource) {
+        if (resource == null) {
+            return Optional.empty();
+        }
+
+        String sku = resource.getValueMap().get(PN_SKU, String.class);
+        if (StringUtils.isNotBlank(sku)) {
+            return Optional.of(sku);
+        }
+
+        Resource productComponent = resource.getChild("root/product");
+        if (productComponent != null) {
+            sku = productComponent.getValueMap().get(PN_SKU, String.class);
+            if (StringUtils.isNotBlank(sku)) {
+                return Optional.of(sku);
+            }
+        }
+
+        return Optional.empty();
     }
 
     public static Optional<String> extractCommercePath(Resource resource, Page currentPage) {

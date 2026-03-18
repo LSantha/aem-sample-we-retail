@@ -63,17 +63,39 @@ public class ProductItemTest {
         assertTrue(item.getVariantsAxesValues().get("size").contains("9"));
     }
 
+    @Test
+    public void testPrefersCifSkusWhenAvailable() {
+        SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
+        ResourceResolver resourceResolver = mock(ResourceResolver.class);
+        Resource productResource = createProductResource();
+        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/cif-products/product-page.html/wo/coats/sonja-insulated-jacket.html");
+        when(request.getResourceResolver()).thenReturn(resourceResolver);
+        when(resourceResolver.map(request, "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"))
+            .thenReturn("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg");
+
+        ProductItem item = new ProductItem(createProduct("wr-sonja-jacket", "wr-sonja-jacket-green-xs"), request, null, productResource);
+
+        assertEquals("wr-sonja-jacket", item.getSku());
+        assertEquals("wr-sonja-jacket-green-xs", item.getVariants().get(0).getSku());
+        assertEquals("/content/we-retail/us/en/cif-products/product-page.html/wo/coats/sonja-insulated-jacket.html#wr-sonja-jacket-green-xs",
+            item.getVariants().get(0).getPagePath());
+    }
+
     private Product createProduct() {
+        return createProduct("me/footwear/meotwisus", "meotwisus-9");
+    }
+
+    private Product createProduct(String productSku, String variantSku) {
         Product product = mock(Product.class);
         Price price = createPrice("$65.00");
         Asset asset = createAsset("https://cdn.example.com/current-cif-image.jpg");
-        Variant variant = createVariant();
+        Variant variant = createVariant(variantSku);
         VariantAttribute attribute = createVariantAttribute();
         ProductInterface productData = createProductData();
         AbstractProductRetriever retriever = mock(AbstractProductRetriever.class);
 
         when(product.getFound()).thenReturn(Boolean.TRUE);
-        when(product.getSku()).thenReturn("me/footwear/meotwisus");
+        when(product.getSku()).thenReturn(productSku);
         when(product.getName()).thenReturn("Sussex Rain Boots");
         when(product.getPriceRange()).thenReturn(price);
         when(product.getAssets()).thenReturn(Collections.singletonList(asset));
@@ -86,9 +108,13 @@ public class ProductItemTest {
     }
 
     private Variant createVariant() {
+        return createVariant("meotwisus-9");
+    }
+
+    private Variant createVariant(String sku) {
         Variant variant = mock(Variant.class);
         Price price = createPrice("$65.00");
-        when(variant.getSku()).thenReturn("me+footwear+meotwisus+var-size-9");
+        when(variant.getSku()).thenReturn(sku);
         when(variant.getName()).thenReturn("Sussex Rain Boots");
         when(variant.getDescription()).thenReturn("");
         when(variant.getPriceRange()).thenReturn(price);

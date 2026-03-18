@@ -38,9 +38,12 @@ public final class LegacyProductPresentationSupport {
     }
 
     public static String baseSku(Resource resource, Page currentPage, String fallbackSku) {
-        return LegacyCommercePageSupport.extractCommercePath(resource, currentPage)
-            .map(LegacyCommercePageSupport::extractProductIdentifier)
-            .orElseGet(() -> fallbackSku(fallbackSku));
+        String resolvedSku = fallbackSku(fallbackSku);
+        if (StringUtils.isNotBlank(resolvedSku)) {
+            return resolvedSku;
+        }
+
+        return LegacyCommercePageSupport.extractSku(resource, currentPage).orElse(StringUtils.EMPTY);
     }
 
     public static Resource productResource(Page currentPage) {
@@ -82,10 +85,20 @@ public final class LegacyProductPresentationSupport {
     }
 
     public static String resolveVariantSku(Resource variantResource, Variant variant) {
-        if (variantResource != null) {
-            return StringUtils.replace(variantResource.getName(), "_", ".");
+        String resolvedSku = fallbackSku(variant != null ? variant.getSku() : null);
+        if (StringUtils.isNotBlank(resolvedSku)) {
+            return resolvedSku;
         }
-        return fallbackSku(variant != null ? variant.getSku() : null);
+
+        resolvedSku = LegacyCommercePageSupport.extractExplicitSku(variantResource).orElse(StringUtils.EMPTY);
+        if (StringUtils.isNotBlank(resolvedSku)) {
+            return resolvedSku;
+        }
+
+        if (variantResource != null) {
+            return legacyVariantIdentifier(variantResource);
+        }
+        return StringUtils.EMPTY;
     }
 
     public static String resolveImageReference(Resource resource, Metadata metadata, SlingHttpServletRequest request, String fallbackImage) {
@@ -132,6 +145,13 @@ public final class LegacyProductPresentationSupport {
     }
 
     private static boolean matchesVariant(Resource variantResource, Variant variant) {
+        String variantSku = fallbackSku(variant != null ? variant.getSku() : null);
+        String resourceSku = LegacyCommercePageSupport.extractExplicitSku(variantResource)
+            .orElseGet(() -> legacyVariantIdentifier(variantResource));
+        if (StringUtils.isNotBlank(variantSku) && StringUtils.equals(variantSku, resourceSku)) {
+            return true;
+        }
+
         String productData = variantResource.getValueMap().get(PN_PRODUCT_DATA, String.class);
         if (StringUtils.isBlank(productData) || variant.getVariantAttributes().isEmpty()) {
             return false;
@@ -154,6 +174,14 @@ public final class LegacyProductPresentationSupport {
         return false;
     }
 
+    private static String legacyVariantIdentifier(Resource variantResource) {
+        if (variantResource == null) {
+            return StringUtils.EMPTY;
+        }
+
+        return StringUtils.replace(variantResource.getName(), "_", ".");
+    }
+
     private static String mapAssetPath(SlingHttpServletRequest request, String assetPath) {
         if (StringUtils.isBlank(assetPath)) {
             return StringUtils.EMPTY;
@@ -166,7 +194,9 @@ public final class LegacyProductPresentationSupport {
     }
 
     private static String fallbackSku(String sku) {
-        return StringUtils.substringAfterLast(StringUtils.defaultString(sku), "/");
+        String normalizedSku = StringUtils.defaultString(sku);
+        String resolvedSku = StringUtils.substringAfterLast(normalizedSku, "/");
+        return StringUtils.isNotBlank(resolvedSku) ? resolvedSku : normalizedSku;
     }
 
     private static Map<String, Metadata> loadMetadata() {
