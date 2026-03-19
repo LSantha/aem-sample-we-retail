@@ -64,10 +64,10 @@
                     displayAs="products"
                     feedEnabled="{Boolean}true"
                     limit="6"
-                    listFrom="static"
+                    listFrom="products"
                     orderBy="jcr:title"
                     pageMax="0"
-                    pages="[/content/we-retail/us/en/products/women/shorts/bahamas-shorts,/content/we-retail/us/en/products/women/pants/hiking-pants,/content/we-retail/us/en/products/women/shirts/devi-sleeveless-shirt,/content/we-retail/us/en/products/women/shorts/candide-trail-short,/content/we-retail/us/en/products/women/shorts/fleet-fox-running-shorts,/content/we-retail/us/en/products/women/shirts/soleil-tunic]"
+                    product="[woswsubas,hiking_pants,wootsudet,wohisucat,wohisufls,woswsusoc]"
                     tagsMatch="any"/>
                 <button
                     cq:lastRolledout="{Date}2016-03-14T22:18:58.084+01:00"

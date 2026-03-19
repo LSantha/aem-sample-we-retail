@@ -288,10 +288,10 @@
                     feedEnabled="{Boolean}true"
                     limit="6"
                     listCSSClass="row"
-                    listFrom="static"
+                    listFrom="products"
                     orderBy="jcr:title"
                     pageMax="0"
-                    pages="[/content/we-retail/us/en/products/women/coats/sleek-insulated-coat,/content/we-retail/us/en/products/men/coats/el-gordo-down-jacket,/content/we-retail/us/en/products/men/shirts/expedition-tech-long-sleeved-shirt,/content/we-retail/us/en/products/men/pants/trail-model-pants,/content/we-retail/us/en/products/equipment/biking/marin-mountain-bike-shoes,/content/we-retail/us/en/products/women/shirts/rios-t-shirt]"
+                    product="[woskwislt,meskwielt,mehiwiext,mehisutrs,eqbisumas,wohisurit]"
                     tagsMatch="any"/>
                 <section_title_431279162
                     cq:lastRolledout="{Date}2018-08-21T16:48:17.492+03:00"
@@ -352,10 +352,10 @@
                     feedEnabled="{Boolean}true"
                     limit="6"
                     listCSSClass="row"
-                    listFrom="static"
+                    listFrom="products"
                     orderBy="jcr:title"
                     pageMax="0"
-                    pages="[/content/we-retail/us/en/products/women/coats/sleek-insulated-coat,/content/we-retail/us/en/products/men/coats/el-gordo-down-jacket,/content/we-retail/us/en/products/men/shirts/expedition-tech-long-sleeved-shirt,/content/we-retail/us/en/products/men/pants/trail-model-pants,/content/we-retail/us/en/products/equipment/biking/marin-mountain-bike-shoes,/content/we-retail/us/en/products/women/shirts/rios-t-shirt]"
+                    product="[woskwislt,meskwielt,mehiwiext,mehisutrs,eqbisumas,wohisurit]"
                     tagsMatch="any"/>
                 <section_title_239098
                     cq:lastRolledout="{Date}2018-08-21T16:48:17.504+03:00"

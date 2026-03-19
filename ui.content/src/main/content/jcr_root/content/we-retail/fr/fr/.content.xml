@@ -282,10 +282,10 @@
                     feedEnabled="{Boolean}true"
                     limit="6"
                     listCSSClass="row"
-                    listFrom="static"
+                    listFrom="products"
                     orderBy="jcr:title"
                     pageMax="0"
-                    pages="[/content/we-retail/language-masters/en/products/women/coats/sleek-insulated-coat,/content/we-retail/language-masters/en/products/men/coats/el-gordo-down-jacket,/content/we-retail/language-masters/en/products/men/shirts/expedition-tech-long-sleeved-shirt,/content/we-retail/language-masters/en/products/men/pants/trail-model-pants,/content/we-retail/language-masters/en/products/equipment/biking/marin-mountain-bike-shoes,/content/we-retail/language-masters/en/products/women/shirts/rios-t-shirt]"
+                    product="[woskwislt,meskwielt,mehiwiext,mehisutrs,eqbisumas,wohisurit]"
                     tagsMatch="any"/>
                 <section_title_431279162
                     cq:lastRolledout="{Date}2018-08-21T17:11:26.355+03:00"
@@ -346,10 +346,10 @@
                     feedEnabled="{Boolean}true"
                     limit="6"
                     listCSSClass="row"
-                    listFrom="static"
+                    listFrom="products"
                     orderBy="jcr:title"
                     pageMax="0"
-                    pages="[/content/we-retail/language-masters/en/products/women/coats/sleek-insulated-coat,/content/we-retail/language-masters/en/products/men/coats/el-gordo-down-jacket,/content/we-retail/language-masters/en/products/men/shirts/expedition-tech-long-sleeved-shirt,/content/we-retail/language-masters/en/products/men/pants/trail-model-pants,/content/we-retail/language-masters/en/products/equipment/biking/marin-mountain-bike-shoes,/content/we-retail/language-masters/en/products/women/shirts/rios-t-shirt]"
+                    product="[woskwislt,meskwielt,mehiwiext,mehisutrs,eqbisumas,wohisurit]"
                     tagsMatch="any"/>
                 <section_title_239098
                     cq:lastRolledout="{Date}2018-08-21T17:11:26.367+03:00"

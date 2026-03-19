@@ -46,10 +46,10 @@
                     displayAs="products"
                     feedEnabled="{Boolean}true"
                     limit="6"
-                    listFrom="static"
+                    listFrom="products"
                     orderBy="jcr:title"
                     pageMax="0"
-                    pages="[/content/we-retail/language-masters/en/products/men/shirts/eton-short-sleeve-shirt,/content/we-retail/language-masters/en/products/men/pants/trail-model-pants,/content/we-retail/language-masters/en/products/men/shorts/pipeline-board-shorts,/content/we-retail/language-masters/en/products/men/shirts/amsterdam-short-sleeve-travel-shirt,/content/we-retail/language-masters/en/products/men/shorts/buffalo-plaid-shorts,/content/we-retail/language-masters/en/products/men/coats/portland-hooded-jacket]"
+                    product="[meotsuett,mehisutrs,mesusupis,meotsuamt,mehisubus,meotwipot]"
                     tagsMatch="any"/>
                 <button
                     jcr:created="{Date}2016-03-14T21:41:39.706+01:00"
