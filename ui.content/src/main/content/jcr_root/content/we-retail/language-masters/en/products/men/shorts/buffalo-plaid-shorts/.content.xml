@@ -9,6 +9,7 @@
         cq:productMaster="/var/commerce/products/we-retail/me/shorts/mehisubus"
         cq:tags="[we-retail:gender/men,we-retail:apparel/shorts,we-retail:season/summer,we-retail:activity/hiking]"
         cq:template="/conf/we-retail/settings/wcm/templates/product-page"
+        cq:redirectTarget="/content/we-retail/language-masters/en/products/product-page.html/me/shorts/mehisubus.html"
         jcr:language="en"
         jcr:mixinTypes="[cq:LiveSync]"
         jcr:primaryType="cq:PageContent"

@@ -9,6 +9,7 @@
         cq:productMaster="/var/commerce/products/we-retail/me/scarfs/meotwizuf"
         cq:tags="[we-retail:apparel/scarf,we-retail:gender/men,we-retail:season/winter,we-retail:activity/others]"
         cq:template="/conf/we-retail/settings/wcm/templates/product-page"
+        cq:redirectTarget="/content/we-retail/language-masters/en/products/product-page.html/me/scarfs/meotwizuf.html"
         jcr:language="en"
         jcr:mixinTypes="[cq:LiveSync]"
         jcr:primaryType="cq:PageContent"

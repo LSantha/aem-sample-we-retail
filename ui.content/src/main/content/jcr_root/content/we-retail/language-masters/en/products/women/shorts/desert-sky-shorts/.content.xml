@@ -9,6 +9,7 @@
         cq:productMaster="/var/commerce/products/we-retail/wo/shorts/wohisudes"
         cq:tags="[we-retail:apparel/shorts,we-retail:season/summer,we-retail:activity/hiking,we-retail:gender/women]"
         cq:template="/conf/we-retail/settings/wcm/templates/product-page"
+        cq:redirectTarget="/content/we-retail/language-masters/en/products/product-page.html/wo/shorts/wohisudes.html"
         jcr:language="en"
         jcr:mixinTypes="[cq:LiveSync]"
         jcr:primaryType="cq:PageContent"

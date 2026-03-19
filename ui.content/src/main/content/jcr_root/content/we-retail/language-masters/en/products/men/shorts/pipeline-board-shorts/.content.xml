@@ -9,6 +9,7 @@
         cq:productMaster="/var/commerce/products/we-retail/me/shorts/mesusupis"
         cq:tags="[we-retail:season/summer,we-retail:activity/surfing,we-retail:apparel/shorts,we-retail:gender/men]"
         cq:template="/conf/we-retail/settings/wcm/templates/product-page"
+        cq:redirectTarget="/content/we-retail/language-masters/en/products/product-page.html/me/shorts/mesusupis.html"
         jcr:language="en"
         jcr:mixinTypes="[cq:LiveSync]"
         jcr:primaryType="cq:PageContent"

@@ -10,6 +10,7 @@
         cq:lastRolledout="{Date}2016-07-04T11:34:55.104+02:00"
         cq:lastRolledoutBy="admin"
         cq:template="/conf/we-retail/settings/wcm/templates/section-page"
+        cq:redirectTarget="/content/we-retail/language-masters/en/products/category-page.html/me/shirts.html"
         jcr:mixinTypes="[cq:LiveSync]"
         jcr:primaryType="cq:PageContent"
         jcr:title="Shirts"

@@ -53,7 +53,8 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/hiking"
+                            categoryId="eq/hiking"
+                            categoryIdType="urlPath"
                             text="Hiking"/>
                     </actions>
                 </teaser>
@@ -74,7 +75,8 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/running"
+                            categoryId="eq/running"
+                            categoryIdType="urlPath"
                             text="Running"/>
                     </actions>
                 </teaser_2082536754>
@@ -95,7 +97,8 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/biking"
+                            categoryId="eq/biking"
+                            categoryIdType="urlPath"
                             text="Biking"/>
                     </actions>
                 </teaser_647414391>
@@ -116,7 +119,8 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/surfing"
+                            categoryId="eq/surfing"
+                            categoryIdType="urlPath"
                             text="Surfing"/>
                     </actions>
                 </teaser_1341949589>
@@ -137,7 +141,8 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/snow-sports"
+                            categoryId="eq/snow-sports"
+                            categoryIdType="urlPath"
                             text="Snow Sports"/>
                     </actions>
                 </teaser_1398042708>
@@ -173,7 +178,9 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/content/button"
                     label="All equipment"
-                    linkTo="/content/we-retail/language-masters/en/products/equipment"/>
+                    categoryId="eq"
+                    categoryIdType="urlPath"
+                    linkType="category"/>
                 <title_419694046
                     jcr:created="{Date}2016-03-13T22:38:54.789+01:00"
                     jcr:createdBy="admin"
@@ -190,21 +197,26 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/content/teaser"
-                    buttonLinkTo="/content/we-retail/us/en/products/equipment/snow-sports"
+                    buttonCategoryId="eq/snow-sports"
+                    buttonCategoryIdType="urlPath"
+                    buttonLinkType="category"
                     fileReference="/content/dam/we-retail/en/activities/skiing/freeride-extreme.jpg"
                     actionsEnabled="{Boolean}true">
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/snow-sports"
+                            categoryId="eq/snow-sports"
+                            categoryIdType="urlPath"
                             text="Snow Sports"/>
                         <item1
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/snow-sports"
+                            categoryId="eq/snow-sports"
+                            categoryIdType="urlPath"
                             text="Skiing"/>
                         <item2
                             jcr:primaryType="nt:unstructured"
-                            link="/content/we-retail/language-masters/en/products/equipment/snow-sports"
+                            categoryId="eq/snow-sports"
+                            categoryIdType="urlPath"
                             text="Snowboarding"/>
                     </actions>
                 </teaser_643606949>

@@ -17,13 +17,20 @@ package we.retail.core.model;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-@Model(adaptables = SlingHttpServletRequest.class)
+import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
+import com.day.cq.wcm.api.Page;
+
+@Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class HeroImage {
 
     private static final String PN_FULL_WIDTH = "useFullWidth";
@@ -34,13 +41,43 @@ public class HeroImage {
     @ScriptVariable
     private ValueMap properties;
 
+    @ScriptVariable
+    private Page currentPage;
+
+    @OSGiService
+    private UrlProvider urlProvider;
+
+    @ValueMapValue
+    private String buttonLabel;
+
+    @ValueMapValue
+    private String buttonLinkType;
+
+    @ValueMapValue
+    private String buttonLinkTo;
+
+    @ValueMapValue
+    private String buttonProductSku;
+
+    @ValueMapValue
+    private String buttonCategoryId;
+
+    @ValueMapValue
+    private String buttonCategoryIdType;
+
+    @ValueMapValue
+    private String buttonExternalLink;
+
     private String classList;
     private Image image;
+    private String buttonLink;
 
     @PostConstruct
     private void initModel() {
         classList = getClassList();
         image = getImage();
+        buttonLink = CommerceLinkSupport.resolveLink(request, currentPage, urlProvider, buttonLinkType, buttonLinkTo,
+            buttonExternalLink, buttonProductSku, buttonCategoryId, buttonCategoryIdType);
     }
 
     public String getClassList() {
@@ -63,6 +100,14 @@ public class HeroImage {
             this.image = new Image(image.getSrc());
         }
         return this.image;
+    }
+
+    public String getButtonLink() {
+        return CommerceLinkSupport.defaultLink(buttonLink);
+    }
+
+    public boolean isButtonCallToAction() {
+        return StringUtils.isNotBlank(buttonLabel) && CommerceLinkSupport.hasLink(getButtonLink());
     }
 
     public class Image {

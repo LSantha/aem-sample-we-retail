@@ -14,10 +14,14 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.templatedContainer="com.day.cq.wcm.foundation.TemplatedContainer"/>
-<div class="container">
+<sly data-sly-test.redirectTarget="${wcmmode.disabled ? properties['cq:redirectTarget'] : ''}"/>
+<div data-sly-test="${!redirectTarget}" class="container">
     <sly data-sly-repeat.child="${templatedContainer.structureResources}"
          data-sly-resource="${child.path @ resourceType=child.resourceType, decorationTagName='div'}"/>
 </div>
-<div data-sly-resource="${'cloudservices' @ resourceType='cq/cloudconfig/components/servicecomponents'}" data-sly-unwrap></div>
-<sly data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"/>
+<div data-sly-test="${!redirectTarget}"
+     data-sly-resource="${'cloudservices' @ resourceType='cq/cloudconfig/components/servicecomponents'}"
+     data-sly-unwrap></div>
+<sly data-sly-test="${!redirectTarget}"
+     data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"/>
 <sly data-sly-include="footerlibs.html"/>

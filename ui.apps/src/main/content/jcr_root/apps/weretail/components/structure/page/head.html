@@ -1,6 +1,12 @@
+<sly data-sly-test.redirectTarget="${wcmmode.disabled ? properties['cq:redirectTarget'] : ''}"/>
 <meta charset="UTF-8"/>
 <title>${currentPage.title || currentPage.name}</title>
 <meta name="template" content="${currentPage.template.name}"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<link rel="canonical" href="${currentPage.path}.html"/>
+<link data-sly-test="${redirectTarget}" rel="canonical" href="${redirectTarget}"/>
+<link data-sly-test="${!redirectTarget}" rel="canonical" href="${currentPage.path}.html"/>
+<meta data-sly-test="${redirectTarget}" http-equiv="refresh" content="0;url=${redirectTarget}"/>
+<script data-sly-test="${redirectTarget}">
+    window.location.replace("${redirectTarget @ context='scriptString'}");
+</script>
 <sly data-sly-include="customheaderlibs.html"/>

@@ -9,6 +9,7 @@
         cq:productMaster="/var/commerce/products/we-retail/eq/running/eqrusufle"
         cq:tags="[we-retail:apparel/footwear,we-retail:season/summer,we-retail:activity/running]"
         cq:template="/conf/we-retail/settings/wcm/templates/product-page"
+        cq:redirectTarget="/content/we-retail/language-masters/en/products/product-page.html/eq/running/eqrusufle.html"
         jcr:language="en"
         jcr:mixinTypes="[cq:LiveSync]"
         jcr:primaryType="cq:PageContent"
