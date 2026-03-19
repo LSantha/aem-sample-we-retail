@@ -68,7 +68,7 @@ public class ProductItemTest {
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
         Resource productResource = createProductResource();
-        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/cif-products/product-page.html/wo/coats/sonja-insulated-jacket.html");
+        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/wo/coats/sonja-insulated-jacket.html");
         when(request.getResourceResolver()).thenReturn(resourceResolver);
         when(resourceResolver.map(request, "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"))
             .thenReturn("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg");
@@ -77,7 +77,7 @@ public class ProductItemTest {
 
         assertEquals("wr-sonja-jacket", item.getSku());
         assertEquals("wr-sonja-jacket-green-xs", item.getVariants().get(0).getSku());
-        assertEquals("/content/we-retail/us/en/cif-products/product-page.html/wo/coats/sonja-insulated-jacket.html#wr-sonja-jacket-green-xs",
+        assertEquals("/content/we-retail/us/en/products/product-page.html/wo/coats/sonja-insulated-jacket.html#wr-sonja-jacket-green-xs",
             item.getVariants().get(0).getPagePath());
     }
 

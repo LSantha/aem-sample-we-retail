@@ -59,11 +59,11 @@ public class ProductGridTest {
 
         when(request.getResourceResolver()).thenReturn(resourceResolver);
         when(resource.getValueMap()).thenReturn(valueMap("category", "/"));
-        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/cif-products");
+        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products");
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
-            "/content/we-retail/us/en/cif-products/product-page"));
-        when(pageManager.getPage("/content/we-retail/us/en/cif-products/product-page")).thenReturn(productRoutePage);
+            "/content/we-retail/us/en/products/product-page"));
+        when(pageManager.getPage("/content/we-retail/us/en/products/product-page")).thenReturn(productRoutePage);
         when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(ProductList.class))).thenReturn(productList);
         when(productList.getCategoryRetriever()).thenReturn(categoryRetriever);
         when(productList.getTitle()).thenReturn("Default Category");
@@ -98,7 +98,7 @@ public class ProductGridTest {
         Collection<ProductGridItem> items = productGrid.getProducts();
         assertNotNull(items);
         assertEquals(1, items.size());
-        assertEquals("/content/we-retail/us/en/cif-products/product-page.html/me/shorts/corona-shorts.html",
+        assertEquals("/content/we-retail/us/en/products/product-page.html/me/shorts/corona-shorts.html",
             items.iterator().next().getPath());
     }
 
@@ -112,7 +112,7 @@ public class ProductGridTest {
 
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
-            "/content/we-retail/us/en/cif-products/product-page"));
+            "/content/we-retail/us/en/products/product-page"));
         when(productListItem.getProduct()).thenReturn(product);
         when(productListItem.getURL()).thenThrow(new RuntimeException("root category url generation should not be required"));
         when(product.getUrlPath()).thenReturn("eq/biking/eqbisublp");
@@ -123,7 +123,7 @@ public class ProductGridTest {
         routeUrlMethod.setAccessible(true);
         String routeUrl = (String) routeUrlMethod.invoke(productGrid, productListItem);
 
-        assertEquals("/content/we-retail/us/en/cif-products/product-page.html/eq/biking/eqbisublp.html", routeUrl);
+        assertEquals("/content/we-retail/us/en/products/product-page.html/eq/biking/eqbisublp.html", routeUrl);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class ProductGridTest {
         CategoryRetriever categoryRetriever = mock(CategoryRetriever.class);
 
         when(resource.getValueMap()).thenReturn(valueMap("category", "/"));
-        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/cif-products");
+        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products");
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(currentPageContent.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
         when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(ProductList.class))).thenReturn(productList);

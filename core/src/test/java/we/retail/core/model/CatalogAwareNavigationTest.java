@@ -29,26 +29,26 @@ public class CatalogAwareNavigationTest {
         PageManager pageManager = mock(PageManager.class);
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
         Resource catalogResource = mock(Resource.class);
-        Page catalogPage = page("cif-products", "/content/we-retail/us/en/cif-products/category-page");
+        Page catalogPage = page("products", "/content/we-retail/us/en/products/category-page");
 
-        NavigationItem equipmentLeaf = navItem("Hiking", "/content/we-retail/us/en/cif-products/category-page.html/eq/hiking.html",
+        NavigationItem equipmentLeaf = navItem("Hiking", "/content/we-retail/us/en/products/category-page.html/eq/hiking.html",
             Collections.<NavigationItem>emptyList(), null, 2);
-        NavigationItem equipment = navItem("Equipment", "/content/we-retail/us/en/cif-products/category-page.html/eq.html",
+        NavigationItem equipment = navItem("Equipment", "/content/we-retail/us/en/products/category-page.html/eq.html",
             Collections.singletonList(equipmentLeaf), null, 1);
-        NavigationItem women = navItem("Women", "/content/we-retail/us/en/cif-products/category-page.html/wo.html",
+        NavigationItem women = navItem("Women", "/content/we-retail/us/en/products/category-page.html/wo.html",
             Collections.<NavigationItem>emptyList(), null, 1);
-        NavigationItem cifProducts = navItem("CIF Products", "/content/we-retail/us/en/cif-products.html",
-            Arrays.asList(equipment, women), null, 0);
+        NavigationItem products = navItem("Products", "/content/we-retail/us/en/products.html", Arrays.asList(equipment, women), null,
+            0);
 
         NavigationItem shorts = navItem("Shorts", "/content/we-retail/us/en/products/men/shorts.html",
             Collections.<NavigationItem>emptyList(), page("shorts", null), 1);
         NavigationItem men = navItem("Men", "/content/we-retail/us/en/men.html",
             Collections.singletonList(shorts), page("men", null), 0);
 
-        when(resourceResolver.resolve("/content/we-retail/us/en/cif-products.html")).thenReturn(catalogResource);
+        when(resourceResolver.resolve("/content/we-retail/us/en/products.html")).thenReturn(catalogResource);
         when(pageManager.getContainingPage(catalogResource)).thenReturn(catalogPage);
 
-        List<NavigationItem> items = CatalogAwareNavigation.limitCatalogBranchDepth(Arrays.asList(cifProducts, men),
+        List<NavigationItem> items = CatalogAwareNavigation.limitCatalogBranchDepth(Arrays.asList(products, men),
             pageManager, resourceResolver);
 
         assertEquals(2, items.size());

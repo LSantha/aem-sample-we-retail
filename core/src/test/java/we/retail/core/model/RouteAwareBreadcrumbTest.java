@@ -43,18 +43,18 @@ public class RouteAwareBreadcrumbTest {
         ModelFactory modelFactory = mock(ModelFactory.class);
         Breadcrumb delegate = mock(Breadcrumb.class);
         Breadcrumb cifBreadcrumb = mock(Breadcrumb.class);
-        NavigationItem catalogItem = navigationItem("CIF Products", "/content/we-retail/us/en/cif-products.html");
-        NavigationItem womenItem = navigationItem("Women", "/content/we-retail/us/en/cif-products/category-page.html/wo.html");
-        NavigationItem coatsItem = navigationItem("Coats", "/content/we-retail/us/en/cif-products/category-page.html/wo/coats.html");
+        NavigationItem catalogItem = navigationItem("Products", "/content/we-retail/us/en/products.html");
+        NavigationItem womenItem = navigationItem("Women", "/content/we-retail/us/en/products/category-page.html/wo.html");
+        NavigationItem coatsItem = navigationItem("Coats", "/content/we-retail/us/en/products/category-page.html/wo/coats.html");
         NavigationItem productItem = navigationItem("Sonja Insulated Jacket",
-            "/content/we-retail/us/en/cif-products/product-page.html/wo/coats/wootwisot.html");
+            "/content/we-retail/us/en/products/product-page.html/wo/coats/wootwisot.html");
 
-        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/cif-products/product-page");
+        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/product-page");
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
         when(currentPageContent.getValueMap()).thenReturn(valueMap(
-            "cq:cifProductPage", "/content/we-retail/us/en/cif-products/product-page",
-            "cq:cifCategoryPage", "/content/we-retail/us/en/cif-products/category-page"));
+            "cq:cifProductPage", "/content/we-retail/us/en/products/product-page",
+            "cq:cifCategoryPage", "/content/we-retail/us/en/products/category-page"));
         when(modelFactory.getModelFromWrappedRequest(any(), any(), any(Class.class))).thenReturn(cifBreadcrumb);
         when(cifBreadcrumb.getItems()).thenReturn(Arrays.asList(catalogItem, womenItem, coatsItem, productItem));
         when(delegate.getItems()).thenReturn(Collections.<NavigationItem>emptyList());
@@ -66,7 +66,7 @@ public class RouteAwareBreadcrumbTest {
         setField(breadcrumb, "delegate", delegate);
 
         assertTrue(we.retail.core.commerce.cif.models.LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage"));
-        assertEquals("/content/we-retail/us/en/cif-products/category-page",
+        assertEquals("/content/we-retail/us/en/products/category-page",
             we.retail.core.commerce.cif.models.GenericRouteSupport.findConfiguredRoute(currentPage, "cq:cifCategoryPage"));
 
         Collection<NavigationItem> items = breadcrumb.getItems();
@@ -98,15 +98,15 @@ public class RouteAwareBreadcrumbTest {
         CategoryInterface pantsCategory = mock(CategoryInterface.class);
         com.adobe.cq.commerce.magento.graphql.Breadcrumb womenBreadcrumb = mock(com.adobe.cq.commerce.magento.graphql.Breadcrumb.class);
 
-        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/cif-products/product-page");
+        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/product-page");
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(request.getRequestPathInfo()).thenReturn(pathInfo);
         when(request.adaptTo(MagentoGraphqlClient.class)).thenReturn(client);
         when(pathInfo.getSuffix()).thenReturn("/wo/pants/faba_running_pants.html");
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
         when(currentPageContent.getValueMap()).thenReturn(valueMap(
-            "cq:cifProductPage", "/content/we-retail/us/en/cif-products/product-page",
-            "cq:cifCategoryPage", "/content/we-retail/us/en/cif-products/category-page"));
+            "cq:cifProductPage", "/content/we-retail/us/en/products/product-page",
+            "cq:cifCategoryPage", "/content/we-retail/us/en/products/category-page"));
         when(modelFactory.getModelFromWrappedRequest(any(), any(), any(Class.class))).thenReturn(cifBreadcrumb);
         when(cifBreadcrumb.getItems()).thenReturn(Collections.<NavigationItem>emptyList());
         when(client.execute(any(String.class))).thenReturn(response);
@@ -137,9 +137,9 @@ public class RouteAwareBreadcrumbTest {
         assertEquals(2, items.size());
         NavigationItem[] breadcrumbItems = items.toArray(new NavigationItem[0]);
         assertEquals("Women", breadcrumbItems[0].getTitle());
-        assertEquals("/content/we-retail/us/en/cif-products/category-page.html/wo.html", breadcrumbItems[0].getURL());
+        assertEquals("/content/we-retail/us/en/products/category-page.html/wo.html", breadcrumbItems[0].getURL());
         assertEquals("Pants", breadcrumbItems[1].getTitle());
-        assertEquals("/content/we-retail/us/en/cif-products/category-page.html/wo/pants.html", breadcrumbItems[1].getURL());
+        assertEquals("/content/we-retail/us/en/products/category-page.html/wo/pants.html", breadcrumbItems[1].getURL());
     }
 
     private NavigationItem navigationItem(String title, String url) {
