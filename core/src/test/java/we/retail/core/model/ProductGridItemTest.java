@@ -13,6 +13,10 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 
 import com.adobe.cq.commerce.core.components.models.common.Price;
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
+import com.adobe.cq.commerce.core.components.models.product.Asset;
+import com.adobe.cq.commerce.core.components.models.product.Product;
+import com.adobe.cq.commerce.core.components.models.product.Variant;
+import com.adobe.cq.commerce.core.components.models.retriever.AbstractProductRetriever;
 import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
 import com.adobe.cq.commerce.magento.graphql.ComplexTextValue;
 import com.adobe.cq.commerce.magento.graphql.ConfigurableProduct;
@@ -66,6 +70,43 @@ public class ProductGridItemTest {
         assertTrue(item.getFilters().getColors().contains("red"));
         assertTrue(item.getFilters().getSizes().contains("9"));
         assertTrue(item.getFilters().getPrices().contains("$64.99"));
+    }
+
+    @Test
+    public void testUsesSelectedVariantForImageAndPrice() {
+        Product product = mock(Product.class);
+        Variant variant = mock(Variant.class);
+        AbstractProductRetriever productRetriever = mock(AbstractProductRetriever.class);
+        ProductInterface productData = mock(ProductInterface.class);
+        SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
+        ResourceResolver resourceResolver = mock(ResourceResolver.class);
+        Asset variantAsset = mock(Asset.class);
+        Price basePrice = createPrice("$64.99");
+        Price variantPrice = createPrice("$74.99");
+
+        when(request.getResourceResolver()).thenReturn(resourceResolver);
+        when(product.getName()).thenReturn("Sussex Rain Boots");
+        when(product.getPriceRange()).thenReturn(basePrice);
+        when(product.getVariants()).thenReturn(Collections.singletonList(variant));
+        when(product.getProductRetriever()).thenReturn(productRetriever);
+        when(productRetriever.fetchProduct()).thenReturn(productData);
+        when(variant.getSku()).thenReturn("meotwisus-red-9");
+        when(variant.getName()).thenReturn("Sussex Rain Boots");
+        when(variant.getPriceRange()).thenReturn(variantPrice);
+        when(variant.getAssets()).thenReturn(Collections.singletonList(variantAsset));
+        when(variantAsset.getPath()).thenReturn("/content/dam/celadon/we-retail/me/footwear/meotwisus-red-9.jpeg");
+        when(resourceResolver.map(request, "/content/dam/celadon/we-retail/me/footwear/meotwisus-red-9.jpeg"))
+            .thenReturn("/content/dam/celadon/we-retail/me/footwear/meotwisus-red-9.jpeg");
+
+        ProductGridItem item = ProductGridItem.fromProduct(product, null, request,
+            "/content/we-retail/us/en/products/product-page.html/me/footwear/meotwisus.html#meotwisus-red-9",
+            "meotwisus-red-9");
+
+        assertTrue(item.exists());
+        assertEquals("$74.99", item.getPrice());
+        assertEquals("/content/dam/celadon/we-retail/me/footwear/meotwisus-red-9.jpeg", item.getImage());
+        assertEquals("/content/we-retail/us/en/products/product-page.html/me/footwear/meotwisus.html#meotwisus-red-9",
+            item.getPath());
     }
 
     private ConfigurableProduct createConfigurableProduct() {

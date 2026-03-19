@@ -8,6 +8,7 @@
         cq:template="/libs/cif/shell/components/configuration/page/template"
         sling:resourceType="cif/shell/components/configuration/page"
         cq:graphqlClient="we-retail"
+        magentoGraphqlEndpoint="/apps/celadon/graphql"
         magentoStore="default"
         magentoRootCategoryId="/"
         magentoRootCategoryIdType="urlPath"

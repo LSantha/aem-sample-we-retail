@@ -27,6 +27,7 @@ import com.day.cq.wcm.api.Page;
 
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
 import com.adobe.cq.commerce.core.components.models.product.Product;
+import com.adobe.cq.commerce.core.components.models.product.Variant;
 import com.adobe.cq.commerce.magento.graphql.ConfigurableProduct;
 import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptions;
 import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptionsValues;
@@ -64,14 +65,27 @@ public class ProductGridItem {
     }
 
     public static ProductGridItem fromProduct(Product product, Page page, SlingHttpServletRequest request, String resolvedPath) {
+        return fromProduct(product, page, request, resolvedPath, null);
+    }
+
+    public static ProductGridItem fromProduct(Product product, Page page, SlingHttpServletRequest request, String resolvedPath,
+        String selectedVariantSku) {
         ProductInterface productData = CifProductViewSupport.fetchProduct(product);
         Optional<Metadata> metadata = LegacyProductPresentationSupport.metadata(LegacyProductPresentationSupport.productResource(page), page);
-        String image = LegacyProductPresentationSupport.resolveImageReference(
+        String defaultImage = LegacyProductPresentationSupport.resolveImageReference(
             LegacyProductPresentationSupport.productResource(page),
             metadata.orElse(null),
             request,
             StringUtils.defaultIfBlank(CifProductViewSupport.assetPath(product.getAssets()), CifProductViewSupport.imagePath(productData)));
         String resolvedPrice = CifProductViewSupport.formatPrice(product.getPriceRange());
+        Variant selectedVariant = resolveSelectedVariant(product, selectedVariantSku);
+        String image = selectedVariant != null
+            ? StringUtils.defaultIfBlank(CifProductViewSupport.assetPath(selectedVariant.getAssets()), defaultImage)
+            : defaultImage;
+        String displayName = selectedVariant != null ? StringUtils.defaultIfBlank(selectedVariant.getName(), product.getName()) : product.getName();
+        String displayPrice = selectedVariant != null
+            ? StringUtils.defaultIfBlank(CifProductViewSupport.formatPrice(selectedVariant.getPriceRange()), resolvedPrice)
+            : resolvedPrice;
         String pagePath = page != null && request != null && request.getResourceResolver() != null
             ? request.getResourceResolver().map(request, page.getPath()) + ".html"
             : StringUtils.EMPTY;
@@ -79,11 +93,11 @@ public class ProductGridItem {
         return new ProductGridItem(
             image,
             LegacyProductPresentationSupport.gridImageResourcePath(page),
-            product.getName(),
+            displayName,
             LegacyProductPresentationSupport.legacyDescription(metadata, CifProductViewSupport.descriptionLabel(productData)),
-            resolvedPrice,
+            displayPrice,
             StringUtils.defaultIfBlank(resolvedPath, pagePath),
-            buildFilters(productData, resolvedPrice));
+            buildFilters(productData, displayPrice));
     }
 
     public static ProductGridItem fromProductListItem(ProductListItem productListItem, Page page, SlingHttpServletRequest request,
@@ -128,6 +142,20 @@ public class ProductGridItem {
         }
 
         return productFilters;
+    }
+
+    private static Variant resolveSelectedVariant(Product product, String selectedVariantSku) {
+        if (product == null || StringUtils.isBlank(selectedVariantSku) || product.getVariants() == null) {
+            return null;
+        }
+
+        for (Variant variant : product.getVariants()) {
+            if (variant != null && StringUtils.equals(selectedVariantSku, variant.getSku())) {
+                return variant;
+            }
+        }
+
+        return null;
     }
 
     public boolean exists() {
