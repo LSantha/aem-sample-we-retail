@@ -46,7 +46,6 @@
             'description',
             'price',
             'summary',
-            'features',
             'image',
             'thumbnail',
             'variantAxes'

@@ -23,14 +23,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.product.Variant;
@@ -40,8 +38,6 @@ import com.adobe.cq.commerce.magento.graphql.ProductInterface;
 import com.day.cq.wcm.api.Page;
 
 import we.retail.core.commerce.cif.models.CifProductViewSupport;
-import we.retail.core.commerce.cif.models.LegacyProductPresentationSupport;
-import we.retail.core.commerce.cif.models.LegacyProductPresentationSupport.Metadata;
 
 public class ProductItem {
 
@@ -52,35 +48,31 @@ public class ProductItem {
     private final String description;
     private final String price;
     private final String summary;
-    private final String features;
     private final String imageUrl;
     private final String thumbnailUrl;
     private final List<ProductItem> variants;
     private final Map<String, String> variantAxesMap;
     private final Map<String, Collection<String>> variantsAxesValues;
 
-    public ProductItem(Product product, SlingHttpServletRequest request, Page currentPage, Resource productResource) {
-        this(product, request, currentPage, productResource, resolvePagePath(request, currentPage));
+    public ProductItem(Product product, SlingHttpServletRequest request, Page currentPage) {
+        this(product, request, resolvePagePath(request, currentPage));
     }
 
-    private ProductItem(Product product, SlingHttpServletRequest request, Page currentPage, Resource productResource, String resolvedPagePath) {
+    private ProductItem(Product product, SlingHttpServletRequest request, String resolvedPagePath) {
         ProductInterface productData = CifProductViewSupport.fetchProduct(product);
-        Optional<Metadata> metadata = LegacyProductPresentationSupport.metadata(productResource, currentPage);
-        String resolvedDescription = LegacyProductPresentationSupport.legacyDescription(metadata,
-            CifProductViewSupport.descriptionLabel(productData));
-        String resolvedSummary = LegacyProductPresentationSupport.legacySummary(metadata, CifProductViewSupport.summary(productData));
-        String resolvedFeatures = LegacyProductPresentationSupport.legacyFeatures(metadata, CifProductViewSupport.features(productData));
-        String resolvedImage = LegacyProductPresentationSupport.resolveImageReference(productResource, metadata.orElse(null), request,
-            StringUtils.defaultIfBlank(CifProductViewSupport.assetPath(product.getAssets()), CifProductViewSupport.imagePath(productData)));
+        String resolvedDescription = CifProductViewSupport.descriptionLabel(productData);
+        String resolvedSummary = CifProductViewSupport.summary(productData);
+        String resolvedImage = CifProductViewSupport.resolveImage(request,
+            CifProductViewSupport.assetPath(product.getAssets()),
+            CifProductViewSupport.imagePath(productData));
 
-        path = productResource != null ? productResource.getPath() : resolvedPagePath;
+        path = resolvedPagePath;
         pagePath = resolvedPagePath;
-        sku = LegacyProductPresentationSupport.baseSku(productResource, currentPage, product.getSku());
+        sku = normalizeSku(product.getSku());
         title = product.getName();
         description = resolvedDescription;
         price = CifProductViewSupport.formatPrice(product.getPriceRange());
         summary = resolvedSummary;
-        features = resolvedFeatures;
         imageUrl = resolvedImage;
         thumbnailUrl = resolvedImage;
 
@@ -100,14 +92,10 @@ public class ProductItem {
         variantAxesMap = Collections.emptyMap();
         variantsAxesValues = aggregatedAxesValues;
         variants = new ArrayList<ProductItem>();
-        List<Resource> legacyVariantResources = LegacyProductPresentationSupport.variantResources(productResource);
         if (!product.getVariants().isEmpty()) {
-            int variantIndex = 0;
             for (Variant variant : product.getVariants()) {
-                Resource variantResource = LegacyProductPresentationSupport.resolveVariantResource(legacyVariantResources, variant, variantIndex);
-                variants.add(new ProductItem(variant, resolvedPagePath, resolvedDescription, resolvedSummary, resolvedFeatures,
-                    resolvedImage, valueLookup, request, variantResource));
-                variantIndex++;
+                variants.add(new ProductItem(variant, resolvedPagePath, resolvedDescription, resolvedSummary,
+                    resolvedImage, valueLookup, request));
             }
         } else {
             variants.add(this);
@@ -115,19 +103,18 @@ public class ProductItem {
     }
 
     private ProductItem(Variant variant, String resolvedPagePath, String resolvedDescription, String resolvedSummary,
-        String resolvedFeatures, String fallbackImage, Map<String, Map<Integer, String>> valueLookup, SlingHttpServletRequest request,
-        Resource variantResource) {
-        String resolvedSku = LegacyProductPresentationSupport.resolveVariantSku(variantResource, variant);
-        path = variantResource != null ? variantResource.getPath() : resolvedPagePath + "#" + resolvedSku;
-        pagePath = resolvedPagePath + "#" + resolvedSku;
+        String fallbackImage, Map<String, Map<Integer, String>> valueLookup, SlingHttpServletRequest request) {
+        String resolvedSku = normalizeSku(variant.getSku());
+        path = resolvedPagePath + "#" + resolvedSku;
+        pagePath = path;
         sku = resolvedSku;
         title = variant.getName();
         description = resolvedDescription;
         price = CifProductViewSupport.formatPrice(variant.getPriceRange());
         summary = StringUtils.defaultIfBlank(CifProductViewSupport.stripHtml(variant.getDescription()), resolvedSummary);
-        features = StringUtils.defaultIfBlank(CifProductViewSupport.stripHtml(variant.getDescription()), resolvedFeatures);
-        imageUrl = LegacyProductPresentationSupport.resolveImageReference(variantResource, null, request,
-            StringUtils.defaultIfBlank(CifProductViewSupport.assetPath(variant.getAssets()), fallbackImage));
+        imageUrl = CifProductViewSupport.resolveImage(request,
+            CifProductViewSupport.assetPath(variant.getAssets()),
+            fallbackImage);
         thumbnailUrl = imageUrl;
         variants = Collections.emptyList();
         variantsAxesValues = Collections.emptyMap();
@@ -135,11 +122,17 @@ public class ProductItem {
     }
 
     private static String resolvePagePath(SlingHttpServletRequest request, Page currentPage) {
-        String requestUri = request.getRequestURI();
+        String requestUri = request != null ? request.getRequestURI() : null;
         if (StringUtils.isNotBlank(requestUri)) {
             return requestUri;
         }
         return currentPage != null ? currentPage.getPath() + ".html" : StringUtils.EMPTY;
+    }
+
+    private static String normalizeSku(String sku) {
+        String normalizedSku = StringUtils.defaultString(sku);
+        String resolvedSku = StringUtils.substringAfterLast(normalizedSku, "/");
+        return StringUtils.isNotBlank(resolvedSku) ? resolvedSku : normalizedSku;
     }
 
     private static Map<String, String> buildVariantAxesMap(Variant variant, Map<String, Map<Integer, String>> valueLookup) {
@@ -182,10 +175,6 @@ public class ProductItem {
 
     public String getSummary() {
         return summary;
-    }
-
-    public String getFeatures() {
-        return features;
     }
 
     public String getImageUrl() {

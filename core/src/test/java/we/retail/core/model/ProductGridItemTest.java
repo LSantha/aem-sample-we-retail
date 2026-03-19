@@ -2,14 +2,10 @@ package we.retail.core.model;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Test;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 
 import com.adobe.cq.commerce.core.components.models.common.Price;
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
@@ -23,7 +19,6 @@ import com.adobe.cq.commerce.magento.graphql.ConfigurableProduct;
 import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptions;
 import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptionsValues;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
-import com.day.cq.wcm.api.Page;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,36 +32,23 @@ public class ProductGridItemTest {
         ProductListItem listItem = mock(ProductListItem.class);
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
-        Page page = mock(Page.class);
-        Resource productResource = mock(Resource.class);
-        Resource imageResource = mock(Resource.class);
         Price price = createPrice("$64.99");
         ConfigurableProduct product = createConfigurableProduct();
 
-        when(listItem.getImageURL()).thenReturn("https://cdn.example.com/current-cif-image.jpg");
+        when(listItem.getImageURL()).thenReturn("/content/dam/celadon/we-retail/me/footwear/meotwisus_img_0.jpeg");
         when(listItem.getTitle()).thenReturn("Sussex Rain Boots");
-        when(listItem.getURL()).thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots.html");
+        when(listItem.getURL()).thenReturn("/content/we-retail/us/en/products/product-page.html/me/footwear/meotwisus.html");
         when(listItem.getPriceRange()).thenReturn(price);
         when(listItem.getProduct()).thenReturn(product);
         when(request.getResourceResolver()).thenReturn(resourceResolver);
-        when(page.getPath()).thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots");
-        when(page.getContentResource("root/product")).thenReturn(productResource);
-        when(productResource.getValueMap()).thenReturn(valueMap("productData",
-            "/var/commerce/products/we-retail/me/footwear/meotwisus"));
-        when(productResource.getChild("image")).thenReturn(imageResource);
-        when(imageResource.getPath())
-            .thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product/image");
-        when(imageResource.getValueMap()).thenReturn(valueMap("fileReference",
-            "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"));
-        when(resourceResolver.map(request, "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"))
-            .thenReturn("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg");
+        when(resourceResolver.map(request, "/content/dam/celadon/we-retail/me/footwear/meotwisus_img_0.jpeg"))
+            .thenReturn("/content/dam/celadon/we-retail/me/footwear/meotwisus_img_0.jpeg");
 
-        ProductGridItem item = ProductGridItem.fromProductListItem(listItem, page, request, listItem.getURL());
+        ProductGridItem item = ProductGridItem.fromProductListItem(listItem, request, listItem.getURL());
 
         assertTrue(item.exists());
-        assertEquals("footwear", item.getDescription());
-        assertEquals("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product/image",
-            item.getImageResourcePath());
+        assertEquals("Footwear", item.getDescription());
+        assertEquals("/content/dam/celadon/we-retail/me/footwear/meotwisus_img_0.jpeg", item.getImage());
         assertTrue(item.getFilters().getColors().contains("red"));
         assertTrue(item.getFilters().getSizes().contains("9"));
         assertTrue(item.getFilters().getPrices().contains("$64.99"));
@@ -111,7 +93,7 @@ public class ProductGridItemTest {
 
     private ConfigurableProduct createConfigurableProduct() {
         ConfigurableProduct product = mock(ConfigurableProduct.class);
-        CategoryInterface category = createCategory("Men");
+        CategoryInterface category = createCategory("Footwear");
         ComplexTextValue shortDescription = createTextValue("<p>Lightweight training shoe</p>");
         ConfigurableProductOptions colorOption = createOption("color", "Red");
         ConfigurableProductOptions sizeOption = createOption("size", "9");
@@ -149,11 +131,5 @@ public class ProductGridItemTest {
         when(price.isRange()).thenReturn(Boolean.FALSE);
         when(price.getFormattedFinalPrice()).thenReturn(formattedFinalPrice);
         return price;
-    }
-
-    private ValueMapDecorator valueMap(String key, String value) {
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put(key, value);
-        return new ValueMapDecorator(values);
     }
 }

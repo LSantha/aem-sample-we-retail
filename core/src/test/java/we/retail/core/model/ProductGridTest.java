@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -20,11 +21,11 @@ import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.retriever.AbstractProductRetriever;
 import com.adobe.cq.commerce.core.components.models.productlist.CategoryRetriever;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
+import com.adobe.cq.commerce.core.components.services.urls.ProductUrlFormat;
 import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
 import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +35,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.InOrder;
 
@@ -46,16 +48,15 @@ public class ProductGridTest {
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
         Resource currentPageContent = mock(Resource.class);
-        Page productRoutePage = mock(Page.class);
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
         ModelFactory modelFactory = mock(ModelFactory.class);
+        UrlProvider urlProvider = mock(UrlProvider.class);
         ProductList productList = mock(ProductList.class);
         CategoryRetriever categoryRetriever = mock(CategoryRetriever.class);
         ProductListItem productListItem = mock(ProductListItem.class);
         ProductInterface product = mock(ProductInterface.class);
         Price price = mock(Price.class);
         CategoryInterface category = createCategory("Men");
-        PageManager pageManager = mock(PageManager.class);
 
         when(request.getResourceResolver()).thenReturn(resourceResolver);
         when(resource.getValueMap()).thenReturn(valueMap("category", "/"));
@@ -63,7 +64,6 @@ public class ProductGridTest {
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
             "/content/we-retail/us/en/products/product-page"));
-        when(pageManager.getPage("/content/we-retail/us/en/products/product-page")).thenReturn(productRoutePage);
         when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(ProductList.class))).thenReturn(productList);
         when(productList.getCategoryRetriever()).thenReturn(categoryRetriever);
         when(productList.getTitle()).thenReturn("Default Category");
@@ -71,11 +71,14 @@ public class ProductGridTest {
 
         when(productListItem.getProduct()).thenReturn(product);
         when(productListItem.getTitle()).thenReturn("Corona Shorts");
-        when(productListItem.getURL()).thenReturn("/content/we-retail/us/en/category-page.html/me/shorts/corona-shorts.html");
-        when(productListItem.getPath()).thenReturn("/content/we-retail/us/en/category-page.html/me/shorts/corona-shorts.html");
+        when(productListItem.getURL()).thenReturn("/content/we-retail/us/en/products/product-page.html/me/shorts/corona-shorts.html");
+        when(productListItem.getPath()).thenReturn("/content/we-retail/us/en/products/product-page.html/me/shorts/corona-shorts.html");
         when(productListItem.getImageURL()).thenReturn("/content/dam/celadon/we-retail/me/shorts/mehisucos_img_0.jpeg");
         when(productListItem.getPriceRange()).thenReturn(price);
+        when(product.getSku()).thenReturn("mehisucos");
         when(product.getUrlPath()).thenReturn("me/shorts/corona-shorts");
+        when(urlProvider.toProductUrl(eq(request), eq(currentPage), isA(ProductUrlFormat.Params.class)))
+            .thenReturn("/content/we-retail/us/en/products/product-page.html/me/shorts/corona-shorts.html");
 
         when(price.isEmpty()).thenReturn(false);
         when(price.isRange()).thenReturn(Boolean.FALSE);
@@ -88,8 +91,8 @@ public class ProductGridTest {
         setField(productGrid, "request", request);
         setField(productGrid, "resource", resource);
         setField(productGrid, "currentPage", currentPage);
-        setField(productGrid, "pageManager", pageManager);
         setField(productGrid, "modelFactory", modelFactory);
+        setField(productGrid, "urlProvider", urlProvider);
 
         Method initMethod = ProductGrid.class.getDeclaredMethod("initModel");
         initMethod.setAccessible(true);
@@ -100,13 +103,16 @@ public class ProductGridTest {
         assertEquals(1, items.size());
         assertEquals("/content/we-retail/us/en/products/product-page.html/me/shorts/corona-shorts.html",
             items.iterator().next().getPath());
+        verify(urlProvider).toProductUrl(eq(request), eq(currentPage), isA(ProductUrlFormat.Params.class));
     }
 
     @Test
-    public void testBuildRouteProductUrlUsesProductUrlPathWhenItemUrlFails() throws Exception {
+    public void testBuildRouteProductUrlPrefersUrlProviderBeforeItemUrlFallback() throws Exception {
         ProductGrid productGrid = new ProductGrid();
+        SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
         Page currentPage = mock(Page.class);
         Resource currentPageContent = mock(Resource.class);
+        UrlProvider urlProvider = mock(UrlProvider.class);
         ProductListItem productListItem = mock(ProductListItem.class);
         ProductInterface product = mock(ProductInterface.class);
 
@@ -115,15 +121,22 @@ public class ProductGridTest {
             "/content/we-retail/us/en/products/product-page"));
         when(productListItem.getProduct()).thenReturn(product);
         when(productListItem.getURL()).thenThrow(new RuntimeException("root category url generation should not be required"));
+        when(productListItem.getPath()).thenReturn(StringUtils.EMPTY);
+        when(product.getSku()).thenReturn("eqbisublp");
         when(product.getUrlPath()).thenReturn("eq/biking/eqbisublp");
+        when(urlProvider.toProductUrl(eq(request), eq(currentPage), isA(ProductUrlFormat.Params.class)))
+            .thenReturn("/content/we-retail/us/en/products/product-page.html/eq/biking/eqbisublp.html");
 
+        setField(productGrid, "request", request);
         setField(productGrid, "currentPage", currentPage);
+        setField(productGrid, "urlProvider", urlProvider);
 
         Method routeUrlMethod = ProductGrid.class.getDeclaredMethod("buildRouteProductUrl", ProductListItem.class);
         routeUrlMethod.setAccessible(true);
         String routeUrl = (String) routeUrlMethod.invoke(productGrid, productListItem);
 
         assertEquals("/content/we-retail/us/en/products/product-page.html/eq/biking/eqbisublp.html", routeUrl);
+        verify(urlProvider).toProductUrl(eq(request), eq(currentPage), isA(ProductUrlFormat.Params.class));
     }
 
     @Test

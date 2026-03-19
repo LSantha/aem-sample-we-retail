@@ -5,6 +5,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 
 import com.adobe.cq.commerce.core.components.models.retriever.AbstractCategoryRetriever;
 import com.adobe.cq.commerce.core.components.services.urls.CategoryUrlFormat;
+import com.adobe.cq.commerce.core.components.services.urls.ProductUrlFormat;
 import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
 import com.day.cq.wcm.api.Page;
 
@@ -30,29 +31,56 @@ final class CommerceLinkSupport {
             return defaultLink(externalLink);
         }
 
-        if (PRODUCT.equals(normalizedLinkType)
-                && StringUtils.isNotBlank(productSku)
-                && request != null
-                && currentPage != null
-                && urlProvider != null) {
-            return defaultLink(urlProvider.toProductUrl(request, currentPage, productSku));
+        if (PRODUCT.equals(normalizedLinkType)) {
+            return defaultLink(resolveProductUrl(request, currentPage, urlProvider, productSku, null, null));
         }
 
-        if (CATEGORY.equals(normalizedLinkType)
-                && StringUtils.isNotBlank(categoryId)
-                && request != null
-                && currentPage != null
-                && urlProvider != null) {
-            CategoryUrlFormat.Params params = new CategoryUrlFormat.Params();
-            if (URL_PATH.equals(categoryIdType)) {
-                params.setUrlPath(categoryId);
-            } else {
-                params.setUid(categoryId);
-            }
-            return defaultLink(urlProvider.formatCategoryUrl(request, currentPage, params));
+        if (CATEGORY.equals(normalizedLinkType)) {
+            return defaultLink(resolveCategoryUrl(request, currentPage, urlProvider, categoryId, categoryIdType));
         }
 
         return toPageUrl(linkTo);
+    }
+
+    static String resolveProductUrl(SlingHttpServletRequest request, Page currentPage, UrlProvider urlProvider,
+            String productSku, String productUrlPath, String variantSku) {
+        if (request == null || currentPage == null || urlProvider == null) {
+            return StringUtils.EMPTY;
+        }
+
+        if (StringUtils.isNotBlank(productUrlPath)) {
+            ProductUrlFormat.Params params = new ProductUrlFormat.Params();
+            params.setUrlPath(productUrlPath);
+            params.setSku(productSku);
+            params.setVariantSku(variantSku);
+
+            String productUrl = urlProvider.toProductUrl(request, currentPage, params);
+            if (StringUtils.isNotBlank(productUrl)) {
+                return appendVariantSkuFragment(productUrl, variantSku);
+            }
+        }
+
+        if (StringUtils.isBlank(productSku)) {
+            return StringUtils.EMPTY;
+        }
+
+        return appendVariantSkuFragment(urlProvider.toProductUrl(request, currentPage, productSku), variantSku);
+    }
+
+    static String resolveCategoryUrl(SlingHttpServletRequest request, Page currentPage, UrlProvider urlProvider,
+            String categoryId, String categoryIdType) {
+        if (request == null || currentPage == null || urlProvider == null || StringUtils.isBlank(categoryId)) {
+            return StringUtils.EMPTY;
+        }
+
+        CategoryUrlFormat.Params params = new CategoryUrlFormat.Params();
+        if (URL_PATH.equals(categoryIdType)) {
+            params.setUrlPath(categoryId);
+        } else {
+            params.setUid(categoryId);
+        }
+
+        return urlProvider.formatCategoryUrl(request, currentPage, params);
     }
 
     static String defaultLink(String link) {
@@ -87,6 +115,14 @@ final class CommerceLinkSupport {
         }
 
         return sanitizedLink + ".html" + suffix;
+    }
+
+    private static String appendVariantSkuFragment(String link, String variantSku) {
+        if (StringUtils.isBlank(link) || StringUtils.isBlank(variantSku)) {
+            return link;
+        }
+
+        return StringUtils.substringBefore(link, "#") + "#" + variantSku;
     }
 
     private static String stripQueryAndFragment(String link) {

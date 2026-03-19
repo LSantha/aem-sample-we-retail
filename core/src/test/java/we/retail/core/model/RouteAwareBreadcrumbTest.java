@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.adobe.cq.commerce.core.components.client.MagentoGraphqlClient;
+import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
@@ -17,6 +18,7 @@ import org.junit.Test;
 
 import com.adobe.cq.commerce.graphql.client.GraphqlResponse;
 import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
+import com.adobe.cq.commerce.magento.graphql.CategoryTree;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
 import com.adobe.cq.commerce.magento.graphql.Products;
 import com.adobe.cq.commerce.magento.graphql.Query;
@@ -29,6 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RouteAwareBreadcrumbTest {
@@ -65,7 +68,7 @@ public class RouteAwareBreadcrumbTest {
         setField(breadcrumb, "modelFactory", modelFactory);
         setField(breadcrumb, "delegate", delegate);
 
-        assertTrue(we.retail.core.commerce.cif.models.LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage"));
+        assertTrue(we.retail.core.commerce.cif.models.GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage"));
         assertEquals("/content/we-retail/us/en/products/category-page",
             we.retail.core.commerce.cif.models.GenericRouteSupport.findConfiguredRoute(currentPage, "cq:cifCategoryPage"));
 
@@ -140,6 +143,118 @@ public class RouteAwareBreadcrumbTest {
         assertEquals("/content/we-retail/us/en/products/category-page.html/wo.html", breadcrumbItems[0].getURL());
         assertEquals("Pants", breadcrumbItems[1].getTitle());
         assertEquals("/content/we-retail/us/en/products/category-page.html/wo/pants.html", breadcrumbItems[1].getURL());
+    }
+
+    @Test
+    public void testBuildsCategoryBreadcrumbFromRouteCategoryParentsOnly() throws Exception {
+        RouteAwareBreadcrumb breadcrumb = new RouteAwareBreadcrumb();
+        SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
+        RequestPathInfo pathInfo = mock(RequestPathInfo.class);
+        Resource resource = mock(Resource.class);
+        Page currentPage = mock(Page.class);
+        Resource currentPageContent = mock(Resource.class);
+        Breadcrumb delegate = mock(Breadcrumb.class);
+        MagentoGraphqlClient client = mock(MagentoGraphqlClient.class);
+        UrlProvider urlProvider = mock(UrlProvider.class);
+        @SuppressWarnings("unchecked")
+        GraphqlResponse<Query, Error> response = mock(GraphqlResponse.class);
+        Query query = mock(Query.class);
+        CategoryTree category = mock(CategoryTree.class);
+        com.adobe.cq.commerce.magento.graphql.Breadcrumb menBreadcrumb = mock(com.adobe.cq.commerce.magento.graphql.Breadcrumb.class);
+        com.adobe.cq.commerce.magento.graphql.Breadcrumb shirtsBreadcrumb = mock(com.adobe.cq.commerce.magento.graphql.Breadcrumb.class);
+
+        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/category-page");
+        when(currentPage.getContentResource()).thenReturn(currentPageContent);
+        when(request.getRequestPathInfo()).thenReturn(pathInfo);
+        when(request.adaptTo(MagentoGraphqlClient.class)).thenReturn(client);
+        when(pathInfo.getSuffix()).thenReturn("/me/shirts/tops.html");
+        when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
+        when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifCategoryPage",
+            "/content/we-retail/us/en/products/category-page"));
+        when(client.execute(any(String.class))).thenReturn(response);
+        when(urlProvider.formatCategoryUrl(any(), any(), any()))
+            .thenReturn("/content/we-retail/us/en/products/category-page.html/me.html",
+                "/content/we-retail/us/en/products/category-page.html/me/shirts.html");
+        when(response.getErrors()).thenReturn(Collections.<Error>emptyList());
+        when(response.getData()).thenReturn(query);
+        when(query.getCategoryList()).thenReturn(Arrays.asList(category));
+        when(category.getUrlPath()).thenReturn("me/shirts/tops");
+        when(category.getName()).thenReturn("Tops");
+        when(category.getBreadcrumbs()).thenReturn(Arrays.asList(menBreadcrumb, shirtsBreadcrumb));
+        when(menBreadcrumb.getCategoryUrlPath()).thenReturn("me");
+        when(menBreadcrumb.getCategoryName()).thenReturn("Men");
+        when(shirtsBreadcrumb.getCategoryUrlPath()).thenReturn("me/shirts");
+        when(shirtsBreadcrumb.getCategoryName()).thenReturn("Shirts");
+        when(delegate.getItems()).thenReturn(Collections.<NavigationItem>emptyList());
+
+        setField(breadcrumb, "request", request);
+        setField(breadcrumb, "resource", resource);
+        setField(breadcrumb, "currentPage", currentPage);
+        setField(breadcrumb, "delegate", delegate);
+        setField(breadcrumb, "urlProvider", urlProvider);
+
+        Collection<NavigationItem> items = breadcrumb.getItems();
+
+        assertEquals(2, items.size());
+        NavigationItem[] breadcrumbItems = items.toArray(new NavigationItem[0]);
+        assertEquals("Men", breadcrumbItems[0].getTitle());
+        assertEquals("/content/we-retail/us/en/products/category-page.html/me.html", breadcrumbItems[0].getURL());
+        assertEquals("Shirts", breadcrumbItems[1].getTitle());
+        assertEquals("/content/we-retail/us/en/products/category-page.html/me/shirts.html", breadcrumbItems[1].getURL());
+        verify(urlProvider, org.mockito.Mockito.times(2)).formatCategoryUrl(any(), any(), any());
+    }
+
+    @Test
+    public void testOmitsRootAndCurrentCategoryForShallowCategoryRoutes() throws Exception {
+        RouteAwareBreadcrumb breadcrumb = new RouteAwareBreadcrumb();
+        SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
+        RequestPathInfo pathInfo = mock(RequestPathInfo.class);
+        Resource resource = mock(Resource.class);
+        Page currentPage = mock(Page.class);
+        Resource currentPageContent = mock(Resource.class);
+        Breadcrumb delegate = mock(Breadcrumb.class);
+        MagentoGraphqlClient client = mock(MagentoGraphqlClient.class);
+        UrlProvider urlProvider = mock(UrlProvider.class);
+        @SuppressWarnings("unchecked")
+        GraphqlResponse<Query, Error> response = mock(GraphqlResponse.class);
+        Query query = mock(Query.class);
+        CategoryTree category = mock(CategoryTree.class);
+        com.adobe.cq.commerce.magento.graphql.Breadcrumb equipmentBreadcrumb = mock(com.adobe.cq.commerce.magento.graphql.Breadcrumb.class);
+
+        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/category-page");
+        when(currentPage.getContentResource()).thenReturn(currentPageContent);
+        when(request.getRequestPathInfo()).thenReturn(pathInfo);
+        when(request.adaptTo(MagentoGraphqlClient.class)).thenReturn(client);
+        when(pathInfo.getSuffix()).thenReturn("/eq/biking.html");
+        when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
+        when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifCategoryPage",
+            "/content/we-retail/us/en/products/category-page"));
+        when(client.execute(any(String.class))).thenReturn(response);
+        when(urlProvider.formatCategoryUrl(any(), any(), any()))
+            .thenReturn("/content/we-retail/us/en/products/category-page.html/eq.html");
+        when(response.getErrors()).thenReturn(Collections.<Error>emptyList());
+        when(response.getData()).thenReturn(query);
+        when(query.getCategoryList()).thenReturn(Arrays.asList(category));
+        when(category.getUrlPath()).thenReturn("eq/biking");
+        when(category.getName()).thenReturn("Biking");
+        when(category.getBreadcrumbs()).thenReturn(Arrays.asList(equipmentBreadcrumb));
+        when(equipmentBreadcrumb.getCategoryUrlPath()).thenReturn("eq");
+        when(equipmentBreadcrumb.getCategoryName()).thenReturn("Equipment");
+        when(delegate.getItems()).thenReturn(Collections.<NavigationItem>emptyList());
+
+        setField(breadcrumb, "request", request);
+        setField(breadcrumb, "resource", resource);
+        setField(breadcrumb, "currentPage", currentPage);
+        setField(breadcrumb, "delegate", delegate);
+        setField(breadcrumb, "urlProvider", urlProvider);
+
+        Collection<NavigationItem> items = breadcrumb.getItems();
+
+        assertEquals(1, items.size());
+        NavigationItem[] breadcrumbItems = items.toArray(new NavigationItem[0]);
+        assertEquals("Equipment", breadcrumbItems[0].getTitle());
+        assertEquals("/content/we-retail/us/en/products/category-page.html/eq.html", breadcrumbItems[0].getURL());
+        verify(urlProvider).formatCategoryUrl(any(), any(), any());
     }
 
     private NavigationItem navigationItem(String title, String url) {

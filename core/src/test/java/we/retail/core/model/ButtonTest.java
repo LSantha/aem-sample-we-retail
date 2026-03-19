@@ -35,10 +35,10 @@ public class ButtonTest {
     public void testGetLinkTo() throws Exception {
         Button button = new Button();
 
-        setField(button, "linkTo", "/content/we-retail/us/en/products/men");
+        setField(button, "linkTo", "/content/we-retail/us/en/men");
         invokeInit(button);
 
-        Assert.assertEquals("/content/we-retail/us/en/products/men", button.getLinkTo());
+        Assert.assertEquals("/content/we-retail/us/en/men", button.getLinkTo());
     }
 
     @Test
@@ -55,10 +55,10 @@ public class ButtonTest {
     public void testResolvesPageLink() throws Exception {
         Button button = new Button();
 
-        setField(button, "linkTo", "/content/we-retail/us/en/products/men");
+        setField(button, "linkTo", "/content/we-retail/us/en/men");
         invokeInit(button);
 
-        Assert.assertEquals("/content/we-retail/us/en/products/men.html", button.getLink());
+        Assert.assertEquals("/content/we-retail/us/en/men.html", button.getLink());
         Assert.assertTrue(button.isVisible());
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 
 import com.adobe.cq.commerce.core.components.models.common.Price;
 import com.adobe.cq.commerce.core.components.models.product.Asset;
@@ -85,14 +86,6 @@ public final class CifProductViewSupport {
         return longDescription(productData);
     }
 
-    public static String features(ProductInterface productData) {
-        String description = longDescription(productData);
-        if (StringUtils.isNotBlank(description)) {
-            return description;
-        }
-        return summary(productData);
-    }
-
     public static String assetPath(List<Asset> assets) {
         if (assets == null || assets.isEmpty()) {
             return StringUtils.EMPTY;
@@ -118,6 +111,23 @@ public final class CifProductViewSupport {
             return StringUtils.defaultString(image.getUrl());
         }
         return StringUtils.EMPTY;
+    }
+
+    public static String resolveImage(SlingHttpServletRequest request, String preferredImage, String fallbackImage) {
+        return mapAssetPath(request, StringUtils.defaultIfBlank(preferredImage, fallbackImage));
+    }
+
+    public static String mapAssetPath(SlingHttpServletRequest request, String assetPath) {
+        if (StringUtils.isBlank(assetPath)) {
+            return StringUtils.EMPTY;
+        }
+
+        String mappedPath = assetPath;
+        if (request != null && request.getResourceResolver() != null && StringUtils.startsWith(assetPath, "/")) {
+            mappedPath = request.getResourceResolver().map(request, assetPath);
+        }
+
+        return StringUtils.replace(mappedPath, " ", "%20");
     }
 
     public static String stripHtml(ComplexTextValue textValue) {

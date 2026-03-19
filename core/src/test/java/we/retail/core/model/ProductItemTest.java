@@ -3,13 +3,8 @@ package we.retail.core.model;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Test;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 
 import com.adobe.cq.commerce.core.components.models.common.Price;
 import com.adobe.cq.commerce.core.components.models.product.Asset;
@@ -33,31 +28,24 @@ import static org.mockito.Mockito.when;
 public class ProductItemTest {
 
     @Test
-    public void testBuildsLegacyWeRetailVariantContractFromPageContent() {
+    public void testBuildsVariantContractFromCifData() {
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
-        ResourceResolver resourceResolver = mock(ResourceResolver.class);
-        Resource productResource = createProductResource();
-        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots.html");
-        when(request.getResourceResolver()).thenReturn(resourceResolver);
-        when(resourceResolver.map(request, "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"))
-            .thenReturn("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg");
+        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/me/footwear/meotwisus.html");
 
-        ProductItem item = new ProductItem(createProduct(), request, null, productResource);
+        ProductItem item = new ProductItem(createProduct(), request, null);
 
         assertEquals("meotwisus", item.getSku());
         assertEquals("Sussex Rain Boots", item.getTitle());
-        assertEquals("footwear", item.getDescription());
+        assertEquals("Footwear", item.getDescription());
         assertEquals("$65.00", item.getPrice());
-        assertEquals("Classic in style, the Sussex Rain Boots provide excellent waterproof protection and great traction.",
-            item.getSummary());
-        assertTrue(item.getFeatures().contains("Mid-height natural rubber uppers"));
-        assertEquals("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg", item.getImageUrl());
-        assertEquals("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product", item.getPath());
+        assertEquals("Current CIF summary", item.getSummary());
+        assertEquals("https://cdn.example.com/current-cif-image.jpg", item.getImageUrl());
+        assertEquals("/content/we-retail/us/en/products/product-page.html/me/footwear/meotwisus.html", item.getPath());
         assertEquals(1, item.getVariants().size());
         assertEquals("meotwisus-9", item.getVariants().get(0).getSku());
-        assertEquals("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product/meotwisus-9",
+        assertEquals("/content/we-retail/us/en/products/product-page.html/me/footwear/meotwisus.html#meotwisus-9",
             item.getVariants().get(0).getPath());
-        assertEquals("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots.html#meotwisus-9",
+        assertEquals("/content/we-retail/us/en/products/product-page.html/me/footwear/meotwisus.html#meotwisus-9",
             item.getVariants().get(0).getPagePath());
         assertEquals("9", item.getVariants().get(0).getVariantValueForAxis("size"));
         assertTrue(item.getVariantsAxesValues().get("size").contains("9"));
@@ -66,14 +54,9 @@ public class ProductItemTest {
     @Test
     public void testPrefersCifSkusWhenAvailable() {
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
-        ResourceResolver resourceResolver = mock(ResourceResolver.class);
-        Resource productResource = createProductResource();
         when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/wo/coats/sonja-insulated-jacket.html");
-        when(request.getResourceResolver()).thenReturn(resourceResolver);
-        when(resourceResolver.map(request, "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"))
-            .thenReturn("/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg");
 
-        ProductItem item = new ProductItem(createProduct("wr-sonja-jacket", "wr-sonja-jacket-green-xs"), request, null, productResource);
+        ProductItem item = new ProductItem(createProduct("wr-sonja-jacket", "wr-sonja-jacket-green-xs"), request, null);
 
         assertEquals("wr-sonja-jacket", item.getSku());
         assertEquals("wr-sonja-jacket-green-xs", item.getVariants().get(0).getSku());
@@ -142,7 +125,7 @@ public class ProductItemTest {
 
     private ProductInterface createProductData() {
         ProductInterface productData = mock(ProductInterface.class);
-        CategoryInterface category = createCategory("Men");
+        CategoryInterface category = createCategory("Footwear");
         ComplexTextValue shortDescription = createTextValue("<p>Current CIF summary</p>");
         ComplexTextValue description = createTextValue("<p>Current CIF description</p>");
         ProductImage image = createImage("https://cdn.example.com/current-cif-image.jpg");
@@ -152,48 +135,6 @@ public class ProductItemTest {
         when(productData.getDescription()).thenReturn(description);
         when(productData.getSmallImage()).thenReturn(image);
         return productData;
-    }
-
-    private Resource createProductResource() {
-        Resource productResource = mock(Resource.class);
-        Resource productImage = mock(Resource.class);
-        Resource variantResource = mock(Resource.class);
-        Resource variantImage = mock(Resource.class);
-
-        when(productResource.getPath()).thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product");
-        when(productResource.getValueMap()).thenReturn(valueMap("productData",
-            "/var/commerce/products/we-retail/me/footwear/meotwisus"));
-        when(productResource.getChild("image")).thenReturn(productImage);
-        when(productResource.getChildren()).thenReturn(Arrays.asList(variantResource));
-
-        when(productImage.getValueMap()).thenReturn(valueMap("fileReference",
-            "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"));
-
-        when(variantResource.getName()).thenReturn("meotwisus-9");
-        when(variantResource.getPath())
-            .thenReturn("/content/we-retail/us/en/products/men/footwear/sussex-rain-boots/jcr:content/root/product/meotwisus-9");
-        when(variantResource.getValueMap()).thenReturn(valueMap(
-            "cq:commerceType", "variant",
-            "productData", "/var/commerce/products/we-retail/me/footwear/meotwisus/size-9"));
-        when(variantResource.getChild("image")).thenReturn(variantImage);
-
-        when(variantImage.getValueMap()).thenReturn(valueMap("fileReference",
-            "/content/dam/we-retail/en/products/apparel/footwear/source/Sussex.jpg"));
-
-        return productResource;
-    }
-
-    private ValueMapDecorator valueMap(String key, String value) {
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put(key, value);
-        return new ValueMapDecorator(values);
-    }
-
-    private ValueMapDecorator valueMap(String key1, String value1, String key2, String value2) {
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put(key1, value1);
-        values.put(key2, value2);
-        return new ValueMapDecorator(values);
     }
 
     private CategoryInterface createCategory(String name) {

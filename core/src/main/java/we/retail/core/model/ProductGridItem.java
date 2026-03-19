@@ -17,7 +17,6 @@ package we.retail.core.model;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,25 +33,20 @@ import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptionsValues;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
 
 import we.retail.core.commerce.cif.models.CifProductViewSupport;
-import we.retail.core.commerce.cif.models.LegacyProductPresentationSupport;
-import we.retail.core.commerce.cif.models.LegacyProductPresentationSupport.Metadata;
 
 public class ProductGridItem {
 
     private final boolean exists;
     private final String image;
-    private final String imageResourcePath;
     private final String name;
     private final String description;
     private final String price;
     private final String path;
     private final ProductFilters filters;
 
-    private ProductGridItem(String image, String imageResourcePath, String name, String description, String price, String path,
-        ProductFilters filters) {
+    private ProductGridItem(String image, String name, String description, String price, String path, ProductFilters filters) {
         this.exists = StringUtils.isNotBlank(name) && StringUtils.isNotBlank(path);
         this.image = image;
-        this.imageResourcePath = imageResourcePath;
         this.name = name;
         this.description = description;
         this.price = price;
@@ -71,53 +65,47 @@ public class ProductGridItem {
     public static ProductGridItem fromProduct(Product product, Page page, SlingHttpServletRequest request, String resolvedPath,
         String selectedVariantSku) {
         ProductInterface productData = CifProductViewSupport.fetchProduct(product);
-        Optional<Metadata> metadata = LegacyProductPresentationSupport.metadata(LegacyProductPresentationSupport.productResource(page), page);
-        String defaultImage = LegacyProductPresentationSupport.resolveImageReference(
-            LegacyProductPresentationSupport.productResource(page),
-            metadata.orElse(null),
-            request,
-            StringUtils.defaultIfBlank(CifProductViewSupport.assetPath(product.getAssets()), CifProductViewSupport.imagePath(productData)));
+        String defaultImage = CifProductViewSupport.resolveImage(request,
+            CifProductViewSupport.assetPath(product.getAssets()),
+            CifProductViewSupport.imagePath(productData));
         String resolvedPrice = CifProductViewSupport.formatPrice(product.getPriceRange());
         Variant selectedVariant = resolveSelectedVariant(product, selectedVariantSku);
         String image = selectedVariant != null
-            ? StringUtils.defaultIfBlank(CifProductViewSupport.assetPath(selectedVariant.getAssets()), defaultImage)
+            ? CifProductViewSupport.resolveImage(request, CifProductViewSupport.assetPath(selectedVariant.getAssets()), defaultImage)
             : defaultImage;
         String displayName = selectedVariant != null ? StringUtils.defaultIfBlank(selectedVariant.getName(), product.getName()) : product.getName();
         String displayPrice = selectedVariant != null
             ? StringUtils.defaultIfBlank(CifProductViewSupport.formatPrice(selectedVariant.getPriceRange()), resolvedPrice)
             : resolvedPrice;
-        String pagePath = page != null && request != null && request.getResourceResolver() != null
-            ? request.getResourceResolver().map(request, page.getPath()) + ".html"
-            : StringUtils.EMPTY;
+        String pagePath = resolvePagePath(page, request);
 
         return new ProductGridItem(
             image,
-            LegacyProductPresentationSupport.gridImageResourcePath(page),
             displayName,
-            LegacyProductPresentationSupport.legacyDescription(metadata, CifProductViewSupport.descriptionLabel(productData)),
+            CifProductViewSupport.descriptionLabel(productData),
             displayPrice,
             StringUtils.defaultIfBlank(resolvedPath, pagePath),
             buildFilters(productData, displayPrice));
     }
 
-    public static ProductGridItem fromProductListItem(ProductListItem productListItem, Page page, SlingHttpServletRequest request,
-        String resolvedUrl) {
+    public static ProductGridItem fromProductListItem(ProductListItem productListItem, SlingHttpServletRequest request, String resolvedUrl) {
         ProductInterface product = productListItem.getProduct();
         String resolvedPrice = CifProductViewSupport.formatPrice(productListItem.getPriceRange());
-        Optional<Metadata> metadata = LegacyProductPresentationSupport.metadata(LegacyProductPresentationSupport.productResource(page), page);
 
         return new ProductGridItem(
-            LegacyProductPresentationSupport.resolveImageReference(
-                LegacyProductPresentationSupport.productResource(page),
-                metadata.orElse(null),
-                request,
-                productListItem.getImageURL()),
-            LegacyProductPresentationSupport.gridImageResourcePath(page),
+            CifProductViewSupport.mapAssetPath(request, productListItem.getImageURL()),
             productListItem.getTitle(),
-            LegacyProductPresentationSupport.legacyDescription(metadata, CifProductViewSupport.descriptionLabel(product)),
+            CifProductViewSupport.descriptionLabel(product),
             resolvedPrice,
             StringUtils.defaultIfBlank(resolvedUrl, StringUtils.defaultIfBlank(productListItem.getURL(), productListItem.getPath())),
             buildFilters(product, resolvedPrice));
+    }
+
+    private static String resolvePagePath(Page page, SlingHttpServletRequest request) {
+        if (page == null || request == null || request.getResourceResolver() == null) {
+            return StringUtils.EMPTY;
+        }
+        return request.getResourceResolver().map(request, page.getPath()) + ".html";
     }
 
     private static ProductFilters buildFilters(ProductInterface product, String price) {
@@ -164,10 +152,6 @@ public class ProductGridItem {
 
     public String getImage() {
         return image;
-    }
-
-    public String getImageResourcePath() {
-        return imageResourcePath;
     }
 
     public String getName() {

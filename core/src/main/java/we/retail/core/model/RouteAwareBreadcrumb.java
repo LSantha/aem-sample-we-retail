@@ -27,33 +27,34 @@ import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Via;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.via.ResourceSuperType;
 import org.apache.sling.models.factory.ModelFactory;
 
 import com.adobe.cq.commerce.core.components.client.MagentoGraphqlClient;
+import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
 import com.adobe.cq.commerce.graphql.client.GraphqlResponse;
+import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
+import com.adobe.cq.commerce.magento.graphql.CategoryTree;
 import com.adobe.cq.commerce.magento.graphql.FilterEqualTypeInput;
 import com.adobe.cq.commerce.magento.graphql.Operations;
 import com.adobe.cq.commerce.magento.graphql.ProductAttributeFilterInput;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.models.Breadcrumb;
-import com.adobe.cq.wcm.core.components.models.NavigationItem;
-import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
+import com.adobe.cq.commerce.magento.graphql.Products;
 import com.adobe.cq.commerce.magento.graphql.ProductsQueryDefinition;
 import com.adobe.cq.commerce.magento.graphql.Query;
 import com.adobe.cq.commerce.magento.graphql.QueryQuery;
 import com.adobe.cq.commerce.magento.graphql.gson.Error;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.models.Breadcrumb;
+import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
 
 import we.retail.core.commerce.cif.models.CifModelAdapter;
 import we.retail.core.commerce.cif.models.GenericRouteSupport;
-import we.retail.core.commerce.cif.models.LegacyCommercePageSupport;
-import we.retail.core.util.WeRetailHelper;
+import we.retail.core.commerce.cif.models.RouteCategorySupport;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -74,11 +75,11 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
     @ScriptVariable
     private Page currentPage;
 
-    @ScriptVariable
-    private PageManager pageManager;
-
     @org.apache.sling.models.annotations.injectorspecific.OSGiService
     private ModelFactory modelFactory;
+
+    @org.apache.sling.models.annotations.injectorspecific.OSGiService
+    private UrlProvider urlProvider;
 
     @Override
     public Collection<NavigationItem> getItems() {
@@ -87,10 +88,11 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
             return cifProductItems;
         }
 
-        Collection<NavigationItem> routeItems = buildRouteItems();
-        if (!routeItems.isEmpty()) {
-            return routeItems;
+        Collection<NavigationItem> categoryRouteItems = buildCategoryRouteItems();
+        if (!categoryRouteItems.isEmpty()) {
+            return categoryRouteItems;
         }
+
         return delegate != null ? delegate.getItems() : Collections.<NavigationItem>emptyList();
     }
 
@@ -110,7 +112,7 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
     }
 
     private Collection<NavigationItem> buildCifProductItems() {
-        if (modelFactory == null || !LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage")) {
+        if (modelFactory == null || !GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage")) {
             return Collections.emptyList();
         }
 
@@ -155,17 +157,45 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
         return items.isEmpty() ? Collections.<NavigationItem>emptyList() : Collections.unmodifiableList(items);
     }
 
+    private Collection<NavigationItem> buildCategoryRouteItems() {
+        if (!GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
+            return Collections.emptyList();
+        }
+
+        String categoryRoute = GenericRouteSupport.findConfiguredRoute(currentPage, "cq:cifCategoryPage");
+        String routePath = GenericRouteSupport.extractRoutePath(request);
+        if (StringUtils.isBlank(categoryRoute) || StringUtils.isBlank(routePath)) {
+            return Collections.emptyList();
+        }
+
+        CategoryTree category = RouteCategorySupport.fetchCategoryByUrlPath(request, routePath);
+        if (category == null) {
+            return Collections.emptyList();
+        }
+
+        return buildCategoryParentItems(categoryRoute, category.getBreadcrumbs());
+    }
+
     private Collection<NavigationItem> buildProductCategoryItems(String categoryRoute) {
         ProductInterface productData = fetchRouteProduct();
         CategoryInterface category = selectCategory(productData, resolveContextCategoryPath());
-        if (category == null || StringUtils.isBlank(category.getUrlPath()) || StringUtils.isBlank(category.getName())) {
+        if (category == null) {
+            return Collections.emptyList();
+        }
+
+        return buildCategoryItems(categoryRoute, category.getUrlPath(), category.getName(), category.getBreadcrumbs());
+    }
+
+    private Collection<NavigationItem> buildCategoryItems(String categoryRoute, String categoryUrlPath, String categoryName,
+        List<com.adobe.cq.commerce.magento.graphql.Breadcrumb> breadcrumbs) {
+        if (StringUtils.isBlank(categoryRoute) || StringUtils.isBlank(categoryUrlPath) || StringUtils.isBlank(categoryName)) {
             return Collections.emptyList();
         }
 
         List<NavigationItem> items = new ArrayList<NavigationItem>();
         int level = 0;
-        if (category.getBreadcrumbs() != null) {
-            for (com.adobe.cq.commerce.magento.graphql.Breadcrumb breadcrumb : category.getBreadcrumbs()) {
+        if (breadcrumbs != null) {
+            for (com.adobe.cq.commerce.magento.graphql.Breadcrumb breadcrumb : breadcrumbs) {
                 if (breadcrumb == null || StringUtils.isBlank(breadcrumb.getCategoryUrlPath())
                     || StringUtils.isBlank(breadcrumb.getCategoryName())) {
                     continue;
@@ -177,22 +207,47 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
             }
         }
 
-        items.add(new CommerceNavigationItem(category.getName(), buildCategoryRouteUrl(categoryRoute, category.getUrlPath()), level));
+        items.add(new CommerceNavigationItem(categoryName, buildCategoryRouteUrl(categoryRoute, categoryUrlPath), level));
         return Collections.unmodifiableList(items);
     }
 
+    private Collection<NavigationItem> buildCategoryParentItems(String categoryRoute,
+        List<com.adobe.cq.commerce.magento.graphql.Breadcrumb> breadcrumbs) {
+        if (StringUtils.isBlank(categoryRoute) || breadcrumbs == null || breadcrumbs.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<NavigationItem> items = new ArrayList<NavigationItem>();
+        int level = 0;
+        for (com.adobe.cq.commerce.magento.graphql.Breadcrumb breadcrumb : breadcrumbs) {
+            String categoryUrlPath = breadcrumb != null ? breadcrumb.getCategoryUrlPath() : null;
+            String categoryName = breadcrumb != null ? breadcrumb.getCategoryName() : null;
+            if (StringUtils.isBlank(categoryUrlPath) || StringUtils.isBlank(categoryName) || StringUtils.equals(categoryUrlPath, "/")) {
+                continue;
+            }
+            items.add(new CommerceNavigationItem(
+                categoryName,
+                buildCategoryRouteUrl(categoryRoute, categoryUrlPath),
+                level++));
+        }
+
+        return items.isEmpty() ? Collections.<NavigationItem>emptyList() : Collections.unmodifiableList(items);
+    }
+
     private String resolveContextCategoryPath() {
-        RequestPathInfo pathInfo = request != null ? request.getRequestPathInfo() : null;
-        String suffix = pathInfo != null ? pathInfo.getSuffix() : null;
-        suffix = StringUtils.removeStart(StringUtils.removeEnd(suffix, ".html"), "/");
+        String suffix = extractRouteSuffix();
         return StringUtils.contains(suffix, "/") ? StringUtils.substringBeforeLast(suffix, "/") : StringUtils.EMPTY;
     }
 
     private String resolveRouteProductUrlKey() {
+        String suffix = extractRouteSuffix();
+        return StringUtils.contains(suffix, "/") ? StringUtils.substringAfterLast(suffix, "/") : suffix;
+    }
+
+    private String extractRouteSuffix() {
         RequestPathInfo pathInfo = request != null ? request.getRequestPathInfo() : null;
         String suffix = pathInfo != null ? pathInfo.getSuffix() : null;
-        suffix = StringUtils.removeStart(StringUtils.removeEnd(suffix, ".html"), "/");
-        return StringUtils.contains(suffix, "/") ? StringUtils.substringAfterLast(suffix, "/") : suffix;
+        return StringUtils.removeStart(StringUtils.removeEnd(suffix, ".html"), "/");
     }
 
     private ProductInterface fetchRouteProduct() {
@@ -231,12 +286,13 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
             }
 
             Query data = response.getData();
-            if (data == null || data.getProducts() == null || data.getProducts().getItems() == null) {
+            Products products = data != null ? data.getProducts() : null;
+            if (products == null || products.getItems() == null) {
                 return null;
             }
 
             ProductInterface firstProduct = null;
-            for (ProductInterface product : data.getProducts().getItems()) {
+            for (ProductInterface product : products.getItems()) {
                 if (product == null) {
                     continue;
                 }
@@ -280,146 +336,12 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
     }
 
     private String buildCategoryRouteUrl(String categoryRoute, String categoryUrlPath) {
+        String providerUrl = CommerceLinkSupport.resolveCategoryUrl(request, currentPage, urlProvider, categoryUrlPath,
+            CommerceLinkSupport.URL_PATH);
+        if (StringUtils.isNotBlank(providerUrl) && !StringUtils.equals(providerUrl, CommerceLinkSupport.DEFAULT_LINK)) {
+            return providerUrl;
+        }
         return categoryRoute + ".html/" + categoryUrlPath + ".html";
-    }
-
-    private Collection<NavigationItem> buildRouteItems() {
-        Page productsRoot = GenericRouteSupport.findLegacyProductsRoot(pageManager, currentPage);
-        if (productsRoot == null) {
-            return Collections.emptyList();
-        }
-
-        Page targetPage = null;
-        String routeProperty = null;
-        if (LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage")) {
-            targetPage = GenericRouteSupport.resolveLegacyProductPage(pageManager, currentPage, request);
-            routeProperty = "cq:cifCategoryPage";
-        } else if (LegacyCommercePageSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
-            targetPage = GenericRouteSupport.resolveLegacyCategoryPage(pageManager, currentPage, request);
-            routeProperty = "cq:cifCategoryPage";
-        }
-
-        if (targetPage == null || StringUtils.isBlank(routeProperty)) {
-            return Collections.emptyList();
-        }
-
-        String categoryRoute = GenericRouteSupport.findConfiguredRoute(currentPage, routeProperty);
-        if (StringUtils.isBlank(categoryRoute)) {
-            return Collections.emptyList();
-        }
-
-        List<Page> trailPages = new ArrayList<Page>();
-        Page ancestor = targetPage.getParent();
-        while (ancestor != null && !StringUtils.equals(ancestor.getPath(), productsRoot.getPath())) {
-            trailPages.add(0, ancestor);
-            ancestor = ancestor.getParent();
-        }
-
-        if (trailPages.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        List<NavigationItem> items = new ArrayList<NavigationItem>();
-        int level = 0;
-        for (Page page : trailPages) {
-            String relativePath = GenericRouteSupport.toCatalogRoutePath(
-                GenericRouteSupport.relativeProductPath(productsRoot, page));
-            String url = categoryRoute + ".html/" + relativePath + ".html";
-            items.add(new RouteNavigationItem(page, url, level++));
-        }
-        return Collections.unmodifiableList(items);
-    }
-
-    private static final class RouteNavigationItem implements NavigationItem {
-        private final Page page;
-        private final String url;
-        private final int level;
-
-        private RouteNavigationItem(Page page, String url, int level) {
-            this.page = page;
-            this.url = url;
-            this.level = level;
-        }
-
-        @Override
-        public Page getPage() {
-            return page;
-        }
-
-        @Override
-        public boolean isActive() {
-            return false;
-        }
-
-        @Override
-        public boolean isCurrent() {
-            return false;
-        }
-
-        @Override
-        public List<NavigationItem> getChildren() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        public int getLevel() {
-            return level;
-        }
-
-        @Override
-        public Link getLink() {
-            return null;
-        }
-
-        @Override
-        public String getURL() {
-            return url;
-        }
-
-        @Override
-        public String getTitle() {
-            return WeRetailHelper.getTitle(page);
-        }
-
-        @Override
-        public String getDescription() {
-            return StringUtils.EMPTY;
-        }
-
-        @Override
-        public Calendar getLastModified() {
-            return page != null ? page.getLastModified() : null;
-        }
-
-        @Override
-        public String getPath() {
-            return page != null ? page.getPath() : StringUtils.EMPTY;
-        }
-
-        @Override
-        public String getName() {
-            return page != null ? page.getName() : StringUtils.EMPTY;
-        }
-
-        @Override
-        public Resource getTeaserResource() {
-            return null;
-        }
-
-        @Override
-        public String getId() {
-            return page != null ? page.getName() : null;
-        }
-
-        @Override
-        public String getAppliedCssClasses() {
-            return null;
-        }
-
-        @Override
-        public String getExportedType() {
-            return null;
-        }
     }
 
     private static final class CommerceNavigationItem implements NavigationItem {

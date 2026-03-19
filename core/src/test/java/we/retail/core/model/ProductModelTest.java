@@ -3,10 +3,12 @@ package we.retail.core.model;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.factory.ModelFactory;
 import org.junit.Test;
 
@@ -36,10 +38,11 @@ public class ProductModelTest {
         when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/fleet-cross-training-shoe.html");
         when(resource.getPath()).thenReturn("/content/we-retail/us/en/products/product-page/jcr:content/root/product");
         when(resource.getChildren()).thenReturn(Collections.<Resource>emptyList());
-        when(resource.getValueMap()).thenReturn(mock(ValueMap.class));
+        when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
         when(currentPage.getContentResource()).thenReturn(currentPageResource);
-        when(currentPageResource.getValueMap()).thenReturn(mock(ValueMap.class));
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/product-page");
+        when(currentPageResource.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
+            "/content/we-retail/us/en/products/product-page"));
         when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(Product.class))).thenReturn(product);
 
         setField(productModel, "request", request);
@@ -80,5 +83,11 @@ public class ProductModelTest {
         Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(target, value);
+    }
+
+    private ValueMapDecorator valueMap(String key, String value) {
+        Map<String, Object> values = new HashMap<String, Object>();
+        values.put(key, value);
+        return new ValueMapDecorator(values);
     }
 }

@@ -20,19 +20,18 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Via;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.via.ResourceSuperType;
 
+import com.adobe.cq.commerce.magento.graphql.CategoryTree;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
 
 import we.retail.core.commerce.cif.models.GenericRouteSupport;
-import we.retail.core.commerce.cif.models.LegacyCommercePageSupport;
-import we.retail.core.util.WeRetailHelper;
+import we.retail.core.commerce.cif.models.RouteCategorySupport;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -53,9 +52,6 @@ public class RouteAwareTitle implements Title {
     @ScriptVariable
     private Page currentPage;
 
-    @ScriptVariable
-    private PageManager pageManager;
-
     @Override
     public String getText() {
         String delegateText = delegate != null ? delegate.getText() : StringUtils.EMPTY;
@@ -63,8 +59,7 @@ public class RouteAwareTitle implements Title {
             return delegateText;
         }
 
-        Page legacyCategoryPage = GenericRouteSupport.resolveLegacyCategoryPage(pageManager, currentPage, request);
-        String routeTitle = WeRetailHelper.getTitle(legacyCategoryPage);
+        String routeTitle = resolveCategoryRouteTitle();
         if (StringUtils.isNotBlank(routeTitle)) {
             return routeTitle;
         }
@@ -107,6 +102,24 @@ public class RouteAwareTitle implements Title {
         return resource != null ? resource.getResourceType() : null;
     }
 
+    private String resolveCategoryRouteTitle() {
+        if (!GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
+            return StringUtils.EMPTY;
+        }
+
+        String routePath = GenericRouteSupport.extractRoutePath(request);
+        if (StringUtils.isBlank(routePath)) {
+            return StringUtils.EMPTY;
+        }
+
+        CategoryTree category = RouteCategorySupport.fetchCategoryByUrlPath(request, routePath);
+        if (category != null && StringUtils.isNotBlank(category.getName())) {
+            return category.getName();
+        }
+
+        return humanizeRoutePath(routePath);
+    }
+
     private boolean hasMeaningfulAuthoredTitle(String delegateText) {
         if (resource == null) {
             return false;
@@ -122,5 +135,33 @@ public class RouteAwareTitle implements Title {
 
     private boolean isPlaceholderTitle(String text) {
         return StringUtils.equals(text, "Category Page") || StringUtils.equals(text, "Product Page");
+    }
+
+    private String humanizeRoutePath(String routePath) {
+        String segment = StringUtils.substringAfterLast(routePath, "/");
+        String normalized = StringUtils.defaultIfBlank(segment, routePath);
+        if (StringUtils.equals(normalized, "me")) {
+            return "Men";
+        }
+        if (StringUtils.equals(normalized, "wo")) {
+            return "Women";
+        }
+        if (StringUtils.equals(normalized, "eq")) {
+            return "Equipment";
+        }
+
+        String[] words = StringUtils.split(StringUtils.replaceChars(normalized, "-_", "  "));
+        if (words == null || words.length == 0) {
+            return normalized;
+        }
+
+        StringBuilder title = new StringBuilder();
+        for (String word : words) {
+            if (title.length() > 0) {
+                title.append(' ');
+            }
+            title.append(StringUtils.capitalize(StringUtils.lowerCase(word)));
+        }
+        return title.toString();
     }
 }
