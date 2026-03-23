@@ -26,11 +26,13 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Via;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.via.ResourceSuperType;
 
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -44,11 +46,12 @@ import com.day.cq.wcm.api.PageManager;
     resourceType = "weretail/components/structure/navigation")
 public class CatalogAwareNavigation implements Navigation {
 
-    private static final String CIF_CATEGORY_PAGE = "cq:cifCategoryPage";
-
     @Self
     @Via(type = ResourceSuperType.class)
     private Navigation delegate;
+
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private SiteStructure siteStructure;
 
     @SlingObject
     private Resource resource;
@@ -64,7 +67,7 @@ public class CatalogAwareNavigation implements Navigation {
         if (delegate == null) {
             return Collections.emptyList();
         }
-        return limitCatalogBranchDepth(delegate.getItems(), pageManager, resourceResolver);
+        return limitCatalogBranchDepth(delegate.getItems(), siteStructure, pageManager, resourceResolver);
     }
 
     @Override
@@ -92,26 +95,22 @@ public class CatalogAwareNavigation implements Navigation {
         return resource != null ? resource.getResourceType() : null;
     }
 
-    static List<NavigationItem> limitCatalogBranchDepth(List<NavigationItem> items, PageManager pageManager,
-        ResourceResolver resourceResolver) {
-        return wrapItems(items, false, pageManager, resourceResolver);
+    static List<NavigationItem> limitCatalogBranchDepth(List<NavigationItem> items, SiteStructure siteStructure,
+        PageManager pageManager, ResourceResolver resourceResolver) {
+        return wrapItems(items, false, siteStructure, pageManager, resourceResolver);
     }
 
     private static List<NavigationItem> wrapItems(List<NavigationItem> items, boolean trimDescendants,
-        PageManager pageManager, ResourceResolver resourceResolver) {
+        SiteStructure siteStructure, PageManager pageManager, ResourceResolver resourceResolver) {
         if (items == null || items.isEmpty()) {
             return Collections.emptyList();
         }
 
         List<NavigationItem> wrappedItems = new ArrayList<NavigationItem>();
         for (NavigationItem item : items) {
-            wrappedItems.add(new CatalogNavigationItem(item, trimDescendants, pageManager, resourceResolver));
+            wrappedItems.add(new CatalogNavigationItem(item, trimDescendants, siteStructure, pageManager, resourceResolver));
         }
         return Collections.unmodifiableList(wrappedItems);
-    }
-
-    private static boolean isCatalogRoot(Page page) {
-        return page != null && StringUtils.isNotBlank(page.getProperties().get(CIF_CATEGORY_PAGE, String.class));
     }
 
     private static Page resolveItemPage(NavigationItem item, PageManager pageManager, ResourceResolver resourceResolver) {
@@ -149,15 +148,16 @@ public class CatalogAwareNavigation implements Navigation {
         private final Page page;
         private final List<NavigationItem> children;
 
-        private CatalogNavigationItem(NavigationItem delegate, boolean trimDescendants, PageManager pageManager,
-            ResourceResolver resourceResolver) {
+        private CatalogNavigationItem(NavigationItem delegate, boolean trimDescendants, SiteStructure siteStructure,
+            PageManager pageManager, ResourceResolver resourceResolver) {
             this.delegate = delegate;
             this.page = resolveItemPage(delegate, pageManager, resourceResolver);
 
             if (delegate == null || trimDescendants) {
                 this.children = Collections.emptyList();
             } else {
-                this.children = wrapItems(delegate.getChildren(), isCatalogRoot(page), pageManager, resourceResolver);
+                boolean catalogRoot = siteStructure != null && siteStructure.isCatalogPage(page);
+                this.children = wrapItems(delegate.getChildren(), catalogRoot, siteStructure, pageManager, resourceResolver);
             }
         }
 

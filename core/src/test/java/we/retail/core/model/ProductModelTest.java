@@ -12,6 +12,7 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.factory.ModelFactory;
 import org.junit.Test;
 
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.common.Price;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.retriever.AbstractProductRetriever;
@@ -33,21 +34,23 @@ public class ProductModelTest {
         Page currentPage = mock(Page.class);
         Resource currentPageResource = mock(Resource.class);
         ModelFactory modelFactory = mock(ModelFactory.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        SiteStructure.Entry productEntry = mock(SiteStructure.Entry.class);
         Product product = createProduct();
 
         when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/eq/running/eqrusufle.html");
         when(resource.getPath()).thenReturn("/content/we-retail/us/en/products/product-page/jcr:content/root/product");
         when(resource.getChildren()).thenReturn(Collections.<Resource>emptyList());
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(currentPage.getContentResource()).thenReturn(currentPageResource);
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/product-page");
-        when(currentPageResource.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
-            "/content/we-retail/us/en/products/product-page"));
+        when(productEntry.getPage()).thenReturn(currentPage);
+        when(siteStructure.getProductPages()).thenReturn(Collections.singletonList(productEntry));
         when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(Product.class))).thenReturn(product);
 
         setField(productModel, "request", request);
         setField(productModel, "resource", resource);
         setField(productModel, "currentPage", currentPage);
+        setField(productModel, "siteStructure", siteStructure);
         setField(productModel, "modelFactory", modelFactory);
 
         Method initMethod = ProductModel.class.getDeclaredMethod("initModel");
@@ -85,9 +88,4 @@ public class ProductModelTest {
         field.set(target, value);
     }
 
-    private ValueMapDecorator valueMap(String key, String value) {
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put(key, value);
-        return new ValueMapDecorator(values);
-    }
 }

@@ -27,6 +27,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Via;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -35,6 +36,7 @@ import org.apache.sling.models.annotations.via.ResourceSuperType;
 import org.apache.sling.models.factory.ModelFactory;
 import com.adobe.cq.commerce.core.components.models.common.CombinedSku;
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
 import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
@@ -44,7 +46,7 @@ import com.day.cq.wcm.api.Page;
 
 import we.retail.core.commerce.cif.models.CifModelAdapter;
 import we.retail.core.commerce.cif.models.CifProductViewSupport;
-import we.retail.core.commerce.cif.models.GenericRouteSupport;
+import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -69,6 +71,9 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     @ScriptVariable
     private Page currentPage;
 
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private SiteStructure siteStructure;
+
     @OSGiService
     private ModelFactory modelFactory;
 
@@ -84,7 +89,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             return;
         }
 
-        boolean routeCategoryPage = GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage");
+        boolean routeCategoryPage = CommerceSiteStructureSupport.isCategoryRoutePage(siteStructure, currentPage);
         boolean explicitCategorySelection = hasExplicitCifCategorySelection();
 
         if (routeCategoryPage || explicitCategorySelection) {
@@ -235,7 +240,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     }
 
     private String buildConfiguredRouteProductUrl(String urlPath, String variantSku) {
-        String configuredRoute = GenericRouteSupport.findConfiguredRoute(currentPage, "cq:cifProductPage");
+        String configuredRoute = CommerceSiteStructureSupport.findProductRoute(siteStructure, currentPage);
         if (StringUtils.isBlank(configuredRoute) || StringUtils.isBlank(urlPath)) {
             return StringUtils.EMPTY;
         }

@@ -21,15 +21,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.day.cq.wcm.api.Page;
 
 import we.retail.core.commerce.cif.models.CifModelAdapter;
-import we.retail.core.commerce.cif.models.GenericRouteSupport;
+import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
 
 @Model(adaptables = SlingHttpServletRequest.class)
 public class ProductModel {
@@ -43,6 +46,9 @@ public class ProductModel {
     @ScriptVariable
     private Page currentPage;
 
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private SiteStructure siteStructure;
+
     @OSGiService
     private ModelFactory modelFactory;
 
@@ -50,7 +56,7 @@ public class ProductModel {
 
     @PostConstruct
     private void initModel() {
-        if (!GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage")) {
+        if (!CommerceSiteStructureSupport.isProductRoutePage(siteStructure, currentPage)) {
             return;
         }
 

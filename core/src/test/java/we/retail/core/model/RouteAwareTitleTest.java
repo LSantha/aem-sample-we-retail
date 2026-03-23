@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.adobe.cq.commerce.core.components.client.MagentoGraphqlClient;
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
@@ -34,7 +35,8 @@ public class RouteAwareTitleTest {
         RequestPathInfo pathInfo = mock(RequestPathInfo.class);
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
-        Resource currentPageContent = mock(Resource.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        SiteStructure.Entry categoryEntry = mock(SiteStructure.Entry.class);
         Title delegate = mock(Title.class);
         MagentoGraphqlClient client = mock(MagentoGraphqlClient.class);
         @SuppressWarnings("unchecked")
@@ -43,13 +45,12 @@ public class RouteAwareTitleTest {
         CategoryTree category = mock(CategoryTree.class);
 
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/category-page");
-        when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(request.getRequestPathInfo()).thenReturn(pathInfo);
         when(request.adaptTo(MagentoGraphqlClient.class)).thenReturn(client);
         when(pathInfo.getSuffix()).thenReturn("/eq/snow-sports.html");
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifCategoryPage",
-            "/content/we-retail/us/en/products/category-page"));
+        when(categoryEntry.getPage()).thenReturn(currentPage);
+        when(siteStructure.getCategoryPages()).thenReturn(Collections.singletonList(categoryEntry));
         when(delegate.getText()).thenReturn("Category Page");
         when(client.execute(any(String.class))).thenReturn(response);
         when(response.getErrors()).thenReturn(Collections.<Error>emptyList());
@@ -61,6 +62,7 @@ public class RouteAwareTitleTest {
         setField(title, "request", request);
         setField(title, "resource", resource);
         setField(title, "currentPage", currentPage);
+        setField(title, "siteStructure", siteStructure);
         setField(title, "delegate", delegate);
 
         assertEquals("Snow Sports", title.getText());
@@ -73,30 +75,25 @@ public class RouteAwareTitleTest {
         RequestPathInfo pathInfo = mock(RequestPathInfo.class);
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
-        Resource currentPageContent = mock(Resource.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        SiteStructure.Entry categoryEntry = mock(SiteStructure.Entry.class);
         Title delegate = mock(Title.class);
 
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/category-page");
-        when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(request.getRequestPathInfo()).thenReturn(pathInfo);
         when(pathInfo.getSuffix()).thenReturn("/me/coats.html");
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifCategoryPage",
-            "/content/we-retail/us/en/products/category-page"));
+        when(categoryEntry.getPage()).thenReturn(currentPage);
+        when(siteStructure.getCategoryPages()).thenReturn(Collections.singletonList(categoryEntry));
         when(delegate.getText()).thenReturn("Category Page");
 
         setField(title, "request", request);
         setField(title, "resource", resource);
         setField(title, "currentPage", currentPage);
+        setField(title, "siteStructure", siteStructure);
         setField(title, "delegate", delegate);
 
         assertEquals("Coats", title.getText());
-    }
-
-    private ValueMapDecorator valueMap(String key, String value) {
-        Map<String, Object> values = new HashMap<String, Object>();
-        values.put(key, value);
-        return new ValueMapDecorator(values);
     }
 
     private void setField(Object target, String fieldName, Object value) throws Exception {

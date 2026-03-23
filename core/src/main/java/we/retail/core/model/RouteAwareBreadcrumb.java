@@ -27,6 +27,7 @@ import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Via;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -34,6 +35,7 @@ import org.apache.sling.models.annotations.via.ResourceSuperType;
 import org.apache.sling.models.factory.ModelFactory;
 
 import com.adobe.cq.commerce.core.components.client.MagentoGraphqlClient;
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
 import com.adobe.cq.commerce.graphql.client.GraphqlResponse;
 import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
@@ -53,8 +55,9 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 
 import we.retail.core.commerce.cif.models.CifModelAdapter;
-import we.retail.core.commerce.cif.models.GenericRouteSupport;
+import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
 import we.retail.core.commerce.cif.models.RouteCategorySupport;
+import we.retail.core.commerce.cif.models.RoutePathSupport;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -74,6 +77,9 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
 
     @ScriptVariable
     private Page currentPage;
+
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private SiteStructure siteStructure;
 
     @org.apache.sling.models.annotations.injectorspecific.OSGiService
     private ModelFactory modelFactory;
@@ -112,11 +118,11 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
     }
 
     private Collection<NavigationItem> buildCifProductItems() {
-        if (modelFactory == null || !GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage")) {
+        if (modelFactory == null || !CommerceSiteStructureSupport.isProductRoutePage(siteStructure, currentPage)) {
             return Collections.emptyList();
         }
 
-        String categoryRoute = GenericRouteSupport.findConfiguredRoute(currentPage, "cq:cifCategoryPage");
+        String categoryRoute = CommerceSiteStructureSupport.findCategoryRoute(siteStructure, currentPage);
         if (StringUtils.isBlank(categoryRoute)) {
             return Collections.emptyList();
         }
@@ -158,12 +164,12 @@ public class RouteAwareBreadcrumb implements Breadcrumb {
     }
 
     private Collection<NavigationItem> buildCategoryRouteItems() {
-        if (!GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
+        if (!CommerceSiteStructureSupport.isCategoryRoutePage(siteStructure, currentPage)) {
             return Collections.emptyList();
         }
 
-        String categoryRoute = GenericRouteSupport.findConfiguredRoute(currentPage, "cq:cifCategoryPage");
-        String routePath = GenericRouteSupport.extractRoutePath(request);
+        String categoryRoute = CommerceSiteStructureSupport.findCategoryRoute(siteStructure, currentPage);
+        String routePath = RoutePathSupport.extractRoutePath(request);
         if (StringUtils.isBlank(categoryRoute) || StringUtils.isBlank(routePath)) {
             return Collections.emptyList();
         }

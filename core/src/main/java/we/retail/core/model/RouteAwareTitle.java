@@ -20,18 +20,21 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Via;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.via.ResourceSuperType;
 
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.magento.graphql.CategoryTree;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.wcm.api.Page;
 
-import we.retail.core.commerce.cif.models.GenericRouteSupport;
+import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
 import we.retail.core.commerce.cif.models.RouteCategorySupport;
+import we.retail.core.commerce.cif.models.RoutePathSupport;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -51,6 +54,9 @@ public class RouteAwareTitle implements Title {
 
     @ScriptVariable
     private Page currentPage;
+
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private SiteStructure siteStructure;
 
     @Override
     public String getText() {
@@ -103,11 +109,11 @@ public class RouteAwareTitle implements Title {
     }
 
     private String resolveCategoryRouteTitle() {
-        if (!GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifCategoryPage")) {
+        if (!CommerceSiteStructureSupport.isCategoryRoutePage(siteStructure, currentPage)) {
             return StringUtils.EMPTY;
         }
 
-        String routePath = GenericRouteSupport.extractRoutePath(request);
+        String routePath = RoutePathSupport.extractRoutePath(request);
         if (StringUtils.isBlank(routePath)) {
             return StringUtils.EMPTY;
         }

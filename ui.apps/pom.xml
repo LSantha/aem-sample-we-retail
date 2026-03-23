@@ -70,10 +70,36 @@
                     <exclude>**/.DS_Store</exclude>
                     <exclude>**/target/**</exclude>
                     <exclude>**/pom.xml</exclude>
+                    <exclude>apps/public/weretail/hapi_types/cart/**</exclude>
+                    <exclude>apps/public/weretail/hapi_types/cartentry/**</exclude>
+                    <exclude>apps/public/weretail/hapi_types/cartprices/**</exclude>
+                    <exclude>apps/public/weretail/hapi_types/order/**</exclude>
+                    <exclude>apps/public/weretail/hapi_types/orderhistory/**</exclude>
+                    <exclude>apps/public/weretail/hapi_types/wishlist/**</exclude>
+                    <exclude>apps/public/weretail/hapi_types/wishlistentry/**</exclude>
                 </excludes>
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>reset-vault-work</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <delete dir="${project.build.directory}/vault-work"/>
+                                <delete dir="${project.build.outputDirectory}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--
                 we want to keep some of the META-INF files and not configure
                 everything in the plugin (mainly the filters).

@@ -3,15 +3,13 @@ package we.retail.core.model;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.junit.Test;
 
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -28,8 +26,9 @@ public class CatalogAwareNavigationTest {
     public void testLimitCatalogBranchDepthResolvesCatalogRootFromUrl() {
         PageManager pageManager = mock(PageManager.class);
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
         Resource catalogResource = mock(Resource.class);
-        Page catalogPage = page("products", "/content/we-retail/us/en/products/category-page");
+        Page catalogPage = page("products");
 
         NavigationItem equipmentLeaf = navItem("Hiking", "/content/we-retail/us/en/products/category-page.html/eq/hiking.html",
             Collections.<NavigationItem>emptyList(), null, 2);
@@ -41,15 +40,16 @@ public class CatalogAwareNavigationTest {
             0);
 
         NavigationItem shorts = navItem("Shorts", "/content/we-retail/us/en/men/shorts.html",
-            Collections.<NavigationItem>emptyList(), page("shorts", null), 1);
+            Collections.<NavigationItem>emptyList(), page("shorts"), 1);
         NavigationItem men = navItem("Men", "/content/we-retail/us/en/men.html",
-            Collections.singletonList(shorts), page("men", null), 0);
+            Collections.singletonList(shorts), page("men"), 0);
 
         when(resourceResolver.resolve("/content/we-retail/us/en/products.html")).thenReturn(catalogResource);
         when(pageManager.getContainingPage(catalogResource)).thenReturn(catalogPage);
+        when(siteStructure.isCatalogPage(catalogPage)).thenReturn(true);
 
         List<NavigationItem> items = CatalogAwareNavigation.limitCatalogBranchDepth(Arrays.asList(products, men),
-            pageManager, resourceResolver);
+            siteStructure, pageManager, resourceResolver);
 
         assertEquals(2, items.size());
         assertEquals(2, items.get(0).getChildren().size());
@@ -62,16 +62,11 @@ public class CatalogAwareNavigationTest {
         return new TestNavigationItem(title, url, children, page, level);
     }
 
-    private Page page(String name, String cifCategoryPage) {
+    private Page page(String name) {
         Page page = mock(Page.class);
-        Map<String, Object> values = new HashMap<String, Object>();
-        if (cifCategoryPage != null) {
-            values.put("cq:cifCategoryPage", cifCategoryPage);
-        }
         when(page.getName()).thenReturn(name);
         when(page.getPath()).thenReturn("/content/we-retail/us/en/" + name);
         when(page.getTitle()).thenReturn(name);
-        when(page.getProperties()).thenReturn(new ValueMapDecorator(values));
         return page;
     }
 

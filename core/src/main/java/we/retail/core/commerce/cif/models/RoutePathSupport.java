@@ -19,11 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 
-import com.day.cq.wcm.api.Page;
+public final class RoutePathSupport {
 
-public final class GenericRouteSupport {
-
-    private GenericRouteSupport() {
+    private RoutePathSupport() {
     }
 
     public static String extractRoutePath(SlingHttpServletRequest request) {
@@ -42,39 +40,5 @@ public final class GenericRouteSupport {
         }
 
         return StringUtils.removeStart(StringUtils.removeEnd(suffix, ".html"), "/");
-    }
-
-    public static String findConfiguredRoute(Page currentPage, String routePropertyName) {
-        Page page = currentPage;
-        while (page != null) {
-            Page routePage = page;
-            if (routePage.getContentResource() != null) {
-                String configuredPath = routePage.getContentResource().getValueMap().get(routePropertyName, String.class);
-                if (StringUtils.isNotBlank(configuredPath)) {
-                    return configuredPath;
-                }
-            }
-            page = page.getParent();
-        }
-        return StringUtils.EMPTY;
-    }
-
-    public static boolean isReferencedRoutePage(Page currentPage, String routePropertyName) {
-        if (currentPage == null) {
-            return false;
-        }
-
-        String currentPath = currentPage.getPath();
-        Page page = currentPage;
-        while (page != null) {
-            if (page.getContentResource() != null) {
-                String configuredPath = page.getContentResource().getValueMap().get(routePropertyName, String.class);
-                if (StringUtils.equals(configuredPath, currentPath)) {
-                    return true;
-                }
-            }
-            page = page.getParent();
-        }
-        return false;
     }
 }

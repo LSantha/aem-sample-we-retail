@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.adobe.cq.commerce.core.components.client.MagentoGraphqlClient;
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
@@ -42,7 +43,11 @@ public class RouteAwareBreadcrumbTest {
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
-        Resource currentPageContent = mock(Resource.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        SiteStructure.Entry currentEntry = mock(SiteStructure.Entry.class);
+        SiteStructure.Entry productRouteEntry = mock(SiteStructure.Entry.class);
+        Page catalogPage = page("/content/we-retail/us/en/products", "cq:cifCategoryPage",
+            "/content/we-retail/us/en/products/category-page");
         ModelFactory modelFactory = mock(ModelFactory.class);
         Breadcrumb delegate = mock(Breadcrumb.class);
         Breadcrumb cifBreadcrumb = mock(Breadcrumb.class);
@@ -53,11 +58,11 @@ public class RouteAwareBreadcrumbTest {
             "/content/we-retail/us/en/products/product-page.html/wo/coats/wootwisot.html");
 
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/product-page");
-        when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(currentPageContent.getValueMap()).thenReturn(valueMap(
-            "cq:cifProductPage", "/content/we-retail/us/en/products/product-page",
-            "cq:cifCategoryPage", "/content/we-retail/us/en/products/category-page"));
+        when(productRouteEntry.getPage()).thenReturn(currentPage);
+        when(siteStructure.getProductPages()).thenReturn(Collections.singletonList(productRouteEntry));
+        when(siteStructure.getEntry(currentPage)).thenReturn(currentEntry);
+        when(currentEntry.getCatalogPage()).thenReturn(catalogPage);
         when(modelFactory.getModelFromWrappedRequest(any(), any(), any(Class.class))).thenReturn(cifBreadcrumb);
         when(cifBreadcrumb.getItems()).thenReturn(Arrays.asList(catalogItem, womenItem, coatsItem, productItem));
         when(delegate.getItems()).thenReturn(Collections.<NavigationItem>emptyList());
@@ -65,12 +70,9 @@ public class RouteAwareBreadcrumbTest {
         setField(breadcrumb, "request", request);
         setField(breadcrumb, "resource", resource);
         setField(breadcrumb, "currentPage", currentPage);
+        setField(breadcrumb, "siteStructure", siteStructure);
         setField(breadcrumb, "modelFactory", modelFactory);
         setField(breadcrumb, "delegate", delegate);
-
-        assertTrue(we.retail.core.commerce.cif.models.GenericRouteSupport.isReferencedRoutePage(currentPage, "cq:cifProductPage"));
-        assertEquals("/content/we-retail/us/en/products/category-page",
-            we.retail.core.commerce.cif.models.GenericRouteSupport.findConfiguredRoute(currentPage, "cq:cifCategoryPage"));
 
         Collection<NavigationItem> items = breadcrumb.getItems();
 
@@ -87,7 +89,11 @@ public class RouteAwareBreadcrumbTest {
         RequestPathInfo pathInfo = mock(RequestPathInfo.class);
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
-        Resource currentPageContent = mock(Resource.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        SiteStructure.Entry currentEntry = mock(SiteStructure.Entry.class);
+        SiteStructure.Entry productRouteEntry = mock(SiteStructure.Entry.class);
+        Page catalogPage = page("/content/we-retail/us/en/products", "cq:cifCategoryPage",
+            "/content/we-retail/us/en/products/category-page");
         ModelFactory modelFactory = mock(ModelFactory.class);
         Breadcrumb delegate = mock(Breadcrumb.class);
         Breadcrumb cifBreadcrumb = mock(Breadcrumb.class);
@@ -102,14 +108,14 @@ public class RouteAwareBreadcrumbTest {
         com.adobe.cq.commerce.magento.graphql.Breadcrumb womenBreadcrumb = mock(com.adobe.cq.commerce.magento.graphql.Breadcrumb.class);
 
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/product-page");
-        when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(request.getRequestPathInfo()).thenReturn(pathInfo);
         when(request.adaptTo(MagentoGraphqlClient.class)).thenReturn(client);
         when(pathInfo.getSuffix()).thenReturn("/wo/pants/faba_running_pants.html");
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(currentPageContent.getValueMap()).thenReturn(valueMap(
-            "cq:cifProductPage", "/content/we-retail/us/en/products/product-page",
-            "cq:cifCategoryPage", "/content/we-retail/us/en/products/category-page"));
+        when(productRouteEntry.getPage()).thenReturn(currentPage);
+        when(siteStructure.getProductPages()).thenReturn(Collections.singletonList(productRouteEntry));
+        when(siteStructure.getEntry(currentPage)).thenReturn(currentEntry);
+        when(currentEntry.getCatalogPage()).thenReturn(catalogPage);
         when(modelFactory.getModelFromWrappedRequest(any(), any(), any(Class.class))).thenReturn(cifBreadcrumb);
         when(cifBreadcrumb.getItems()).thenReturn(Collections.<NavigationItem>emptyList());
         when(client.execute(any(String.class))).thenReturn(response);
@@ -132,6 +138,7 @@ public class RouteAwareBreadcrumbTest {
         setField(breadcrumb, "request", request);
         setField(breadcrumb, "resource", resource);
         setField(breadcrumb, "currentPage", currentPage);
+        setField(breadcrumb, "siteStructure", siteStructure);
         setField(breadcrumb, "modelFactory", modelFactory);
         setField(breadcrumb, "delegate", delegate);
 
@@ -152,7 +159,11 @@ public class RouteAwareBreadcrumbTest {
         RequestPathInfo pathInfo = mock(RequestPathInfo.class);
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
-        Resource currentPageContent = mock(Resource.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        SiteStructure.Entry currentEntry = mock(SiteStructure.Entry.class);
+        SiteStructure.Entry categoryRouteEntry = mock(SiteStructure.Entry.class);
+        Page catalogPage = page("/content/we-retail/us/en/products", "cq:cifCategoryPage",
+            "/content/we-retail/us/en/products/category-page");
         Breadcrumb delegate = mock(Breadcrumb.class);
         MagentoGraphqlClient client = mock(MagentoGraphqlClient.class);
         UrlProvider urlProvider = mock(UrlProvider.class);
@@ -164,13 +175,14 @@ public class RouteAwareBreadcrumbTest {
         com.adobe.cq.commerce.magento.graphql.Breadcrumb shirtsBreadcrumb = mock(com.adobe.cq.commerce.magento.graphql.Breadcrumb.class);
 
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/category-page");
-        when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(request.getRequestPathInfo()).thenReturn(pathInfo);
         when(request.adaptTo(MagentoGraphqlClient.class)).thenReturn(client);
         when(pathInfo.getSuffix()).thenReturn("/me/shirts/tops.html");
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifCategoryPage",
-            "/content/we-retail/us/en/products/category-page"));
+        when(categoryRouteEntry.getPage()).thenReturn(currentPage);
+        when(siteStructure.getCategoryPages()).thenReturn(Collections.singletonList(categoryRouteEntry));
+        when(siteStructure.getEntry(currentPage)).thenReturn(currentEntry);
+        when(currentEntry.getCatalogPage()).thenReturn(catalogPage);
         when(client.execute(any(String.class))).thenReturn(response);
         when(urlProvider.formatCategoryUrl(any(), any(), any()))
             .thenReturn("/content/we-retail/us/en/products/category-page.html/me.html",
@@ -190,6 +202,7 @@ public class RouteAwareBreadcrumbTest {
         setField(breadcrumb, "request", request);
         setField(breadcrumb, "resource", resource);
         setField(breadcrumb, "currentPage", currentPage);
+        setField(breadcrumb, "siteStructure", siteStructure);
         setField(breadcrumb, "delegate", delegate);
         setField(breadcrumb, "urlProvider", urlProvider);
 
@@ -211,7 +224,11 @@ public class RouteAwareBreadcrumbTest {
         RequestPathInfo pathInfo = mock(RequestPathInfo.class);
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
-        Resource currentPageContent = mock(Resource.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        SiteStructure.Entry currentEntry = mock(SiteStructure.Entry.class);
+        SiteStructure.Entry categoryRouteEntry = mock(SiteStructure.Entry.class);
+        Page catalogPage = page("/content/we-retail/us/en/products", "cq:cifCategoryPage",
+            "/content/we-retail/us/en/products/category-page");
         Breadcrumb delegate = mock(Breadcrumb.class);
         MagentoGraphqlClient client = mock(MagentoGraphqlClient.class);
         UrlProvider urlProvider = mock(UrlProvider.class);
@@ -222,13 +239,14 @@ public class RouteAwareBreadcrumbTest {
         com.adobe.cq.commerce.magento.graphql.Breadcrumb equipmentBreadcrumb = mock(com.adobe.cq.commerce.magento.graphql.Breadcrumb.class);
 
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/category-page");
-        when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(request.getRequestPathInfo()).thenReturn(pathInfo);
         when(request.adaptTo(MagentoGraphqlClient.class)).thenReturn(client);
         when(pathInfo.getSuffix()).thenReturn("/eq/biking.html");
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifCategoryPage",
-            "/content/we-retail/us/en/products/category-page"));
+        when(categoryRouteEntry.getPage()).thenReturn(currentPage);
+        when(siteStructure.getCategoryPages()).thenReturn(Collections.singletonList(categoryRouteEntry));
+        when(siteStructure.getEntry(currentPage)).thenReturn(currentEntry);
+        when(currentEntry.getCatalogPage()).thenReturn(catalogPage);
         when(client.execute(any(String.class))).thenReturn(response);
         when(urlProvider.formatCategoryUrl(any(), any(), any()))
             .thenReturn("/content/we-retail/us/en/products/category-page.html/eq.html");
@@ -245,6 +263,7 @@ public class RouteAwareBreadcrumbTest {
         setField(breadcrumb, "request", request);
         setField(breadcrumb, "resource", resource);
         setField(breadcrumb, "currentPage", currentPage);
+        setField(breadcrumb, "siteStructure", siteStructure);
         setField(breadcrumb, "delegate", delegate);
         setField(breadcrumb, "urlProvider", urlProvider);
 
@@ -270,6 +289,15 @@ public class RouteAwareBreadcrumbTest {
             values.put(keyValues[i], keyValues[i + 1]);
         }
         return new ValueMapDecorator(values);
+    }
+
+    private Page page(String path, String... keyValues) {
+        Page page = mock(Page.class);
+        Resource contentResource = mock(Resource.class);
+        when(page.getPath()).thenReturn(path);
+        when(page.getContentResource()).thenReturn(contentResource);
+        when(contentResource.getValueMap()).thenReturn(valueMap(keyValues));
+        return page;
     }
 
     private void setField(Object target, String fieldName, Object value) throws Exception {
