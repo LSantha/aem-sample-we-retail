@@ -35,7 +35,7 @@ public class ProductModelTest {
         ModelFactory modelFactory = mock(ModelFactory.class);
         Product product = createProduct();
 
-        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/fleet-cross-training-shoe.html");
+        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/eq/running/eqrusufle.html");
         when(resource.getPath()).thenReturn("/content/we-retail/us/en/products/product-page/jcr:content/root/product");
         when(resource.getChildren()).thenReturn(Collections.<Resource>emptyList());
         when(resource.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
@@ -68,7 +68,7 @@ public class ProductModelTest {
         when(price.getFormattedFinalPrice()).thenReturn("$64.99");
 
         when(product.getFound()).thenReturn(Boolean.TRUE);
-        when(product.getSku()).thenReturn("fleet-cross-training-shoe");
+        when(product.getSku()).thenReturn("eqrusufle");
         when(product.getName()).thenReturn("Fleet Cross-Training Shoe");
         when(product.getPriceRange()).thenReturn(price);
         when(product.getAssets()).thenReturn(Collections.emptyList());

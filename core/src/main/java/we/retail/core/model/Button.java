@@ -84,7 +84,4 @@ public class Button {
         return StringUtils.defaultString(cssClass, CSS_CLASS_DEFAULT);
     }
 
-    public boolean isVisible() {
-        return !CommerceLinkSupport.isCheckoutFlowLink(getLink());
-    }
 }

@@ -85,11 +85,7 @@
                              data-sly-attribute="${hapiProduct.itemprop.summary}">${productModel.productItem.summary}</div>
                     </div>
                 </div>
-
-                <form class="we-Product-form" v-el:weProductForm action="${productModel.addToCartUrl}" method="POST"
-                      data-sly-use.hapiProductForm="${'org.apache.sling.hapi.sightly.HApiUse' @ type='/apps/public/weretail/hapi_types/addcartentryform'}"
-                      data-sly-attribute="${hapiProductForm.itemtype}"
-                      data-rel="addCartEntryForm">
+                <div class="we-Product-form">
                     <sly data-sly-list.axisName="${productModel.productItem.variantsAxesValues}">
                     <div class="form-group fg-title">
                         <label>${axisName @ i18n}</label>
@@ -98,12 +94,10 @@
                         <div class="we-Product-radio marker radio-inline" data-sly-repeat.axisValue="${productModel.productItem.variantsAxesValues[axisName]}">
                             <label>
                                 <input data-sly-test="${axisName != 'color'}" type="radio" name="${axisName}" value="${axisValue}" title="${axisValue}"
-                                       v-bind:checked="isChecked('${axisName}','${axisValue}')" v-on:click="setProduct"
-                                       data-sly-attribute="${hapiProductForm.itemprop[axisName]}" />
+                                       v-bind:checked="isChecked('${axisName}','${axisValue}')" v-on:click="setProduct" />
                                 <input data-sly-test="${axisName == 'color'}" type="radio" name="${axisName}" value="${axisValue}" title="${axisValue}"
                                        v-bind:checked="isChecked('${axisName}','${axisValue}')" v-on:click="setProduct"
-                                       style="background-color:${axisValue @context='styleString'};"
-                                       data-sly-attribute="${hapiProductForm.itemprop[axisName]}" />
+                                       style="background-color:${axisValue @context='styleString'};" />
                                 <div data-sly-test="${axisName != 'color'}">${axisValue}</div>
                                 <div data-sly-test="${axisName == 'color'}" style="background-color:${axisValue @context='styleString'};"></div>
                             </label>
@@ -123,12 +117,12 @@
                                     </button>
                                 </div>
                                 <p class="we-Product-unavailable">
-                                    ${'Cart and wishlist are unavailable in this CIF migration.' @ i18n}
+                                    ${'Purchase actions are unavailable in this CIF migration.' @ i18n}
                                 </p>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
 
             </div>
 

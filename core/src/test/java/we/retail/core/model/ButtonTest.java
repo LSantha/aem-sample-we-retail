@@ -59,7 +59,6 @@ public class ButtonTest {
         invokeInit(button);
 
         Assert.assertEquals("/content/we-retail/us/en/men.html", button.getLink());
-        Assert.assertTrue(button.isVisible());
     }
 
     @Test
@@ -101,26 +100,6 @@ public class ButtonTest {
         invokeInit(button);
 
         Assert.assertEquals("/content/we-retail/us/en/products/product-page.html/me/coats/meskwielt.html", button.getLink());
-    }
-
-    @Test
-    public void testHidesCheckoutLinks() throws Exception {
-        Button checkoutButton = new Button();
-
-        setField(checkoutButton, "linkTo", "/content/we-retail/us/en/user/checkout");
-        invokeInit(checkoutButton);
-
-        Assert.assertFalse(checkoutButton.isVisible());
-    }
-
-    @Test
-    public void testHidesCartLinks() throws Exception {
-        Button cartButton = new Button();
-
-        setField(cartButton, "linkTo", "/content/we-retail/us/en/user/cart");
-        invokeInit(cartButton);
-
-        Assert.assertFalse(cartButton.isVisible());
     }
 
     private void invokeInit(Button button) throws Exception {

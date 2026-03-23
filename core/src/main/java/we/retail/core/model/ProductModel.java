@@ -72,10 +72,6 @@ public class ProductModel {
         return productItem != null && !productItem.getVariants().isEmpty();
     }
 
-    public String getAddToCartUrl() {
-        return StringUtils.EMPTY;
-    }
-
     public String getProductTrackingPath() {
         if (productItem != null && StringUtils.isNotBlank(productItem.getPagePath())) {
             return StringUtils.substringBefore(productItem.getPagePath(), ".html");

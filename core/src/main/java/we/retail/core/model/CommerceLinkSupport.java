@@ -91,17 +91,6 @@ final class CommerceLinkSupport {
         return StringUtils.isNotBlank(link) && !DEFAULT_LINK.equals(link);
     }
 
-    static boolean isCheckoutFlowLink(String link) {
-        if (!hasLink(link)) {
-            return false;
-        }
-
-        String sanitizedLink = stripQueryAndFragment(link);
-        String normalizedLink = StringUtils.removeEnd(sanitizedLink, ".html");
-        return StringUtils.contains(normalizedLink, "/user/cart")
-                || StringUtils.contains(normalizedLink, "/user/checkout");
-    }
-
     private static String toPageUrl(String linkTo) {
         if (StringUtils.isBlank(linkTo) || DEFAULT_LINK.equals(linkTo)) {
             return DEFAULT_LINK;

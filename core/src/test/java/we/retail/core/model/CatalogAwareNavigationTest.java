@@ -40,7 +40,7 @@ public class CatalogAwareNavigationTest {
         NavigationItem products = navItem("Products", "/content/we-retail/us/en/products.html", Arrays.asList(equipment, women), null,
             0);
 
-        NavigationItem shorts = navItem("Shorts", "/content/we-retail/us/en/products/men/shorts.html",
+        NavigationItem shorts = navItem("Shorts", "/content/we-retail/us/en/men/shorts.html",
             Collections.<NavigationItem>emptyList(), page("shorts", null), 1);
         NavigationItem men = navItem("Men", "/content/we-retail/us/en/men.html",
             Collections.singletonList(shorts), page("men", null), 0);
