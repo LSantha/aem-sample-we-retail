@@ -13,7 +13,6 @@
         cq:lastRolledout="{Date}2017-02-08T11:58:34.998+01:00"
         cq:lastRolledoutBy="admin"
         cq:template="/conf/we-retail/settings/wcm/templates/section-page"
-        jcr:language="en"
         jcr:mixinTypes="[cq:LiveRelationship]"
         jcr:primaryType="cq:PageContent"
         jcr:title="Products"
