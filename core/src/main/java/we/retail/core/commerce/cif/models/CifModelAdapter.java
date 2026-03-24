@@ -13,13 +13,11 @@ import org.apache.sling.models.factory.ModelFactory;
 
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
-import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 
 public final class CifModelAdapter {
 
     public static final String PRODUCT_RESOURCE_TYPE = "core/cif/components/commerce/product/v2/product";
     public static final String PRODUCT_LIST_RESOURCE_TYPE = "core/cif/components/commerce/productlist/v2/productlist";
-    public static final String BREADCRUMB_RESOURCE_TYPE = "core/cif/components/structure/breadcrumb/v1/breadcrumb";
 
     private static final String PN_SELECTION = "selection";
 
@@ -38,11 +36,6 @@ public final class CifModelAdapter {
     public static ProductList adaptToProductList(ModelFactory modelFactory, SlingHttpServletRequest request, Resource resource) {
         Resource wrappedResource = new ResourceTypeOverrideResource(resource, PRODUCT_LIST_RESOURCE_TYPE, new HashMap<String, Object>());
         return modelFactory.getModelFromWrappedRequest(request, wrappedResource, ProductList.class);
-    }
-
-    public static Breadcrumb adaptToBreadcrumb(ModelFactory modelFactory, SlingHttpServletRequest request, Resource resource) {
-        Resource wrappedResource = new ResourceTypeOverrideResource(resource, BREADCRUMB_RESOURCE_TYPE, new HashMap<String, Object>());
-        return modelFactory.getModelFromWrappedRequest(request, wrappedResource, Breadcrumb.class);
     }
 
     private static final class ResourceTypeOverrideResource extends ResourceWrapper {
