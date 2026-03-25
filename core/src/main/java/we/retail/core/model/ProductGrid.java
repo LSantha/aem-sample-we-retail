@@ -32,6 +32,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.via.ForcedResourceType;
 import org.apache.sling.models.annotations.via.ResourceSuperType;
 import org.apache.sling.models.factory.ModelFactory;
 import com.adobe.cq.commerce.core.components.models.common.CombinedSku;
@@ -39,14 +40,12 @@ import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
 import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
+import com.adobe.cq.commerce.core.components.services.urls.ProductUrlFormat;
 import com.adobe.cq.commerce.core.components.services.urls.UrlProvider;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
+import com.adobe.granite.ui.components.ValueMapResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
-
-import we.retail.core.commerce.cif.models.CifModelAdapter;
-import we.retail.core.commerce.cif.models.CifProductViewSupport;
-import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -54,9 +53,13 @@ import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
     resourceType = "weretail/components/content/productgrid")
 public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List {
     private static final String PN_CATEGORY = "category";
+    private static final String PN_CIF_PRODUCT_PAGE = "cq:cifProductPage";
     private static final String PN_LIST_FROM = "listFrom";
     private static final String PN_PRODUCT = "product";
+    private static final String PN_SELECTION = "selection";
     private static final String LIST_FROM_PRODUCTS = "products";
+    private static final String CIF_PRODUCT_RESOURCE_TYPE = "core/cif/components/commerce/product/v2/product";
+    private static final String CIF_PRODUCT_LIST_RESOURCE_TYPE = "core/cif/components/commerce/productlist/v2/productlist";
 
     @Self
     private SlingHttpServletRequest request;
@@ -74,6 +77,10 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SiteStructure siteStructure;
 
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Via(type = ForcedResourceType.class, value = CIF_PRODUCT_LIST_RESOURCE_TYPE)
+    private ProductList cifProductList;
+
     @OSGiService
     private ModelFactory modelFactory;
 
@@ -89,7 +96,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             return;
         }
 
-        boolean routeCategoryPage = CommerceSiteStructureSupport.isCategoryRoutePage(siteStructure, currentPage);
+        boolean routeCategoryPage = siteStructure != null && currentPage != null && siteStructure.isCategoryPage(currentPage);
         boolean explicitCategorySelection = hasExplicitCifCategorySelection();
 
         if (routeCategoryPage || explicitCategorySelection) {
@@ -115,7 +122,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
         java.util.List<ProductGridItem> selectedItems = new ArrayList<ProductGridItem>();
         for (SelectedProductSelection selection : getConfiguredProductSelections()) {
             try {
-                Product product = CifModelAdapter.adaptToProduct(modelFactory, request, resource, selection.getBaseSku());
+                Product product = adaptSelectedProduct(selection.getBaseSku());
                 if (product == null || !Boolean.TRUE.equals(product.getFound()) || isPlaceholderProductName(product.getName())) {
                     continue;
                 }
@@ -135,7 +142,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     private java.util.List<ProductGridItem> buildRouteItems() {
         java.util.List<ProductGridItem> routeItems = new ArrayList<ProductGridItem>();
         try {
-            ProductList productList = CifModelAdapter.adaptToProductList(modelFactory, request, resource);
+            ProductList productList = cifProductList;
             if (productList == null || productList.getCategoryRetriever() == null) {
                 return routeItems;
             }
@@ -210,9 +217,19 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
         return selections;
     }
 
+    private Product adaptSelectedProduct(String sku) {
+        if (modelFactory == null || request == null || resource == null || StringUtils.isBlank(sku)) {
+            return null;
+        }
+
+        ValueMapResourceWrapper wrappedResource = new ValueMapResourceWrapper(resource, CIF_PRODUCT_RESOURCE_TYPE);
+        wrappedResource.getValueMap().put(PN_SELECTION, sku);
+        return modelFactory.getModelFromWrappedRequest(request, wrappedResource, Product.class);
+    }
+
     private String buildRouteProductUrl(ProductListItem productListItem) {
         ProductInterface product = productListItem != null ? productListItem.getProduct() : null;
-        String providerUrl = CommerceLinkSupport.resolveProductUrl(request, currentPage, urlProvider,
+        String providerUrl = resolveProductUrl(
             product != null ? product.getSku() : null,
             product != null ? product.getUrlPath() : null,
             null);
@@ -229,9 +246,8 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     }
 
     private String buildSelectedProductUrl(Product product, String baseSku, String variantSku) {
-        ProductInterface productData = CifProductViewSupport.fetchProduct(product);
-        String providerUrl = CommerceLinkSupport.resolveProductUrl(request, currentPage, urlProvider, baseSku,
-            productData != null ? productData.getUrlPath() : null, variantSku);
+        ProductInterface productData = ProductItem.fetchProduct(product);
+        String providerUrl = resolveProductUrl(baseSku, productData != null ? productData.getUrlPath() : null, variantSku);
         if (StringUtils.isNotBlank(providerUrl)) {
             return providerUrl;
         }
@@ -240,7 +256,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     }
 
     private String buildConfiguredRouteProductUrl(String urlPath, String variantSku) {
-        String configuredRoute = CommerceSiteStructureSupport.findProductRoute(siteStructure, currentPage);
+        String configuredRoute = findConfiguredProductRoute();
         if (StringUtils.isBlank(configuredRoute) || StringUtils.isBlank(urlPath)) {
             return StringUtils.EMPTY;
         }
@@ -250,6 +266,66 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             return routeUrl + "#" + variantSku;
         }
         return routeUrl;
+    }
+
+    private String findConfiguredProductRoute() {
+        if (currentPage == null) {
+            return StringUtils.EMPTY;
+        }
+
+        Page configHolder = resolveProductRouteConfigHolder();
+        String configuredRoute = readProductRoute(configHolder);
+        if (StringUtils.isNotBlank(configuredRoute)) {
+            return configuredRoute;
+        }
+
+        if (siteStructure != null) {
+            Page landingPage = siteStructure.getLandingPage();
+            if (landingPage != null && landingPage != configHolder) {
+                configuredRoute = readProductRoute(landingPage);
+                if (StringUtils.isNotBlank(configuredRoute)) {
+                    return configuredRoute;
+                }
+            }
+        }
+
+        if (currentPage != configHolder) {
+            return readProductRoute(currentPage);
+        }
+
+        return StringUtils.EMPTY;
+    }
+
+    private Page resolveProductRouteConfigHolder() {
+        if (siteStructure == null || currentPage == null) {
+            return currentPage;
+        }
+
+        if (siteStructure.isCatalogPage(currentPage)) {
+            return currentPage;
+        }
+
+        SiteStructure.Entry entry = siteStructure.getEntry(currentPage);
+        Page catalogPage = entry != null ? entry.getCatalogPage() : null;
+        if (catalogPage != null) {
+            return catalogPage;
+        }
+
+        Page landingPage = siteStructure.getLandingPage();
+        return landingPage != null ? landingPage : currentPage;
+    }
+
+    private String readProductRoute(Page page) {
+        if (page == null) {
+            return StringUtils.EMPTY;
+        }
+
+        Resource contentResource = page.getContentResource();
+        if (contentResource == null) {
+            return StringUtils.EMPTY;
+        }
+
+        return StringUtils.defaultString(contentResource.getValueMap().get(PN_CIF_PRODUCT_PAGE, String.class));
     }
 
     private boolean hasUsableRouteItems(List<ProductGridItem> routeItems) {
@@ -281,6 +357,38 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
         }
 
         return productListItem.getPath();
+    }
+
+    private String resolveProductUrl(String productSku, String productUrlPath, String variantSku) {
+        if (request == null || currentPage == null || urlProvider == null) {
+            return StringUtils.EMPTY;
+        }
+
+        if (StringUtils.isNotBlank(productUrlPath)) {
+            ProductUrlFormat.Params params = new ProductUrlFormat.Params();
+            params.setUrlPath(productUrlPath);
+            params.setSku(productSku);
+            params.setVariantSku(variantSku);
+
+            String productUrl = urlProvider.toProductUrl(request, currentPage, params);
+            if (StringUtils.isNotBlank(productUrl)) {
+                return appendVariantSkuFragment(productUrl, variantSku);
+            }
+        }
+
+        if (StringUtils.isBlank(productSku)) {
+            return StringUtils.EMPTY;
+        }
+
+        return appendVariantSkuFragment(urlProvider.toProductUrl(request, currentPage, productSku), variantSku);
+    }
+
+    private String appendVariantSkuFragment(String link, String variantSku) {
+        if (StringUtils.isBlank(link) || StringUtils.isBlank(variantSku)) {
+            return link;
+        }
+
+        return StringUtils.substringBefore(link, "#") + "#" + variantSku;
     }
 
     private static boolean isPlaceholderCategoryTitle(String title) {
@@ -354,4 +462,5 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             return variantSku;
         }
     }
+
 }

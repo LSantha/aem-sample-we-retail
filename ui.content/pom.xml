@@ -84,6 +84,7 @@
                         <configuration>
                             <target>
                                 <delete dir="${project.build.directory}/vault-work"/>
+                                <delete dir="${project.build.directory}/classes"/>
                             </target>
                         </configuration>
                     </execution>

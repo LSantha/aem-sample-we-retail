@@ -17,7 +17,7 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldLabel="Button label"
-                        name="./label"/>
+                        name="./jcr:title"/>
                     <linkType
                         granite:class="cq-dialog-dropdown-showhide"
                         jcr:primaryType="nt:unstructured"

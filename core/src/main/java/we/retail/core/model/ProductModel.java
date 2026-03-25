@@ -22,20 +22,18 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.factory.ModelFactory;
+import org.apache.sling.models.annotations.Via;
+import org.apache.sling.models.annotations.via.ForcedResourceType;
 import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.day.cq.wcm.api.Page;
 
-import we.retail.core.commerce.cif.models.CifModelAdapter;
-import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
-
 @Model(adaptables = SlingHttpServletRequest.class)
 public class ProductModel {
+    private static final String CIF_PRODUCT_RESOURCE_TYPE = "core/cif/components/commerce/product/v2/product";
 
     @SlingObject
     private Resource resource;
@@ -49,21 +47,21 @@ public class ProductModel {
     @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SiteStructure siteStructure;
 
-    @OSGiService
-    private ModelFactory modelFactory;
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Via(type = ForcedResourceType.class, value = CIF_PRODUCT_RESOURCE_TYPE)
+    private Product cifProduct;
 
     private ProductItem productItem;
 
     @PostConstruct
     private void initModel() {
-        if (!CommerceSiteStructureSupport.isProductRoutePage(siteStructure, currentPage)) {
+        if (siteStructure == null || currentPage == null || !siteStructure.isProductPage(currentPage)) {
             return;
         }
 
         try {
-            Product routeProduct = CifModelAdapter.adaptToProduct(modelFactory, request, resource, null);
-            if (isUsableRouteProduct(routeProduct)) {
-                productItem = new ProductItem(routeProduct, request, currentPage);
+            if (isUsableRouteProduct(cifProduct)) {
+                productItem = new ProductItem(cifProduct, request, currentPage);
             }
         } catch (RuntimeException e) {
             // Fail soft so route pages can render surrounding authored content even when commerce data is unavailable.

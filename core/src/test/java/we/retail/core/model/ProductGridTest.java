@@ -1,3 +1,18 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2026 Adobe
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package we.retail.core.model;
 
 import java.lang.reflect.Field;
@@ -17,6 +32,7 @@ import org.junit.Test;
 
 import com.adobe.cq.commerce.core.components.models.common.Price;
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
+import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.retriever.AbstractProductRetriever;
 import com.adobe.cq.commerce.core.components.models.productlist.CategoryRetriever;
@@ -49,7 +65,6 @@ public class ProductGridTest {
         Page currentPage = mock(Page.class);
         Resource currentPageContent = mock(Resource.class);
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
-        ModelFactory modelFactory = mock(ModelFactory.class);
         UrlProvider urlProvider = mock(UrlProvider.class);
         ProductList productList = mock(ProductList.class);
         CategoryRetriever categoryRetriever = mock(CategoryRetriever.class);
@@ -64,7 +79,6 @@ public class ProductGridTest {
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
             "/content/we-retail/us/en/products/product-page"));
-        when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(ProductList.class))).thenReturn(productList);
         when(productList.getCategoryRetriever()).thenReturn(categoryRetriever);
         when(productList.getTitle()).thenReturn("Default Category");
         when(productList.getProducts()).thenReturn(Collections.singletonList(productListItem));
@@ -91,7 +105,7 @@ public class ProductGridTest {
         setField(productGrid, "request", request);
         setField(productGrid, "resource", resource);
         setField(productGrid, "currentPage", currentPage);
-        setField(productGrid, "modelFactory", modelFactory);
+        setField(productGrid, "cifProductList", productList);
         setField(productGrid, "urlProvider", urlProvider);
 
         Method initMethod = ProductGrid.class.getDeclaredMethod("initModel");
@@ -140,13 +154,37 @@ public class ProductGridTest {
     }
 
     @Test
+    public void testBuildConfiguredRouteProductUrlFallsBackToLandingPageConfiguration() throws Exception {
+        ProductGrid productGrid = new ProductGrid();
+        Page currentPage = mock(Page.class);
+        SiteStructure siteStructure = mock(SiteStructure.class);
+        Page landingPage = mock(Page.class);
+        Resource landingPageContent = mock(Resource.class);
+
+        when(currentPage.getContentResource()).thenReturn(null);
+        when(siteStructure.getEntry(currentPage)).thenReturn(null);
+        when(siteStructure.getLandingPage()).thenReturn(landingPage);
+        when(landingPage.getContentResource()).thenReturn(landingPageContent);
+        when(landingPageContent.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
+            "/content/we-retail/us/en/products/product-page"));
+
+        setField(productGrid, "currentPage", currentPage);
+        setField(productGrid, "siteStructure", siteStructure);
+
+        Method routeUrlMethod = ProductGrid.class.getDeclaredMethod("buildConfiguredRouteProductUrl", String.class, String.class);
+        routeUrlMethod.setAccessible(true);
+        String routeUrl = (String) routeUrlMethod.invoke(productGrid, "eq/biking/eqbisublp", null);
+
+        assertEquals("/content/we-retail/us/en/products/product-page.html/eq/biking/eqbisublp.html", routeUrl);
+    }
+
+    @Test
     public void testExtendsProductQueryBeforeReadingTitle() throws Exception {
         ProductGrid productGrid = new ProductGrid();
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
         Resource resource = mock(Resource.class);
         Page currentPage = mock(Page.class);
         Resource currentPageContent = mock(Resource.class);
-        ModelFactory modelFactory = mock(ModelFactory.class);
         ProductList productList = mock(ProductList.class);
         CategoryRetriever categoryRetriever = mock(CategoryRetriever.class);
 
@@ -154,7 +192,6 @@ public class ProductGridTest {
         when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products");
         when(currentPage.getContentResource()).thenReturn(currentPageContent);
         when(currentPageContent.getValueMap()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>()));
-        when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(ProductList.class))).thenReturn(productList);
         when(productList.getCategoryRetriever()).thenReturn(categoryRetriever);
         when(productList.getTitle()).thenReturn("Default Category");
         when(productList.getProducts()).thenReturn(Collections.<ProductListItem>emptyList());
@@ -162,7 +199,7 @@ public class ProductGridTest {
         setField(productGrid, "request", request);
         setField(productGrid, "resource", resource);
         setField(productGrid, "currentPage", currentPage);
-        setField(productGrid, "modelFactory", modelFactory);
+        setField(productGrid, "cifProductList", productList);
 
         Method initMethod = ProductGrid.class.getDeclaredMethod("initModel");
         initMethod.setAccessible(true);

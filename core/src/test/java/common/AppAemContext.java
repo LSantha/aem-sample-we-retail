@@ -34,6 +34,7 @@ import common.mock.MockCommunityContext;
 import common.mock.MockProduct;
 import common.mock.MockUserManager;
 import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit.AemContextCallback;
 
 public class AppAemContext {
@@ -52,7 +53,11 @@ public class AppAemContext {
     }
 
     public static AemContext newAemContext() {
-        return new AemContext(new SetUpCallback(), ResourceResolverType.RESOURCERESOLVER_MOCK);
+        return new AemContextBuilder()
+            .registerSlingModelsFromClassPath(false)
+            .resourceResolverType(ResourceResolverType.RESOURCERESOLVER_MOCK)
+            .afterSetUp(new SetUpCallback())
+            .build();
     }
 
     private static final class SetUpCallback implements AemContextCallback {

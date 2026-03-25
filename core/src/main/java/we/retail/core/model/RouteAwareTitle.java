@@ -15,8 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package we.retail.core.model;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Via;
@@ -26,15 +29,20 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.via.ResourceSuperType;
 
+import com.adobe.cq.commerce.core.components.client.MagentoGraphqlClient;
 import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
+import com.adobe.cq.commerce.graphql.client.GraphqlResponse;
+import com.adobe.cq.commerce.magento.graphql.CategoryFilterInput;
 import com.adobe.cq.commerce.magento.graphql.CategoryTree;
+import com.adobe.cq.commerce.magento.graphql.CategoryTreeQueryDefinition;
+import com.adobe.cq.commerce.magento.graphql.FilterEqualTypeInput;
+import com.adobe.cq.commerce.magento.graphql.Operations;
+import com.adobe.cq.commerce.magento.graphql.Query;
+import com.adobe.cq.commerce.magento.graphql.QueryQuery;
+import com.adobe.cq.commerce.magento.graphql.gson.Error;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.wcm.api.Page;
-
-import we.retail.core.commerce.cif.models.CommerceSiteStructureSupport;
-import we.retail.core.commerce.cif.models.RouteCategorySupport;
-import we.retail.core.commerce.cif.models.RoutePathSupport;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -57,6 +65,9 @@ public class RouteAwareTitle implements Title {
 
     @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SiteStructure siteStructure;
+
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private MagentoGraphqlClient magentoGraphqlClient;
 
     @Override
     public String getText() {
@@ -109,16 +120,16 @@ public class RouteAwareTitle implements Title {
     }
 
     private String resolveCategoryRouteTitle() {
-        if (!CommerceSiteStructureSupport.isCategoryRoutePage(siteStructure, currentPage)) {
+        if (siteStructure == null || currentPage == null || !siteStructure.isCategoryPage(currentPage)) {
             return StringUtils.EMPTY;
         }
 
-        String routePath = RoutePathSupport.extractRoutePath(request);
+        String routePath = extractRoutePath();
         if (StringUtils.isBlank(routePath)) {
             return StringUtils.EMPTY;
         }
 
-        CategoryTree category = RouteCategorySupport.fetchCategoryByUrlPath(request, routePath);
+        CategoryTree category = fetchCategoryByUrlPath(routePath);
         if (category != null && StringUtils.isNotBlank(category.getName())) {
             return category.getName();
         }
@@ -141,6 +152,61 @@ public class RouteAwareTitle implements Title {
 
     private boolean isPlaceholderTitle(String text) {
         return StringUtils.equals(text, "Category Page") || StringUtils.equals(text, "Product Page");
+    }
+
+    private String extractRoutePath() {
+        if (request == null) {
+            return StringUtils.EMPTY;
+        }
+
+        RequestPathInfo pathInfo = request.getRequestPathInfo();
+        if (pathInfo == null) {
+            return StringUtils.EMPTY;
+        }
+
+        String suffix = pathInfo.getSuffix();
+        if (StringUtils.isBlank(suffix)) {
+            return StringUtils.EMPTY;
+        }
+
+        return StringUtils.removeStart(StringUtils.removeEnd(suffix, ".html"), "/");
+    }
+
+    private CategoryTree fetchCategoryByUrlPath(String routePath) {
+        if (magentoGraphqlClient == null || StringUtils.isBlank(routePath)) {
+            return null;
+        }
+
+        try {
+            GraphqlResponse<Query, Error> response = magentoGraphqlClient.execute(buildCategoryQuery(routePath));
+            if (response == null || response.getErrors() != null && !response.getErrors().isEmpty()) {
+                return null;
+            }
+
+            Query data = response.getData();
+            List<CategoryTree> categories = data != null ? data.getCategoryList() : null;
+            if (categories == null || categories.isEmpty()) {
+                return null;
+            }
+
+            for (CategoryTree category : categories) {
+                if (category != null) {
+                    return category;
+                }
+            }
+            return null;
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    private String buildCategoryQuery(String routePath) {
+        CategoryFilterInput filter = new CategoryFilterInput().setUrlPath(new FilterEqualTypeInput().setEq(routePath));
+        QueryQuery.CategoryListArgumentsDefinition searchArgs = args -> args.filters(filter);
+        CategoryTreeQueryDefinition queryArgs = category -> category
+            .urlPath()
+            .name();
+        return Operations.query(query -> query.categoryList(searchArgs, queryArgs)).toString();
     }
 
     private String humanizeRoutePath(String routePath) {

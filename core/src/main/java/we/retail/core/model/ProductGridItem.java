@@ -32,8 +32,6 @@ import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptions;
 import com.adobe.cq.commerce.magento.graphql.ConfigurableProductOptionsValues;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
 
-import we.retail.core.commerce.cif.models.CifProductViewSupport;
-
 public class ProductGridItem {
 
     private final boolean exists;
@@ -64,25 +62,23 @@ public class ProductGridItem {
 
     public static ProductGridItem fromProduct(Product product, Page page, SlingHttpServletRequest request, String resolvedPath,
         String selectedVariantSku) {
-        ProductInterface productData = CifProductViewSupport.fetchProduct(product);
-        String defaultImage = CifProductViewSupport.resolveImage(request,
-            CifProductViewSupport.assetPath(product.getAssets()),
-            CifProductViewSupport.imagePath(productData));
-        String resolvedPrice = CifProductViewSupport.formatPrice(product.getPriceRange());
+        ProductInterface productData = ProductItem.fetchProduct(product);
+        String defaultImage = ProductItem.resolveImage(request, ProductItem.assetPath(product.getAssets()), ProductItem.imagePath(productData));
+        String resolvedPrice = ProductItem.formatPrice(product.getPriceRange());
         Variant selectedVariant = resolveSelectedVariant(product, selectedVariantSku);
         String image = selectedVariant != null
-            ? CifProductViewSupport.resolveImage(request, CifProductViewSupport.assetPath(selectedVariant.getAssets()), defaultImage)
+            ? ProductItem.resolveImage(request, ProductItem.assetPath(selectedVariant.getAssets()), defaultImage)
             : defaultImage;
         String displayName = selectedVariant != null ? StringUtils.defaultIfBlank(selectedVariant.getName(), product.getName()) : product.getName();
         String displayPrice = selectedVariant != null
-            ? StringUtils.defaultIfBlank(CifProductViewSupport.formatPrice(selectedVariant.getPriceRange()), resolvedPrice)
+            ? StringUtils.defaultIfBlank(ProductItem.formatPrice(selectedVariant.getPriceRange()), resolvedPrice)
             : resolvedPrice;
         String pagePath = resolvePagePath(page, request);
 
         return new ProductGridItem(
             image,
             displayName,
-            CifProductViewSupport.descriptionLabel(productData),
+            ProductItem.descriptionLabel(productData),
             displayPrice,
             StringUtils.defaultIfBlank(resolvedPath, pagePath),
             buildFilters(productData, displayPrice));
@@ -90,12 +86,12 @@ public class ProductGridItem {
 
     public static ProductGridItem fromProductListItem(ProductListItem productListItem, SlingHttpServletRequest request, String resolvedUrl) {
         ProductInterface product = productListItem.getProduct();
-        String resolvedPrice = CifProductViewSupport.formatPrice(productListItem.getPriceRange());
+        String resolvedPrice = ProductItem.formatPrice(productListItem.getPriceRange());
 
         return new ProductGridItem(
-            CifProductViewSupport.mapAssetPath(request, productListItem.getImageURL()),
+            ProductItem.mapAssetPath(request, productListItem.getImageURL()),
             productListItem.getTitle(),
-            CifProductViewSupport.descriptionLabel(product),
+            ProductItem.descriptionLabel(product),
             resolvedPrice,
             StringUtils.defaultIfBlank(resolvedUrl, StringUtils.defaultIfBlank(productListItem.getURL(), productListItem.getPath())),
             buildFilters(product, resolvedPrice));

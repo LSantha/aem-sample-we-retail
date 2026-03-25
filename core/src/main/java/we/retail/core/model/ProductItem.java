@@ -27,17 +27,21 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 
+import com.adobe.cq.commerce.core.components.models.common.Price;
+import com.adobe.cq.commerce.core.components.models.product.Asset;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.product.Variant;
 import com.adobe.cq.commerce.core.components.models.product.VariantAttribute;
 import com.adobe.cq.commerce.core.components.models.product.VariantValue;
+import com.adobe.cq.commerce.magento.graphql.CategoryInterface;
+import com.adobe.cq.commerce.magento.graphql.ComplexTextValue;
+import com.adobe.cq.commerce.magento.graphql.ProductImage;
 import com.adobe.cq.commerce.magento.graphql.ProductInterface;
 import com.day.cq.wcm.api.Page;
-
-import we.retail.core.commerce.cif.models.CifProductViewSupport;
 
 public class ProductItem {
 
@@ -59,19 +63,17 @@ public class ProductItem {
     }
 
     private ProductItem(Product product, SlingHttpServletRequest request, String resolvedPagePath) {
-        ProductInterface productData = CifProductViewSupport.fetchProduct(product);
-        String resolvedDescription = CifProductViewSupport.descriptionLabel(productData);
-        String resolvedSummary = CifProductViewSupport.summary(productData);
-        String resolvedImage = CifProductViewSupport.resolveImage(request,
-            CifProductViewSupport.assetPath(product.getAssets()),
-            CifProductViewSupport.imagePath(productData));
+        ProductInterface productData = fetchProduct(product);
+        String resolvedDescription = descriptionLabel(productData);
+        String resolvedSummary = resolveSummary(productData);
+        String resolvedImage = resolveImage(request, assetPath(product.getAssets()), imagePath(productData));
 
         path = resolvedPagePath;
         pagePath = resolvedPagePath;
         sku = normalizeSku(product.getSku());
         title = product.getName();
         description = resolvedDescription;
-        price = CifProductViewSupport.formatPrice(product.getPriceRange());
+        price = formatPrice(product.getPriceRange());
         summary = resolvedSummary;
         imageUrl = resolvedImage;
         thumbnailUrl = resolvedImage;
@@ -110,11 +112,9 @@ public class ProductItem {
         sku = resolvedSku;
         title = variant.getName();
         description = resolvedDescription;
-        price = CifProductViewSupport.formatPrice(variant.getPriceRange());
-        summary = StringUtils.defaultIfBlank(CifProductViewSupport.stripHtml(variant.getDescription()), resolvedSummary);
-        imageUrl = CifProductViewSupport.resolveImage(request,
-            CifProductViewSupport.assetPath(variant.getAssets()),
-            fallbackImage);
+        price = formatPrice(variant.getPriceRange());
+        summary = StringUtils.defaultIfBlank(stripHtml(variant.getDescription()), resolvedSummary);
+        imageUrl = resolveImage(request, assetPath(variant.getAssets()), fallbackImage);
         thumbnailUrl = imageUrl;
         variants = Collections.emptyList();
         variantsAxesValues = Collections.emptyMap();
@@ -127,6 +127,109 @@ public class ProductItem {
             return requestUri;
         }
         return currentPage != null ? currentPage.getPath() + ".html" : StringUtils.EMPTY;
+    }
+
+    static ProductInterface fetchProduct(Product product) {
+        return product != null && product.getProductRetriever() != null ? product.getProductRetriever().fetchProduct() : null;
+    }
+
+    static String formatPrice(Price priceRange) {
+        if (priceRange == null || priceRange.isEmpty()) {
+            return StringUtils.EMPTY;
+        }
+        if (Boolean.TRUE.equals(priceRange.isRange()) && StringUtils.isNotBlank(priceRange.getFormattedFinalPriceMax())) {
+            return priceRange.getFormattedFinalPrice() + " - " + priceRange.getFormattedFinalPriceMax();
+        }
+        if (StringUtils.isNotBlank(priceRange.getFormattedFinalPrice())) {
+            return priceRange.getFormattedFinalPrice();
+        }
+        return StringUtils.defaultString(priceRange.getFormattedRegularPrice());
+    }
+
+    static String firstCategoryName(ProductInterface productData) {
+        if (productData == null || productData.getCategories() == null || productData.getCategories().isEmpty()) {
+            return StringUtils.EMPTY;
+        }
+
+        CategoryInterface selectedCategory = null;
+        for (CategoryInterface category : productData.getCategories()) {
+            if (category == null || StringUtils.isBlank(category.getName())) {
+                continue;
+            }
+
+            if (selectedCategory == null) {
+                selectedCategory = category;
+                continue;
+            }
+
+            int currentDepth = StringUtils.countMatches(StringUtils.defaultString(category.getUrlPath()), "/");
+            int selectedDepth = StringUtils.countMatches(StringUtils.defaultString(selectedCategory.getUrlPath()), "/");
+            if (currentDepth >= selectedDepth) {
+                selectedCategory = category;
+            }
+        }
+
+        return selectedCategory != null ? StringUtils.defaultString(selectedCategory.getName()) : StringUtils.EMPTY;
+    }
+
+    static String descriptionLabel(ProductInterface productData) {
+        String category = firstCategoryName(productData);
+        if (StringUtils.isNotBlank(category)) {
+            return category;
+        }
+        return stripHtml(productData != null ? productData.getShortDescription() : null);
+    }
+
+    static String assetPath(List<Asset> assets) {
+        if (assets == null || assets.isEmpty()) {
+            return StringUtils.EMPTY;
+        }
+        Asset asset = assets.get(0);
+        return asset != null ? StringUtils.defaultString(asset.getPath()) : StringUtils.EMPTY;
+    }
+
+    static String imagePath(ProductInterface productData) {
+        if (productData == null) {
+            return StringUtils.EMPTY;
+        }
+        ProductImage smallImage = productData.getSmallImage();
+        if (smallImage != null && StringUtils.isNotBlank(smallImage.getUrl())) {
+            return smallImage.getUrl();
+        }
+        ProductImage thumbnail = productData.getThumbnail();
+        if (thumbnail != null && StringUtils.isNotBlank(thumbnail.getUrl())) {
+            return thumbnail.getUrl();
+        }
+        ProductImage image = productData.getImage();
+        if (image != null) {
+            return StringUtils.defaultString(image.getUrl());
+        }
+        return StringUtils.EMPTY;
+    }
+
+    static String resolveImage(SlingHttpServletRequest request, String preferredImage, String fallbackImage) {
+        return mapAssetPath(request, StringUtils.defaultIfBlank(preferredImage, fallbackImage));
+    }
+
+    static String mapAssetPath(SlingHttpServletRequest request, String assetPath) {
+        if (StringUtils.isBlank(assetPath)) {
+            return StringUtils.EMPTY;
+        }
+
+        String mappedPath = assetPath;
+        if (request != null && request.getResourceResolver() != null && StringUtils.startsWith(assetPath, "/")) {
+            mappedPath = request.getResourceResolver().map(request, assetPath);
+        }
+
+        return StringUtils.replace(mappedPath, " ", "%20");
+    }
+
+    private static String resolveSummary(ProductInterface productData) {
+        String shortDescription = stripHtml(productData != null ? productData.getShortDescription() : null);
+        if (StringUtils.isNotBlank(shortDescription)) {
+            return shortDescription;
+        }
+        return stripHtml(productData != null ? productData.getDescription() : null);
     }
 
     private static String normalizeSku(String sku) {
@@ -147,6 +250,18 @@ public class ProductItem {
             }
         }
         return axisValues;
+    }
+
+    private static String stripHtml(ComplexTextValue textValue) {
+        return textValue != null ? stripHtml(textValue.getHtml()) : StringUtils.EMPTY;
+    }
+
+    private static String stripHtml(String value) {
+        if (StringUtils.isBlank(value)) {
+            return StringUtils.EMPTY;
+        }
+        String withoutTags = value.replaceAll("<[^>]+>", " ");
+        return StringEscapeUtils.unescapeHtml4(withoutTags).replaceAll("\\s+", " ").trim();
     }
 
     public String getPath() {
