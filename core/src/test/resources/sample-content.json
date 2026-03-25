@@ -427,7 +427,6 @@
         "equipment"      : {
             "jcr:content"    : {
                 "coverImage"            : "/content/dam/we-retail/en/products/activities/equipment_4.jpg",
-                "cq:catalogBlueprint"   : "/content/catalogs/we-retail/en/website-catalog/equipment",
                 "cq:commerceType"       : "section",
                 "cq:lastModified"       : "Wed Jun 29 2016 14:20:54 GMT+0200",
                 "cq:lastModifiedBy"     : "admin",
@@ -470,7 +469,6 @@
             "running"        : {
                 "jcr:content"              : {
                     "coverImage"         : "/content/dam/we-retail/en/activities/running/running_5.jpg",
-                    "cq:catalogBlueprint": "/content/catalogs/we-retail/en/website-catalog/equipment/running",
                     "cq:commerceType"    : "section",
                     "cq:lastModified"    : "Wed Jun 29 2016 14:20:56 GMT+0200",
                     "cq:lastModifiedBy"  : "admin",

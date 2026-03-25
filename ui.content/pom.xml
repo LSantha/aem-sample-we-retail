@@ -112,7 +112,7 @@
                             <outputDirectory>${project.build.directory}/vault-work/META-INF</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/META-INF</directory>
+                                    <directory>${basedir}/src/main/content/META-INF</directory>
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
@@ -129,7 +129,7 @@
                 <artifactId>content-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <filterSource>${basedir}/META-INF/vault/filter.xml</filterSource>
+                    <filterSource>${basedir}/src/main/content/META-INF/vault/filter.xml</filterSource>
                     <verbose>true</verbose>
                     <failOnError>true</failOnError>
                     <group>adobe/aem6/sample</group>

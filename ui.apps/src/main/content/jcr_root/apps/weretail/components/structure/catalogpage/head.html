@@ -13,9 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */-->
+<sly data-sly-use.metadata="we.retail.core.model.PageHeadMetadata"/>
 <meta charset="UTF-8"/>
-<title>${currentPage.title || currentPage.name}</title>
+<title>${metadata.title || currentPage.title || currentPage.name}</title>
 <meta name="template" content="${currentPage.template.name}"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<link rel="canonical" href="${currentPage.path}.html"/>
+<meta data-sly-test="${metadata.description}" name="description" content="${metadata.description}"/>
+<link data-sly-test="${metadata.canonicalUrl}" rel="canonical" href="${metadata.canonicalUrl}"/>
+<link data-sly-test="${!metadata.canonicalUrl}" rel="canonical" href="${currentPage.path}.html"/>
 <sly data-sly-include="customheaderlibs.html"/>

@@ -13,13 +13,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */-->
+<sly data-sly-use.metadata="we.retail.core.model.PageHeadMetadata"/>
 <sly data-sly-test.redirectTarget="${wcmmode.disabled ? properties['cq:redirectTarget'] : ''}"/>
 <meta charset="UTF-8"/>
-<title>${currentPage.title || currentPage.name}</title>
+<title>${metadata.title || currentPage.title || currentPage.name}</title>
 <meta name="template" content="${currentPage.template.name}"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta data-sly-test="${metadata.description}" name="description" content="${metadata.description}"/>
 <link data-sly-test="${redirectTarget}" rel="canonical" href="${redirectTarget}"/>
-<link data-sly-test="${!redirectTarget}" rel="canonical" href="${currentPage.path}.html"/>
+<link data-sly-test="${!redirectTarget && metadata.canonicalUrl}" rel="canonical" href="${metadata.canonicalUrl}"/>
+<link data-sly-test="${!redirectTarget && !metadata.canonicalUrl}" rel="canonical" href="${currentPage.path}.html"/>
 <meta data-sly-test="${redirectTarget}" http-equiv="refresh" content="0;url=${redirectTarget}"/>
 <script data-sly-test="${redirectTarget}">
     window.location.replace("${redirectTarget @ context='scriptString'}");

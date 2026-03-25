@@ -53,7 +53,6 @@ import com.day.cq.wcm.api.Page;
     resourceType = "weretail/components/content/productgrid")
 public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List {
     private static final String PN_CATEGORY = "category";
-    private static final String PN_CIF_PRODUCT_PAGE = "cq:cifProductPage";
     private static final String PN_LIST_FROM = "listFrom";
     private static final String PN_PRODUCT = "product";
     private static final String PN_SELECTION = "selection";
@@ -237,12 +236,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             return providerUrl;
         }
 
-        String safeUrl = safeListItemUrl(productListItem);
-        if (StringUtils.isNotBlank(safeUrl)) {
-            return safeUrl;
-        }
-
-        return buildConfiguredRouteProductUrl(product != null ? product.getUrlPath() : null, null);
+        return StringUtils.EMPTY;
     }
 
     private String buildSelectedProductUrl(Product product, String baseSku, String variantSku) {
@@ -252,80 +246,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
             return providerUrl;
         }
 
-        return buildConfiguredRouteProductUrl(productData != null ? productData.getUrlPath() : null, variantSku);
-    }
-
-    private String buildConfiguredRouteProductUrl(String urlPath, String variantSku) {
-        String configuredRoute = findConfiguredProductRoute();
-        if (StringUtils.isBlank(configuredRoute) || StringUtils.isBlank(urlPath)) {
-            return StringUtils.EMPTY;
-        }
-
-        String routeUrl = configuredRoute + ".html/" + StringUtils.removeStart(urlPath, "/") + ".html";
-        if (StringUtils.isNotBlank(variantSku)) {
-            return routeUrl + "#" + variantSku;
-        }
-        return routeUrl;
-    }
-
-    private String findConfiguredProductRoute() {
-        if (currentPage == null) {
-            return StringUtils.EMPTY;
-        }
-
-        Page configHolder = resolveProductRouteConfigHolder();
-        String configuredRoute = readProductRoute(configHolder);
-        if (StringUtils.isNotBlank(configuredRoute)) {
-            return configuredRoute;
-        }
-
-        if (siteStructure != null) {
-            Page landingPage = siteStructure.getLandingPage();
-            if (landingPage != null && landingPage != configHolder) {
-                configuredRoute = readProductRoute(landingPage);
-                if (StringUtils.isNotBlank(configuredRoute)) {
-                    return configuredRoute;
-                }
-            }
-        }
-
-        if (currentPage != configHolder) {
-            return readProductRoute(currentPage);
-        }
-
         return StringUtils.EMPTY;
-    }
-
-    private Page resolveProductRouteConfigHolder() {
-        if (siteStructure == null || currentPage == null) {
-            return currentPage;
-        }
-
-        if (siteStructure.isCatalogPage(currentPage)) {
-            return currentPage;
-        }
-
-        SiteStructure.Entry entry = siteStructure.getEntry(currentPage);
-        Page catalogPage = entry != null ? entry.getCatalogPage() : null;
-        if (catalogPage != null) {
-            return catalogPage;
-        }
-
-        Page landingPage = siteStructure.getLandingPage();
-        return landingPage != null ? landingPage : currentPage;
-    }
-
-    private String readProductRoute(Page page) {
-        if (page == null) {
-            return StringUtils.EMPTY;
-        }
-
-        Resource contentResource = page.getContentResource();
-        if (contentResource == null) {
-            return StringUtils.EMPTY;
-        }
-
-        return StringUtils.defaultString(contentResource.getValueMap().get(PN_CIF_PRODUCT_PAGE, String.class));
     }
 
     private boolean hasUsableRouteItems(List<ProductGridItem> routeItems) {
@@ -340,23 +261,6 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
         }
 
         return false;
-    }
-
-    private String safeListItemUrl(ProductListItem productListItem) {
-        if (productListItem == null) {
-            return StringUtils.EMPTY;
-        }
-
-        try {
-            String url = productListItem.getURL();
-            if (StringUtils.isNotBlank(url)) {
-                return url;
-            }
-        } catch (RuntimeException e) {
-            // Fall back to the already available item path.
-        }
-
-        return productListItem.getPath();
     }
 
     private String resolveProductUrl(String productSku, String productUrlPath, String variantSku) {

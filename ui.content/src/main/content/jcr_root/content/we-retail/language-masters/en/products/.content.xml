@@ -2,7 +2,6 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:catalogBlueprint="/content/catalogs/we-retail/en/website-catalog"
         cq:commerceProvider="we-retail"
         cq:cifCategoryPage="/content/we-retail/language-masters/en/products/category-page"
         cq:cifProductPage="/content/we-retail/language-masters/en/products/product-page"
@@ -13,7 +12,6 @@
         cq:lastRolledout="{Date}2016-07-04T11:34:46.262+02:00"
         cq:lastRolledoutBy="admin"
         cq:template="/conf/we-retail/settings/wcm/templates/section-page"
-        jcr:mixinTypes="[cq:LiveSync]"
         jcr:primaryType="cq:PageContent"
         jcr:title="Products"
         coverImage="/content/dam/we-retail/en/products/Product_catalog.jpg"
@@ -72,11 +70,6 @@
                     sling:resourceType="weretail/components/content/productgrid"/>
             </product-grid-container>
         </root>
-        <cq:LiveSyncConfig
-            cq:isDeep="{Boolean}false"
-            cq:master="/content/catalogs/we-retail/en/website-template-pages/catalog-page-template"
-            cq:rolloutConfigs="[/libs/msm/catalog/rolloutconfigs/catalogpagecontent,/libs/msm/catalog/rolloutconfigs/catalogrollouthooks]"
-            jcr:primaryType="cq:LiveCopy"/>
     </jcr:content>
     <women/>
     <men/>

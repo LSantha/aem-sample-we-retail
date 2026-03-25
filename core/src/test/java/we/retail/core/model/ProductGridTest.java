@@ -32,7 +32,6 @@ import org.junit.Test;
 
 import com.adobe.cq.commerce.core.components.models.common.Price;
 import com.adobe.cq.commerce.core.components.models.common.ProductListItem;
-import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.retriever.AbstractProductRetriever;
 import com.adobe.cq.commerce.core.components.models.productlist.CategoryRetriever;
@@ -121,21 +120,15 @@ public class ProductGridTest {
     }
 
     @Test
-    public void testBuildRouteProductUrlPrefersUrlProviderBeforeItemUrlFallback() throws Exception {
+    public void testBuildRouteProductUrlUsesUrlProviderOnly() throws Exception {
         ProductGrid productGrid = new ProductGrid();
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
         Page currentPage = mock(Page.class);
-        Resource currentPageContent = mock(Resource.class);
         UrlProvider urlProvider = mock(UrlProvider.class);
         ProductListItem productListItem = mock(ProductListItem.class);
         ProductInterface product = mock(ProductInterface.class);
 
-        when(currentPage.getContentResource()).thenReturn(currentPageContent);
-        when(currentPageContent.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
-            "/content/we-retail/us/en/products/product-page"));
         when(productListItem.getProduct()).thenReturn(product);
-        when(productListItem.getURL()).thenThrow(new RuntimeException("root category url generation should not be required"));
-        when(productListItem.getPath()).thenReturn(StringUtils.EMPTY);
         when(product.getSku()).thenReturn("eqbisublp");
         when(product.getUrlPath()).thenReturn("eq/biking/eqbisublp");
         when(urlProvider.toProductUrl(eq(request), eq(currentPage), isA(ProductUrlFormat.Params.class)))
@@ -151,31 +144,6 @@ public class ProductGridTest {
 
         assertEquals("/content/we-retail/us/en/products/product-page.html/eq/biking/eqbisublp.html", routeUrl);
         verify(urlProvider).toProductUrl(eq(request), eq(currentPage), isA(ProductUrlFormat.Params.class));
-    }
-
-    @Test
-    public void testBuildConfiguredRouteProductUrlFallsBackToLandingPageConfiguration() throws Exception {
-        ProductGrid productGrid = new ProductGrid();
-        Page currentPage = mock(Page.class);
-        SiteStructure siteStructure = mock(SiteStructure.class);
-        Page landingPage = mock(Page.class);
-        Resource landingPageContent = mock(Resource.class);
-
-        when(currentPage.getContentResource()).thenReturn(null);
-        when(siteStructure.getEntry(currentPage)).thenReturn(null);
-        when(siteStructure.getLandingPage()).thenReturn(landingPage);
-        when(landingPage.getContentResource()).thenReturn(landingPageContent);
-        when(landingPageContent.getValueMap()).thenReturn(valueMap("cq:cifProductPage",
-            "/content/we-retail/us/en/products/product-page"));
-
-        setField(productGrid, "currentPage", currentPage);
-        setField(productGrid, "siteStructure", siteStructure);
-
-        Method routeUrlMethod = ProductGrid.class.getDeclaredMethod("buildConfiguredRouteProductUrl", String.class, String.class);
-        routeUrlMethod.setAccessible(true);
-        String routeUrl = (String) routeUrlMethod.invoke(productGrid, "eq/biking/eqbisublp", null);
-
-        assertEquals("/content/we-retail/us/en/products/product-page.html/eq/biking/eqbisublp.html", routeUrl);
     }
 
     @Test
