@@ -38,6 +38,7 @@
         <module>core</module>
         <module>ui.apps</module>
         <module>ui.content</module>
+        <module>catalog</module>
         <module>commons.content.slim</module>
         <module>all</module>
     </modules>

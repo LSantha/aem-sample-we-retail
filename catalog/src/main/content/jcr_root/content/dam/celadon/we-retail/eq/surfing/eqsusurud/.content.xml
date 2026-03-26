@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="8593ab5d-9715-4615-9301-ea45a39ac0f5">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:09.474+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Rusty Parrot Shortboad"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:09.460+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="Currently our most popular high performance all around shortboard, the Rusty Parrot offers the same characteristics as what a pro would ride (fast, loose performance) but is made with slightly fuller dimensions to appeal to everyone."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:09.460+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/surfing/eqsusurud_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:09.474+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Rusty Parrot Shortboad"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:09.458+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}895.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:09.460+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:09.461+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqsusurud"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:09.461+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="8e372da4-21d6-4ae5-bf14-45b631af0dee"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/surfing/eqsusurud"
+                _x0040_string_x0040_uuid="8593ab5d-9715-4615-9301-ea45a39ac0f5"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}895.0"
+                string_x0040_description="Currently our most popular high performance all around shortboard, the Rusty Parrot offers the same characteristics as what a pro would ride (fast, loose performance) but is made with slightly fuller dimensions to appeal to everyone."
+                string_x0040_description_x0040_html="Currently our most popular high performance all around shortboard, the Rusty Parrot offers the same characteristics as what a pro would ride (fast, loose performance) but is made with slightly fuller dimensions to appeal to everyone."
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;Currently our most popular high performance all around shortboard, the Rusty Parrot offers the same characteristics as what a pro would ride (fast, loose performance) but is made with slightly fuller dimensions to appeal to everyone.&quot;}]"
+                string_x0040_description_x0040_markdown="Currently our most popular high performance all around shortboard, the Rusty Parrot offers the same characteristics as what a pro would ride (fast, loose performance) but is made with slightly fuller dimensions to appeal to everyone.&#xa;"
+                string_x0040_description_x0040_plaintext="Currently our most popular high performance all around shortboard, the Rusty Parrot offers the same characteristics as what a pro would ride (fast, loose performance) but is made with slightly fuller dimensions to appeal to everyone."
+                string_x0040_name="Rusty Parrot Shortboad"
+                string_x0040_sku="eqsusurud"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/surfing/eqsusurud_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

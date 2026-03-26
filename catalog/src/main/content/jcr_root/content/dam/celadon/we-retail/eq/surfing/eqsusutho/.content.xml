@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="375f321f-cac2-457f-ac94-6d423456b515">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:09.580+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="The Neutrino"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:09.561+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:09.561+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/surfing/eqsusutho_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:09.580+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="The Neutrino"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:09.560+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}695.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:09.561+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:09.562+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqsusutho"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:09.562+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="24ea43ad-604e-4b0b-927b-7b67ed415193"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/surfing/eqsusutho"
+                _x0040_string_x0040_uuid="375f321f-cac2-457f-ac94-6d423456b515"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}695.0"
+                string_x0040_description="With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations."
+                string_x0040_description_x0040_html="With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations."
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations.&quot;}]"
+                string_x0040_description_x0040_markdown="With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations.&#xa;"
+                string_x0040_description_x0040_plaintext="With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations."
+                string_x0040_name="The Neutrino"
+                string_x0040_sku="eqsusutho"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/surfing/eqsusutho_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="cd2942d8-c21f-433e-a8fc-5f792610f8e5">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:11.763+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Buffalo Plaid Shorts"
+        configurableOptions="\[{&quot;label&quot;:&quot;Size&quot;,&quot;attribute_code&quot;:&quot;size&quot;,&quot;values&quot;:[{&quot;label&quot;:&quot;S&quot;,&quot;value_index&quot;:1,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;S&quot;,&quot;swatch_data&quot;:null},{&quot;label&quot;:&quot;M&quot;,&quot;value_index&quot;:2,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;M&quot;,&quot;swatch_data&quot;:null},{&quot;label&quot;:&quot;L&quot;,&quot;value_index&quot;:3,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;L&quot;,&quot;swatch_data&quot;:null},{&quot;label&quot;:&quot;XL&quot;,&quot;value_index&quot;:4,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;XL&quot;,&quot;swatch_data&quot;:null}]}]"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.734+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="The Buffalo Shorts are stylish yet versatile warm-weather gear that will save you space in your luggage."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.733+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.749+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Buffalo Plaid Shorts"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.733+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}32.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.734+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.734+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="mehisubus"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.734+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-S
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:11.750+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.751+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.752+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.752+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Buffalo Plaid Shorts"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.752+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}32.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.751+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="S"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.752+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="mehisubus-S"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.753+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-M
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:11.753+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.754+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.755+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.755+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Buffalo Plaid Shorts"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.755+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}32.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.754+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="M"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.755+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="mehisubus-M"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.756+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-L
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:11.756+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.757+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.759+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.758+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Buffalo Plaid Shorts"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.758+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}32.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.757+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="L"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.759+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="mehisubus-L"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.759+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-XL
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:11.759+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.761+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.762+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.762+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Buffalo Plaid Shorts"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.762+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}32.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.761+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="XL"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.763+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="mehisubus-XL"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.763+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="20d112b0-8968-4461-af32-7bb9aa08a943"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/shorts/mehisubus"
+                _x0040_string_x0040_uuid="cd2942d8-c21f-433e-a8fc-5f792610f8e5"
+                _x0040_stringArray_x0040_variations="[var-size-S,var-size-M,var-size-L,var-size-XL]"
+                double_x0040_price="{Double}32.0"
+                string_x0040_description="The Buffalo Shorts are stylish yet versatile warm-weather gear that will save you space in your luggage."
+                string_x0040_description_x0040_html="The Buffalo Shorts are stylish yet versatile warm-weather gear that will save you space in your luggage."
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;The Buffalo Shorts are stylish yet versatile warm-weather gear that will save you space in your luggage.&quot;}]"
+                string_x0040_description_x0040_markdown="The Buffalo Shorts are stylish yet versatile warm-weather gear that will save you space in your luggage.&#xa;"
+                string_x0040_description_x0040_plaintext="The Buffalo Shorts are stylish yet versatile warm-weather gear that will save you space in your luggage."
+                string_x0040_name="Buffalo Plaid Shorts"
+                string_x0040_sku="mehisubus"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"/>
+            <var-size-S
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="fcd35667-0e9c-458c-a4de-5e255e468f49"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/shorts/mehisubus"
+                _x0040_string_x0040_uuid="cd2942d8-c21f-433e-a8fc-5f792610f8e5"
+                double_x0040_price="{Double}32.0"
+                string_x0040_name="Buffalo Plaid Shorts"
+                string_x0040_size="S"
+                string_x0040_sku="mehisubus-S"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"/>
+            <var-size-M
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="503cfa93-b46c-440d-bdbf-47587b0acae6"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/shorts/mehisubus"
+                _x0040_string_x0040_uuid="cd2942d8-c21f-433e-a8fc-5f792610f8e5"
+                double_x0040_price="{Double}32.0"
+                string_x0040_name="Buffalo Plaid Shorts"
+                string_x0040_size="M"
+                string_x0040_sku="mehisubus-M"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"/>
+            <var-size-L
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="84eae80d-07b0-4b77-b56b-6645b14139b0"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/shorts/mehisubus"
+                _x0040_string_x0040_uuid="cd2942d8-c21f-433e-a8fc-5f792610f8e5"
+                double_x0040_price="{Double}32.0"
+                string_x0040_name="Buffalo Plaid Shorts"
+                string_x0040_size="L"
+                string_x0040_sku="mehisubus-L"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"/>
+            <var-size-XL
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="b6f771a8-e8ef-4d08-9331-90cceef9dc25"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/shorts/mehisubus"
+                _x0040_string_x0040_uuid="cd2942d8-c21f-433e-a8fc-5f792610f8e5"
+                double_x0040_price="{Double}32.0"
+                string_x0040_name="Buffalo Plaid Shorts"
+                string_x0040_size="XL"
+                string_x0040_sku="mehisubus-XL"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/shorts/mehisubus_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <model jcr:primaryType="nt:unstructured">
+            <variations jcr:primaryType="nt:unstructured">
+                <var-size-S
+                    jcr:description="Variant: var-size-S"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-S"
+                    name="var-size-S"/>
+                <var-size-M
+                    jcr:description="Variant: var-size-M"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-M"
+                    name="var-size-M"/>
+                <var-size-L
+                    jcr:description="Variant: var-size-L"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-L"
+                    name="var-size-L"/>
+                <var-size-XL
+                    jcr:description="Variant: var-size-XL"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-XL"
+                    name="var-size-XL"/>
+            </variations>
+        </model>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

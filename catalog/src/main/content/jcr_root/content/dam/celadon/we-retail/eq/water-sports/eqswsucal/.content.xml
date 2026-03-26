@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="955ebdb2-8b05-4679-9217-a27cc16dcf65">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:10.217+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Cabana Stripe Towel"
+        configurableOptions="\[{&quot;label&quot;:&quot;Size&quot;,&quot;attribute_code&quot;:&quot;size&quot;,&quot;values&quot;:[{&quot;label&quot;:&quot;One size&quot;,&quot;value_index&quot;:1,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;One size&quot;,&quot;swatch_data&quot;:null}]}]"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:10.174+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="Soft cotton, cheerful stripes and an extra long length set our Cabana Stripe Towel apart."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:10.173+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/water-sports/eqswsucal_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:10.203+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Cabana Stripe Towel"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:10.172+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}18.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:10.174+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:10.174+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqswsucal"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:10.174+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-Onesize
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:10.204+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:10.207+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:10.209+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/water-sports/eqswsucal_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:10.208+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Cabana Stripe Towel"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:10.208+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}18.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:10.207+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="One size"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:10.213+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqswsucal-Onesize"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:10.217+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="ffc3bad8-b17a-466e-bd52-f3fd899e3e09"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/water-sports/eqswsucal"
+                _x0040_string_x0040_uuid="955ebdb2-8b05-4679-9217-a27cc16dcf65"
+                _x0040_stringArray_x0040_variations="[var-size-Onesize]"
+                double_x0040_price="{Double}18.0"
+                string_x0040_description="Soft cotton, cheerful stripes and an extra long length set our Cabana Stripe Towel apart."
+                string_x0040_description_x0040_html="Soft cotton, cheerful stripes and an extra long length set our Cabana Stripe Towel apart."
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;Soft cotton, cheerful stripes and an extra long length set our Cabana Stripe Towel apart.&quot;}]"
+                string_x0040_description_x0040_markdown="Soft cotton, cheerful stripes and an extra long length set our Cabana Stripe Towel apart.&#xa;"
+                string_x0040_description_x0040_plaintext="Soft cotton, cheerful stripes and an extra long length set our Cabana Stripe Towel apart."
+                string_x0040_name="Cabana Stripe Towel"
+                string_x0040_sku="eqswsucal"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/water-sports/eqswsucal_img_0.jpeg]"/>
+            <var-size-Onesize
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="7f62de53-2f1c-45a9-bf75-8f715928677c"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/water-sports/eqswsucal"
+                _x0040_string_x0040_uuid="955ebdb2-8b05-4679-9217-a27cc16dcf65"
+                double_x0040_price="{Double}18.0"
+                string_x0040_name="Cabana Stripe Towel"
+                string_x0040_size="One size"
+                string_x0040_sku="eqswsucal-Onesize"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/water-sports/eqswsucal_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <model jcr:primaryType="nt:unstructured">
+            <variations jcr:primaryType="nt:unstructured">
+                <var-size-Onesize
+                    jcr:description="Variant: var-size-Onesize"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-Onesize"
+                    name="var-size-Onesize"/>
+            </variations>
+        </model>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -80,6 +80,11 @@
                         </subPackage>
                         <subPackage>
                             <groupId>com.adobe.cq.sample</groupId>
+                            <artifactId>we.retail.catalog</artifactId>
+                            <filter>true</filter>
+                        </subPackage>
+                        <subPackage>
+                            <groupId>com.adobe.cq.sample</groupId>
                             <artifactId>we.retail.commons.content.slim</artifactId>
                             <filter>true</filter>
                         </subPackage>
@@ -142,6 +147,13 @@
         <dependency>
             <groupId>com.adobe.cq.sample</groupId>
             <artifactId>we.retail.config</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq.sample</groupId>
+            <artifactId>we.retail.catalog</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
             <scope>provided</scope>

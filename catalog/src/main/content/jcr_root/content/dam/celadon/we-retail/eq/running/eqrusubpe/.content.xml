@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="2dbfddbe-aaa8-4f6a-b360-9a1ff1f50d98">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:09.304+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="BPA-Free Water Bottle"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:09.291+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="BPA-free, our water bottle water bottle gives you quick access to hydration while at the gym or on the trail."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:09.291+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/running/eqrusubpe_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:09.304+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="BPA-Free Water Bottle"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:09.290+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}18.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:09.291+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:09.292+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqrusubpe"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:09.292+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="bd976a8f-019f-462c-99f7-d306081efa58"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/running/eqrusubpe"
+                _x0040_string_x0040_uuid="2dbfddbe-aaa8-4f6a-b360-9a1ff1f50d98"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}18.0"
+                string_x0040_description="BPA-free, our water bottle water bottle gives you quick access to hydration while at the gym or on the trail."
+                string_x0040_description_x0040_html="BPA-free, our water bottle water bottle gives you quick access to hydration while at the gym or on the trail."
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;BPA-free, our water bottle water bottle gives you quick access to hydration while at the gym or on the trail.&quot;}]"
+                string_x0040_description_x0040_markdown="BPA-free, our water bottle water bottle gives you quick access to hydration while at the gym or on the trail.&#xa;"
+                string_x0040_description_x0040_plaintext="BPA-free, our water bottle water bottle gives you quick access to hydration while at the gym or on the trail."
+                string_x0040_name="BPA-Free Water Bottle"
+                string_x0040_sku="eqrusubpe"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/running/eqrusubpe_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

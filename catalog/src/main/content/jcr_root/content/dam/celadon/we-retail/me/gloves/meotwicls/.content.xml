@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="144d3aa6-5c46-4fe5-bf72-9a041a017731">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:11.505+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Classic Leather Gloves"
+        configurableOptions="\[{&quot;label&quot;:&quot;Size&quot;,&quot;attribute_code&quot;:&quot;size&quot;,&quot;values&quot;:[{&quot;label&quot;:&quot;S&quot;,&quot;value_index&quot;:1,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;S&quot;,&quot;swatch_data&quot;:null},{&quot;label&quot;:&quot;M&quot;,&quot;value_index&quot;:2,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;M&quot;,&quot;swatch_data&quot;:null},{&quot;label&quot;:&quot;L&quot;,&quot;value_index&quot;:3,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;L&quot;,&quot;swatch_data&quot;:null}]}]"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.482+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="Leather gloves offer a low-bulk fit for excellent dexterity and a classic look that can be dressed up or down."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.481+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.493+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Classic Leather Gloves"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.480+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}38.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.482+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.482+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="meotwicls"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.482+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-S
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:11.494+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.496+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.497+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.496+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Classic Leather Gloves"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.497+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}38.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.496+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="S"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.497+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="meotwicls-S"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.498+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-M
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:11.498+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.500+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.501+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.500+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Classic Leather Gloves"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.501+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}38.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.499+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="M"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.501+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="meotwicls-M"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.502+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-L
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:11.502+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:11.504+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:11.505+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:11.504+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Classic Leather Gloves"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:11.505+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}38.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:11.503+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="L"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:11.505+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="meotwicls-L"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:11.505+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="22f639ba-3f8d-420a-8f8e-95ead2dd8f08"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/gloves/meotwicls"
+                _x0040_string_x0040_uuid="144d3aa6-5c46-4fe5-bf72-9a041a017731"
+                _x0040_stringArray_x0040_variations="[var-size-S,var-size-M,var-size-L]"
+                double_x0040_price="{Double}38.0"
+                string_x0040_description="Leather gloves offer a low-bulk fit for excellent dexterity and a classic look that can be dressed up or down."
+                string_x0040_description_x0040_html="Leather gloves offer a low-bulk fit for excellent dexterity and a classic look that can be dressed up or down."
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;Leather gloves offer a low-bulk fit for excellent dexterity and a classic look that can be dressed up or down.&quot;}]"
+                string_x0040_description_x0040_markdown="Leather gloves offer a low-bulk fit for excellent dexterity and a classic look that can be dressed up or down.&#xa;"
+                string_x0040_description_x0040_plaintext="Leather gloves offer a low-bulk fit for excellent dexterity and a classic look that can be dressed up or down."
+                string_x0040_name="Classic Leather Gloves"
+                string_x0040_sku="meotwicls"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"/>
+            <var-size-S
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="fdbbdb58-524f-4276-a9dd-345565d67045"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/gloves/meotwicls"
+                _x0040_string_x0040_uuid="144d3aa6-5c46-4fe5-bf72-9a041a017731"
+                double_x0040_price="{Double}38.0"
+                string_x0040_name="Classic Leather Gloves"
+                string_x0040_size="S"
+                string_x0040_sku="meotwicls-S"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"/>
+            <var-size-M
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="e1e830ab-9118-44db-9361-3fb761265ace"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/gloves/meotwicls"
+                _x0040_string_x0040_uuid="144d3aa6-5c46-4fe5-bf72-9a041a017731"
+                double_x0040_price="{Double}38.0"
+                string_x0040_name="Classic Leather Gloves"
+                string_x0040_size="M"
+                string_x0040_sku="meotwicls-M"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"/>
+            <var-size-L
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="201e96e9-0c79-4a3d-a50c-04678109b951"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/me/gloves/meotwicls"
+                _x0040_string_x0040_uuid="144d3aa6-5c46-4fe5-bf72-9a041a017731"
+                double_x0040_price="{Double}38.0"
+                string_x0040_name="Classic Leather Gloves"
+                string_x0040_size="L"
+                string_x0040_sku="meotwicls-L"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/me/gloves/meotwicls_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <model jcr:primaryType="nt:unstructured">
+            <variations jcr:primaryType="nt:unstructured">
+                <var-size-S
+                    jcr:description="Variant: var-size-S"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-S"
+                    name="var-size-S"/>
+                <var-size-M
+                    jcr:description="Variant: var-size-M"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-M"
+                    name="var-size-M"/>
+                <var-size-L
+                    jcr:description="Variant: var-size-L"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-L"
+                    name="var-size-L"/>
+            </variations>
+        </model>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

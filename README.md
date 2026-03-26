@@ -9,9 +9,10 @@ The main parts of the template are:
 * core: Java bundle containing all core functionality like OSGi services, listeners or schedulers, as well as component-related Java code such as servlets or request filters.
 * ui.apps: contains the /apps (and /etc) parts of the project, ie JS&CSS clientlibs, components, templates, runmode specific configs
 * ui.content: contains sample content using the components from the ui.apps
+* catalog: contains catalog DAM assets and catalog-specific content models
 * it.tests: Java bundle containing JUnit tests that are executed server-side. This bundle is not to be deployed onto production.
 * it.launcher: contains glue code that deploys the ui.tests bundle (and dependent bundles) to the server and triggers the remote JUnit execution
-* all: additional module to build a single package embedding ui.apps and ui.content
+* all: additional module to build a single package embedding the deployable content subpackages
 
 ## How to Build
 

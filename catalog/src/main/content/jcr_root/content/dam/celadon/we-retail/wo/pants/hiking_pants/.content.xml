@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="7a85af2d-d01a-4487-a158-194362eb1136">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:08.538+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Hiking Pants"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:08.528+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="&lt;p>Stay cool, crisp and dry. High performance materials breathe well while giving you flexibility during those long treks.&amp;nbsp;&lt;br>&lt;/p>"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:08.528+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/wo/pants/hiking_pants_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:08.538+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Hiking Pants"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:08.526+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}86.99"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:08.528+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:08.528+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="331050524"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:08.529+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="f65b08b7-66b6-4f54-9f96-beffe7a93f55"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/wo/pants/hiking_pants"
+                _x0040_string_x0040_uuid="7a85af2d-d01a-4487-a158-194362eb1136"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}86.99"
+                string_x0040_description="&lt;p>Stay cool, crisp and dry. High performance materials breathe well while giving you flexibility during those long treks.&amp;nbsp;&lt;br>&lt;/p>"
+                string_x0040_description_x0040_html="&lt;p>Stay cool, crisp and dry. High performance materials breathe well while giving you flexibility during those long treks.&amp;nbsp;&lt;br>&lt;/p>"
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;paragraph&quot;,&quot;content&quot;:[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;Stay cool, crisp and dry. High performance materials breathe well while giving you flexibility during those long treks. &quot;},{&quot;nodeType&quot;:&quot;line-break&quot;,&quot;content&quot;:[]}]}]"
+                string_x0040_description_x0040_markdown="Stay cool, crisp and dry. High performance materials breathe well while giving you flexibility during those long treks.   &#xa;"
+                string_x0040_description_x0040_plaintext="Stay cool, crisp and dry. High performance materials breathe well while giving you flexibility during those long treks. "
+                string_x0040_name="Hiking Pants"
+                string_x0040_sku="331050524"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/wo/pants/hiking_pants_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

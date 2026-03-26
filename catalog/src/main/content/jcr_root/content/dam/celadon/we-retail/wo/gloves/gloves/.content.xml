@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="2d43f26c-d3fe-4c1c-8b7f-791a6787f51a">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:08.520+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Gloves"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:08.510+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="The perfect fit keeps your hands warm but flexible. Tactile grip ensures no loss of control with sweat wicking interior. "
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:08.510+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/wo/gloves/gloves_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:08.520+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Gloves"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:08.501+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}24.99"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:08.510+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:08.511+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="90019930"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:08.511+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="9e8dda13-5e64-48dc-8bcc-2b41a81ca3b0"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/wo/gloves/gloves"
+                _x0040_string_x0040_uuid="2d43f26c-d3fe-4c1c-8b7f-791a6787f51a"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}24.99"
+                string_x0040_description="The perfect fit keeps your hands warm but flexible. Tactile grip ensures no loss of control with sweat wicking interior. "
+                string_x0040_description_x0040_html="The perfect fit keeps your hands warm but flexible. Tactile grip ensures no loss of control with sweat wicking interior. "
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;The perfect fit keeps your hands warm but flexible. Tactile grip ensures no loss of control with sweat wicking interior. &quot;}]"
+                string_x0040_description_x0040_markdown="The perfect fit keeps your hands warm but flexible. Tactile grip ensures no loss of control with sweat wicking interior.&#xa;"
+                string_x0040_description_x0040_plaintext="The perfect fit keeps your hands warm but flexible. Tactile grip ensures no loss of control with sweat wicking interior."
+                string_x0040_name="Gloves"
+                string_x0040_sku="90019930"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/wo/gloves/gloves_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

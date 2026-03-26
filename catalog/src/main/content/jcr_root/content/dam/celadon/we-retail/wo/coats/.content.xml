@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="sling:OrderedFolder">
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Coats">
+        <folderThumbnail/>
+    </jcr:content>
+    <woskwislt/>
+    <woskwislt_img_0.jpeg/>
+    <wootwisot/>
+    <wootwisot_img_0.jpeg/>
+    <wootwisot_var-color-darkgreen-size-XS_img_0.jpeg/>
+    <wootwisot_var-color-darkgreen-size-S_img_0.jpeg/>
+    <wootwisot_var-color-darkgreen-size-M_img_0.jpeg/>
+    <wootwisot_var-color-darkgreen-size-L_img_0.jpeg/>
+    <wootwisot_var-color-darkgreen-size-XL_img_0.jpeg/>
+    <wootwisot_var-color-purple-size-XS_img_0.jpeg/>
+    <wootwisot_var-color-purple-size-S_img_0.jpeg/>
+    <wootwisot_var-color-purple-size-M_img_0.jpeg/>
+    <wootwisot_var-color-purple-size-L_img_0.jpeg/>
+    <wootwisot_var-color-purple-size-XL_img_0.jpeg/>
+</jcr:root>

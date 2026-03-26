@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="sling:OrderedFolder">
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Shorts">
+        <folderThumbnail/>
+    </jcr:content>
+    <mehisucos/>
+    <mehisucos_img_0.jpeg/>
+    <mehisubus/>
+    <mehisubus_img_0.jpeg/>
+    <mehisusts/>
+    <mehisusts_img_0.jpeg/>
+    <mehisusls/>
+    <mehisusls_img_0.jpeg/>
+    <mesusupis/>
+    <mesusupis_img_0.jpeg/>
+    <mesusupis_var-color-orange-size-S_img_0.jpeg/>
+    <mesusupis_var-color-orange-size-M_img_0.jpeg/>
+    <mesusupis_var-color-orange-size-L_img_0.jpeg/>
+    <mesusupis_var-color-orange-size-XL_img_0.jpeg/>
+    <mesusupis_var-color-orange-size-XXL_img_0.jpeg/>
+    <mesusupis_var-color-blue-size-S_img_0.jpeg/>
+    <mesusupis_var-color-blue-size-M_img_0.jpeg/>
+    <mesusupis_var-color-blue-size-L_img_0.jpeg/>
+    <mesusupis_var-color-blue-size-XL_img_0.jpeg/>
+    <mesusupis_var-color-blue-size-XXL_img_0.jpeg/>
+    <mesusupis_var-color-red-size-S_img_0.jpeg/>
+    <mesusupis_var-color-red-size-M_img_0.jpeg/>
+    <mesusupis_var-color-red-size-L_img_0.jpeg/>
+    <mesusupis_var-color-red-size-XL_img_0.jpeg/>
+    <mesusupis_var-color-red-size-XXL_img_0.jpeg/>
+</jcr:root>

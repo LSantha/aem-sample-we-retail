@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="5d1be570-1723-468d-b8d8-49271ce12a1a">
+    <jcr:content
+        jcr:lastModified="{Date}2026-03-26T23:01:09.332+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Fleet Cross-Training Shoe"
+        configurableOptions="\[{&quot;label&quot;:&quot;Size&quot;,&quot;attribute_code&quot;:&quot;size&quot;,&quot;values&quot;:[{&quot;label&quot;:&quot;9&quot;,&quot;value_index&quot;:1,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;9&quot;,&quot;swatch_data&quot;:null},{&quot;label&quot;:&quot;11&quot;,&quot;value_index&quot;:2,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;11&quot;,&quot;swatch_data&quot;:null},{&quot;label&quot;:&quot;13&quot;,&quot;value_index&quot;:3,&quot;uid&quot;:null,&quot;default_label&quot;:&quot;13&quot;,&quot;swatch_data&quot;:null}]}]"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:09.312+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description="The Fleet Cross-Training shoes provide an ideal platform for high-mileage runners looking for 1 pair of shoes to take them from the street to the trail and back again."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:09.311+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:09.322+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Fleet Cross-Training Shoe"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:09.310+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}65.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:09.311+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:09.312+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqrusufle"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:09.312+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-9
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:09.322+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:09.324+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:09.326+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:09.325+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Fleet Cross-Training Shoe"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:09.325+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}65.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:09.324+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="9"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:09.326+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqrusufle-9"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:09.326+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-11
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:09.326+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:09.328+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:09.329+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:09.328+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Fleet Cross-Training Shoe"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:09.328+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}65.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:09.327+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="11"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:09.329+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqrusufle-11"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:09.329+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+            <var-size-13
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                _x0040_variationCreationDate="{Date}2026-03-26T23:01:09.329+02:00"
+                color_x0040_LastModified="{Date}2026-03-26T23:01:09.330+02:00"
+                color_x0040_LastModifiedBy="admin"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-03-26T23:01:09.331+02:00"
+                description_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-03-26T23:01:09.331+02:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Fleet Cross-Training Shoe"
+                name_x0040_LastModified="{Date}2026-03-26T23:01:09.331+02:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}65.0"
+                price_x0040_LastModified="{Date}2026-03-26T23:01:09.330+02:00"
+                price_x0040_LastModifiedBy="admin"
+                size="13"
+                size_x0040_LastModified="{Date}2026-03-26T23:01:09.332+02:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="eqrusufle-13"
+                sku_x0040_LastModified="{Date}2026-03-26T23:01:09.332+02:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="9981bd2a-507a-4270-bef5-1cc80a382767"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/running/eqrusufle"
+                _x0040_string_x0040_uuid="5d1be570-1723-468d-b8d8-49271ce12a1a"
+                _x0040_stringArray_x0040_variations="[var-size-9,var-size-11,var-size-13]"
+                double_x0040_price="{Double}65.0"
+                string_x0040_description="The Fleet Cross-Training shoes provide an ideal platform for high-mileage runners looking for 1 pair of shoes to take them from the street to the trail and back again."
+                string_x0040_description_x0040_html="The Fleet Cross-Training shoes provide an ideal platform for high-mileage runners looking for 1 pair of shoes to take them from the street to the trail and back again."
+                string_x0040_description_x0040_json="\[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;The Fleet Cross-Training shoes provide an ideal platform for high-mileage runners looking for 1 pair of shoes to take them from the street to the trail and back again.&quot;}]"
+                string_x0040_description_x0040_markdown="The Fleet Cross-Training shoes provide an ideal platform for high-mileage runners looking for 1 pair of shoes to take them from the street to the trail and back again.&#xa;"
+                string_x0040_description_x0040_plaintext="The Fleet Cross-Training shoes provide an ideal platform for high-mileage runners looking for 1 pair of shoes to take them from the street to the trail and back again."
+                string_x0040_name="Fleet Cross-Training Shoe"
+                string_x0040_sku="eqrusufle"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"/>
+            <var-size-9
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="526aa33a-1e9f-4c21-a4d4-be9ba0775370"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/running/eqrusufle"
+                _x0040_string_x0040_uuid="5d1be570-1723-468d-b8d8-49271ce12a1a"
+                double_x0040_price="{Double}65.0"
+                string_x0040_name="Fleet Cross-Training Shoe"
+                string_x0040_size="9"
+                string_x0040_sku="eqrusufle-9"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"/>
+            <var-size-11
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="63790501-17a7-4646-9848-37f926f91844"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/running/eqrusufle"
+                _x0040_string_x0040_uuid="5d1be570-1723-468d-b8d8-49271ce12a1a"
+                double_x0040_price="{Double}65.0"
+                string_x0040_name="Fleet Cross-Training Shoe"
+                string_x0040_size="11"
+                string_x0040_sku="eqrusufle-11"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"/>
+            <var-size-13
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="62cf2a6a-166d-400e-a624-6b259e4b25b4"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/eq/running/eqrusufle"
+                _x0040_string_x0040_uuid="5d1be570-1723-468d-b8d8-49271ce12a1a"
+                double_x0040_price="{Double}65.0"
+                string_x0040_name="Fleet Cross-Training Shoe"
+                string_x0040_size="13"
+                string_x0040_sku="eqrusufle-13"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/eq/running/eqrusufle_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <model jcr:primaryType="nt:unstructured">
+            <variations jcr:primaryType="nt:unstructured">
+                <var-size-9
+                    jcr:description="Variant: var-size-9"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-9"
+                    name="var-size-9"/>
+                <var-size-11
+                    jcr:description="Variant: var-size-11"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-11"
+                    name="var-size-11"/>
+                <var-size-13
+                    jcr:description="Variant: var-size-13"
+                    jcr:mixinTypes="[cq:Taggable]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="var-size-13"
+                    name="var-size-13"/>
+            </variations>
+        </model>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

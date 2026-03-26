@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="sling:OrderedFolder">
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Coats">
+        <folderThumbnail/>
+    </jcr:content>
+    <meotwipot/>
+    <meotwipot_img_0.jpeg/>
+    <meotwibrt/>
+    <meotwibrt_img_0.jpeg/>
+    <meskwielt/>
+    <meskwielt_img_0.jpeg/>
+    <meskwielt_var-color-green-size-XS_img_0.jpeg/>
+    <meskwielt_var-color-green-size-S_img_0.jpeg/>
+    <meskwielt_var-color-green-size-M_img_0.jpeg/>
+    <meskwielt_var-color-green-size-L_img_0.jpeg/>
+    <meskwielt_var-color-green-size-XL_img_0.jpeg/>
+    <meskwielt_var-color-purple-size-XS_img_0.jpeg/>
+    <meskwielt_var-color-purple-size-S_img_0.jpeg/>
+    <meskwielt_var-color-purple-size-M_img_0.jpeg/>
+    <meskwielt_var-color-purple-size-L_img_0.jpeg/>
+    <meskwielt_var-color-purple-size-XL_img_0.jpeg/>
+    <meskwielt_var-color-red-size-XS_img_0.jpeg/>
+    <meskwielt_var-color-red-size-S_img_0.jpeg/>
+    <meskwielt_var-color-red-size-M_img_0.jpeg/>
+    <meskwielt_var-color-red-size-L_img_0.jpeg/>
+    <meskwielt_var-color-red-size-XL_img_0.jpeg/>
+    <meotwidot/>
+    <meotwidot_img_0.jpeg/>
+    <meotwislt/>
+    <meotwislt_img_0.jpeg/>
+</jcr:root>
