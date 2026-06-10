@@ -61,6 +61,18 @@
                             <target>/apps/weretail/install</target>
                             <filter>true</filter>
                         </embedded>
+                        <embedded>
+                            <groupId>com.adobe.commerce.cif</groupId>
+                            <artifactId>celadon-core</artifactId>
+                            <target>/apps/weretail/install</target>
+                            <filter>true</filter>
+                        </embedded>
+                        <embedded>
+                            <groupId>com.adobe.commerce.cif</groupId>
+                            <artifactId>celadon-aem</artifactId>
+                            <target>/apps/weretail/install</target>
+                            <filter>true</filter>
+                        </embedded>
                     </embeddeds>
                     <subPackages>
                         <subPackage>
@@ -163,6 +175,18 @@
             <artifactId>we.retail.commons.content.slim</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.commerce.cif</groupId>
+            <artifactId>celadon-core</artifactId>
+            <version>${celadon.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.commerce.cif</groupId>
+            <artifactId>celadon-aem</artifactId>
+            <version>${celadon.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

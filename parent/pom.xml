@@ -41,6 +41,7 @@
         <core.cif.components.version>2.18.0</core.cif.components.version>
         <graphql.client.version>1.10.0</graphql.client.version>
         <magento.graphql.version>9.1.0-magento242ee</magento.graphql.version>
+        <celadon.version>0.1.0-SNAPSHOT</celadon.version>
         <test.jvm.opens />
     </properties>
 
@@ -192,6 +193,10 @@
                         <!-- Jenkins configuration file -->
                         <exclude>Jenkinsfile</exclude>
                         <exclude>jenkinsfiles/*</exclude>
+                        <!-- Migration helper / agent guideline files -->
+                        <exclude>.java-version</exclude>
+                        <exclude>AGENTS.md</exclude>
+                        <exclude>CLAUDE.md</exclude>
                     </excludes>
                 </configuration>
                 <executions>
