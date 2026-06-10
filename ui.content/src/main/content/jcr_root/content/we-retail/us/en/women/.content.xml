@@ -67,7 +67,7 @@
                     listFrom="products"
                     orderBy="jcr:title"
                     pageMax="0"
-                    product="[woswsubas,hiking_pants,wootsudet,wohisucat,wohisufls,woswsusoc]"
+                    product="[woswsubas,331050524,wootsudet,wohisucat,wohisufls,woswsusoc]"
                     tagsMatch="any"/>
                 <button
                     cq:lastRolledout="{Date}2016-03-14T22:18:58.084+01:00"
@@ -80,7 +80,7 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="weretail/components/content/button"
                     jcr:title="All women's products"
-                    categoryId="wo"
+                    categoryId="women"
                     categoryIdType="urlPath"
                     linkType="category"/>
                 <teaser
@@ -111,7 +111,7 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            categoryId="wo/shirts"
+                            categoryId="women/shirts"
                             categoryIdType="urlPath"
                             text="Our strongest clothes"/>
                     </actions>
@@ -144,7 +144,7 @@
                     <actions jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            categoryId="wo/coats"
+                            categoryId="women/coats"
                             categoryIdType="urlPath"
                             text="Our warmest jackets"/>
                     </actions>
