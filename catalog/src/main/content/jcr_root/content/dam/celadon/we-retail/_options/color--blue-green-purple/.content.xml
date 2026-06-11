@@ -2,9 +2,9 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="25c6e219-08fb-4caa-8c12-573c5a6631ec">
+    jcr:uuid="f0f5e098-b5c8-4e5b-8d34-7287d4ecfd6e">
     <jcr:content
-        jcr:lastModified="{Date}2026-06-11T10:23:54.968+03:00"
+        jcr:lastModified="{Date}2026-06-11T11:16:09.196+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="color: blue, green, purple"
@@ -17,28 +17,28 @@
                 jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
                 jcr:primaryType="nt:unstructured"
                 attributeCode="color"
-                attributeCode_x0040_LastModified="{Date}2026-06-11T10:23:54.967+03:00"
+                attributeCode_x0040_LastModified="{Date}2026-06-11T11:16:09.195+03:00"
                 attributeCode_x0040_LastModifiedBy="admin"
                 label="color"
-                label_x0040_LastModified="{Date}2026-06-11T10:23:54.967+03:00"
+                label_x0040_LastModified="{Date}2026-06-11T11:16:09.195+03:00"
                 label_x0040_LastModifiedBy="admin"
                 productField="color"
-                productField_x0040_LastModified="{Date}2026-06-11T10:23:54.967+03:00"
+                productField_x0040_LastModified="{Date}2026-06-11T11:16:09.195+03:00"
                 productField_x0040_LastModifiedBy="admin"
-                swatchType_x0040_LastModified="{Date}2026-06-11T10:23:54.968+03:00"
+                swatchType_x0040_LastModified="{Date}2026-06-11T11:16:09.196+03:00"
                 swatchType_x0040_LastModifiedBy="admin"
                 values="[1;blue,2;green,3;purple]"
-                values_x0040_LastModified="{Date}2026-06-11T10:23:54.968+03:00"
+                values_x0040_LastModified="{Date}2026-06-11T11:16:09.196+03:00"
                 values_x0040_LastModifiedBy="admin"/>
         </data>
         <indexedData jcr:primaryType="nt:unstructured">
             <master
                 jcr:mixinTypes="[dam:IndexedFragmentData]"
                 jcr:primaryType="nt:unstructured"
-                jcr:uuid="fdbcd49e-cd74-4954-8b04-36d11ac34119"
+                jcr:uuid="3c144c68-249b-4efd-ab51-93d4181c79c6"
                 _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/celadon-option-definition"
                 _x0040_string_x0040_path="/content/dam/celadon/we-retail/_options/color--blue-green-purple"
-                _x0040_string_x0040_uuid="25c6e219-08fb-4caa-8c12-573c5a6631ec"
+                _x0040_string_x0040_uuid="f0f5e098-b5c8-4e5b-8d34-7287d4ecfd6e"
                 _x0040_stringArray_x0040_variations="[]"
                 string_x0040_attributeCode="color"
                 string_x0040_label="color"

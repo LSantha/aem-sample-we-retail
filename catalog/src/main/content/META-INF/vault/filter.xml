@@ -16,5 +16,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
     <filter root="/conf/we-retail/settings/dam/cfm/models/product"/>
+    <filter root="/conf/we-retail/settings/dam/cfm/models/celadon-option-definition"/>
+    <filter root="/conf/we-retail/settings/dam/cfm/models/celadon-attribute"/>
     <filter root="/content/dam/celadon"/>
 </workspaceFilter>

@@ -2,16 +2,16 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:exif="http://ns.adobe.com/exif/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="1112d1fa-aaf2-45d9-ac6e-ffea245b3a68">
+    jcr:uuid="665addd6-f333-4f71-82ed-6782231210f1">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2026-06-11T10:23:53.287+03:00"
+        jcr:lastModified="{Date}2026-06-11T11:16:07.721+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             cq:productReference="/etc/commerce/products/we-retail/en/wo/coats/woskwislt"
             dam:Bitsperpixel="{Long}24"
-            dam:extracted="{Date}2026-06-11T10:23:52.797+03:00"
+            dam:extracted="{Date}2026-06-11T11:16:07.660+03:00"
             dam:Fileformat="JPEG"
             dam:MIMEtype="image/jpeg"
             dam:Numberofimages="{Long}1"

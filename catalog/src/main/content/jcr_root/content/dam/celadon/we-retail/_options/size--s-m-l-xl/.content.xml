@@ -2,9 +2,9 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="43720062-caf8-4611-88cb-5a6b992ba066">
+    jcr:uuid="794aaa04-6ce9-4053-98e9-34dc6e5cf2f2">
     <jcr:content
-        jcr:lastModified="{Date}2026-06-11T10:23:54.639+03:00"
+        jcr:lastModified="{Date}2026-06-11T11:16:08.985+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="size: S, M, L, XL"
@@ -17,28 +17,28 @@
                 jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
                 jcr:primaryType="nt:unstructured"
                 attributeCode="size"
-                attributeCode_x0040_LastModified="{Date}2026-06-11T10:23:54.639+03:00"
+                attributeCode_x0040_LastModified="{Date}2026-06-11T11:16:08.983+03:00"
                 attributeCode_x0040_LastModifiedBy="admin"
                 label="size"
-                label_x0040_LastModified="{Date}2026-06-11T10:23:54.638+03:00"
+                label_x0040_LastModified="{Date}2026-06-11T11:16:08.983+03:00"
                 label_x0040_LastModifiedBy="admin"
                 productField="size"
-                productField_x0040_LastModified="{Date}2026-06-11T10:23:54.639+03:00"
+                productField_x0040_LastModified="{Date}2026-06-11T11:16:08.984+03:00"
                 productField_x0040_LastModifiedBy="admin"
-                swatchType_x0040_LastModified="{Date}2026-06-11T10:23:54.639+03:00"
+                swatchType_x0040_LastModified="{Date}2026-06-11T11:16:08.984+03:00"
                 swatchType_x0040_LastModifiedBy="admin"
                 values="[1;S,2;M,3;L,4;XL]"
-                values_x0040_LastModified="{Date}2026-06-11T10:23:54.639+03:00"
+                values_x0040_LastModified="{Date}2026-06-11T11:16:08.985+03:00"
                 values_x0040_LastModifiedBy="admin"/>
         </data>
         <indexedData jcr:primaryType="nt:unstructured">
             <master
                 jcr:mixinTypes="[dam:IndexedFragmentData]"
                 jcr:primaryType="nt:unstructured"
-                jcr:uuid="4f102b9b-cb05-44be-9d7f-faedabc51afe"
+                jcr:uuid="9c5f3a42-efd1-4c81-82bb-7344bcfac8e4"
                 _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/celadon-option-definition"
                 _x0040_string_x0040_path="/content/dam/celadon/we-retail/_options/size--s-m-l-xl"
-                _x0040_string_x0040_uuid="43720062-caf8-4611-88cb-5a6b992ba066"
+                _x0040_string_x0040_uuid="794aaa04-6ce9-4053-98e9-34dc6e5cf2f2"
                 _x0040_stringArray_x0040_variations="[]"
                 string_x0040_attributeCode="size"
                 string_x0040_label="size"
