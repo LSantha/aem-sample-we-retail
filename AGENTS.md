@@ -13,6 +13,7 @@ Integration Framework). The migration keeps the existing `weretail` presentation
 (HTL, CSS, clientlibs) and replaces the legacy commerce runtime in `core` with CIF-backed
 models and routing. The GraphQL backend is the local **Celadon** service
 (`com.adobe.cq.commerce.celadon.aem.CeladonGraphqlServlet`), not a real Magento instance.
+Celadon is built in-reactor as the `celadon` module and deployed alongside We.Retail.
 
 See `cif_migration.md` for the full migration specification, scope, principles, and
 acceptance criteria. Cart, checkout, and order history are explicitly out of scope and
@@ -23,16 +24,25 @@ must render empty; product recommendations are deferred (no-op stubs only).
 | Module | Artifact | Purpose |
 |--------|----------|---------|
 | `parent` | `we.retail.parent` | Parent POM: dependency/plugin management, shared versions |
+| `celadon` | `com.adobe.commerce.cif:celadon` | Local Celadon GraphQL backend: OSGi bundles + integration tests |
 | `core` | `we.retail.core` | OSGi bundle: Sling Models, services, CIF adapter layer |
 | `ui.apps` | `we.retail.ui.apps` | `/apps` content: components, templates, clientlibs |
 | `ui.content` | `we.retail.ui.content` | Sample content under `/content` |
-| `catalog` | `we.retail.catalog` | Catalog DAM assets and content |
+| `catalog` | `we.retail.catalog` | Celadon CFM models + blueprint-mode catalog content under `/content/dam/celadon` |
 | `config` | `we.retail.config` | OSGi configs, incl. CIF/Celadon `osgiconfig` |
 | `commons.content.slim` | `we.retail.commons.content.slim` | Shared commons content |
 | `all` | `we.retail.all` | Combined package embedding all subpackages |
 
 Key versions (in `parent/pom.xml`): UberJar `6.4.4`, Core WCM Components `2.29.0`,
 Core CIF Components `2.18.0`, GraphQL client `1.10.0`, Magento GraphQL `9.1.0-magento242ee`.
+
+### Celadon backend (`celadon`)
+
+`com.adobe.commerce.cif:celadon` (`0.1.0-SNAPSHOT`) has two submodules: `bundles`
+(`bundles/aem` + `bundles/core`, the GraphQL servlet and engine) and `it` (REST-assured
+HTTP integration tests, e.g. `WeRetailBlueprintFidelityIT`). It compiles with
+`maven.compiler.release=21`, which is why the full reactor requires JDK 21 (see Build &
+Deploy). The we.retail bundle (`core`) still targets Java 8 bytecode.
 
 ### CIF adapter layer (`core`)
 
@@ -50,14 +60,35 @@ migrated to CIF are in `we.retail.core.model` (e.g. `ProductModel`, `ProductGrid
 - `com.adobe.cq.commerce.core.components.internal.services.UrlProviderImpl.cfg.json`
 - `com.adobe.cq.commerce.core.components.internal.servlets.SpecificPageFilterFactory~default.cfg.json`
 
+### Catalog content (`catalog`)
+
+The `catalog` module ships everything Celadon needs to serve the `we-retail` catalog on a
+fresh deploy, with **no import step**:
+- CFM models under `conf/we-retail/settings/dam/cfm/models/`: `product`,
+  `celadon-option-definition`, `celadon-attribute`. All three are required — without the
+  option/attribute models, `configurable_options` (variant axes such as size/color)
+  resolve empty.
+- Blueprint-mode catalog content under `content/dam/celadon/we-retail/`: the authored
+  category tree (`women`, `men`, `equipment`) plus `_manifest` and `_options`. Product
+  fragments live under their blueprint categories and carry editorial slugs used for
+  PDP/PLP URLs.
+
+The package `filter.xml` covers all three model roots and `/content/dam/celadon`. The
+served catalog is `we-retail` (default, `ready=true`, ~60 products / 21 categories).
+
 ## Build & Deploy
 
-Run from the repository root with Maven 3 and Java (UberJar APIs must be available).
+Run from the repository root with Maven 3. The full reactor requires **JDK 21** because
+the `celadon` module compiles with `maven.compiler.release=21`. Surefire/Failsafe honor
+`JAVA_HOME` (not the `java` on PATH), so point it at a JDK 21 home before building or
+testing:
 
 ```bash
+export JAVA_HOME=/path/to/jdk-21   # required for the celadon module + its ITs
 mvn clean install                              # build all modules
 mvn clean install -PautoInstallSinglePackage   # build + deploy the 'all' package to AEM
 mvn clean test                                 # unit tests (core)
+mvn clean verify                               # incl. Celadon HTTP integration tests (it)
 ```
 
 Common single-module deploy from within a content module:
@@ -112,6 +143,9 @@ curl -s -u admin:admin "http://localhost:4502/crx/packmgr/service.jsp?cmd=ls"
 ## Testing
 
 - Unit tests run in `core` via `mvn clean test` (JUnit 4, Mockito, `io.wcm` AEM mocks).
+- Celadon HTTP integration tests live in `celadon/it` (REST-assured, Failsafe, e.g.
+  `WeRetailBlueprintFidelityIT`) and run on `mvn clean verify` against a running 4502
+  instance. They require `JAVA_HOME` to point at JDK 21.
 - After changing a Sling Model or service, update the corresponding tests and run them.
 - Suggested coverage per `cif_migration.md` §8.7: PDP/PLP models build the current HTL
   contract from CIF data; unsupported cart/order models removed or empty;
