@@ -3,10 +3,13 @@
     jcr:primaryType="sling:OrderedFolder">
     <jcr:content
         jcr:primaryType="nt:unstructured"
-        jcr:title="we-retail">
+        jcr:title="we-retail"
+        celadonReady="{Boolean}true">
         <folderThumbnail/>
     </jcr:content>
-    <wo/>
-    <eq/>
-    <me/>
+    <_manifest/>
+    <_options/>
+    <women/>
+    <men/>
+    <equipment/>
 </jcr:root>

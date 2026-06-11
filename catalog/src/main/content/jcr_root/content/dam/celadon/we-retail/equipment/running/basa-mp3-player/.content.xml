@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="a1e5ace4-c6b0-4e86-a704-c788face039e">
+    <jcr:content
+        jcr:lastModified="{Date}2026-06-11T10:23:54.261+03:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Basa MP3 Player"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                additionalCategories_x0040_LastModified="{Date}2026-06-11T10:23:54.233+03:00"
+                color_x0040_LastModified="{Date}2026-06-11T10:23:54.233+03:00"
+                configurableOptions_x0040_LastModified="{Date}2026-06-11T10:23:54.233+03:00"
+                description="Carries up to 20,000 of your favorite tunes! Also features built in timer and workout monitor to track your energy and calories. "
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-06-11T10:23:54.245+03:00"
+                description_x0040_LastModifiedBy="admin"
+                features_x0040_LastModified="{Date}2026-06-11T10:23:54.233+03:00"
+                identifier="30941863"
+                identifier_x0040_LastModified="{Date}2026-06-11T10:23:54.246+03:00"
+                identifier_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/equipment/running/basa-mp3-player_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-06-11T10:23:54.261+03:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Basa MP3 Player"
+                name_x0040_LastModified="{Date}2026-06-11T10:23:54.245+03:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}149.99"
+                price_x0040_LastModified="{Date}2026-06-11T10:23:54.246+03:00"
+                price_x0040_LastModifiedBy="admin"
+                rating_x0040_LastModified="{Date}2026-06-11T10:23:54.233+03:00"
+                reviews_x0040_LastModified="{Date}2026-06-11T10:23:54.233+03:00"
+                size="one"
+                size_x0040_LastModified="{Date}2026-06-11T10:23:54.246+03:00"
+                size_x0040_LastModifiedBy="admin"
+                sku="30941863"
+                sku_x0040_LastModified="{Date}2026-06-11T10:23:54.245+03:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="cdfb335e-078c-403d-a8bb-84efb228fb46"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/equipment/running/basa-mp3-player"
+                _x0040_string_x0040_uuid="a1e5ace4-c6b0-4e86-a704-c788face039e"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}149.99"
+                string_x0040_description="Carries up to 20,000 of your favorite tunes! Also features built in timer and workout monitor to track your energy and calories. "
+                string_x0040_identifier="30941863"
+                string_x0040_name="Basa MP3 Player"
+                string_x0040_size="one"
+                string_x0040_sku="30941863"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/equipment/running/basa-mp3-player_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

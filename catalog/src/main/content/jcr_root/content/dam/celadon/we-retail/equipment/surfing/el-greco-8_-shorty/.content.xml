@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="72c44961-6664-4fd0-90ed-718144ed33d0">
+    <jcr:content
+        jcr:lastModified="{Date}2026-06-11T10:23:54.439+03:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="El Greco 8' Shorty"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                additionalCategories_x0040_LastModified="{Date}2026-06-11T10:23:54.419+03:00"
+                color_x0040_LastModified="{Date}2026-06-11T10:23:54.419+03:00"
+                configurableOptions_x0040_LastModified="{Date}2026-06-11T10:23:54.419+03:00"
+                description="The El Greco has blended the nose riding capabilities of a longboard together with the maneuverability and speed of a shortboard. It's not a long short board, it's a short longboard."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-06-11T10:23:54.429+03:00"
+                description_x0040_LastModifiedBy="admin"
+                features="EPS foam core with high density polyurethane band around the rails&#xd;&#xa;Glassed with a Salmon Skin technology to provide durability without compromising flexibility"
+                features_x0040_LastModified="{Date}2026-06-11T10:23:54.430+03:00"
+                features_x0040_LastModifiedBy="admin"
+                identifier="eqsusuely"
+                identifier_x0040_LastModified="{Date}2026-06-11T10:23:54.430+03:00"
+                identifier_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/equipment/surfing/el-greco-8_-shorty_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-06-11T10:23:54.439+03:00"
+                image_x0040_LastModifiedBy="admin"
+                name="El Greco 8' Shorty"
+                name_x0040_LastModified="{Date}2026-06-11T10:23:54.429+03:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}750.0"
+                price_x0040_LastModified="{Date}2026-06-11T10:23:54.430+03:00"
+                price_x0040_LastModifiedBy="admin"
+                rating="5"
+                rating_x0040_LastModified="{Date}2026-06-11T10:23:54.430+03:00"
+                rating_x0040_LastModifiedBy="admin"
+                reviews="This item is not yet reviewed. Be the first to write a review"
+                reviews_x0040_LastModified="{Date}2026-06-11T10:23:54.431+03:00"
+                reviews_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-06-11T10:23:54.419+03:00"
+                sku="eqsusuely"
+                sku_x0040_LastModified="{Date}2026-06-11T10:23:54.429+03:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="53b9caa2-84da-4567-8995-343cc25a312f"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/equipment/surfing/el-greco-8_-shorty"
+                _x0040_string_x0040_uuid="72c44961-6664-4fd0-90ed-718144ed33d0"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}750.0"
+                string_x0040_description="The El Greco has blended the nose riding capabilities of a longboard together with the maneuverability and speed of a shortboard. It's not a long short board, it's a short longboard."
+                string_x0040_features="EPS foam core with high density polyurethane band around the rails&#xd;&#xa;Glassed with a Salmon Skin technology to provide durability without compromising flexibility"
+                string_x0040_identifier="eqsusuely"
+                string_x0040_name="El Greco 8' Shorty"
+                string_x0040_rating="5"
+                string_x0040_reviews="This item is not yet reviewed. Be the first to write a review"
+                string_x0040_sku="eqsusuely"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/equipment/surfing/el-greco-8_-shorty_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

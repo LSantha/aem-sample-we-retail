@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="64f457e1-a5cf-439c-a89b-0590f0ebf75e">
+    <jcr:content
+        jcr:lastModified="{Date}2026-06-11T10:23:54.529+03:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="The Neutrino"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                additionalCategories_x0040_LastModified="{Date}2026-06-11T10:23:54.484+03:00"
+                color_x0040_LastModified="{Date}2026-06-11T10:23:54.484+03:00"
+                configurableOptions_x0040_LastModified="{Date}2026-06-11T10:23:54.484+03:00"
+                description="With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations."
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-06-11T10:23:54.514+03:00"
+                description_x0040_LastModifiedBy="admin"
+                features="&#xd;&#xa;Polyurethane, Balsa Wood&#xd;&#xa;Hand shaped&#xd;&#xa;High gloss finish"
+                features_x0040_LastModified="{Date}2026-06-11T10:23:54.515+03:00"
+                features_x0040_LastModifiedBy="admin"
+                identifier="eqsusutho"
+                identifier_x0040_LastModified="{Date}2026-06-11T10:23:54.514+03:00"
+                identifier_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/equipment/surfing/the-neutrino_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-06-11T10:23:54.529+03:00"
+                image_x0040_LastModifiedBy="admin"
+                name="The Neutrino"
+                name_x0040_LastModified="{Date}2026-06-11T10:23:54.513+03:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}695.0"
+                price_x0040_LastModified="{Date}2026-06-11T10:23:54.514+03:00"
+                price_x0040_LastModifiedBy="admin"
+                rating="5"
+                rating_x0040_LastModified="{Date}2026-06-11T10:23:54.514+03:00"
+                rating_x0040_LastModifiedBy="admin"
+                reviews="This item is not yet reviewed. Be the first to write a review"
+                reviews_x0040_LastModified="{Date}2026-06-11T10:23:54.515+03:00"
+                reviews_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-06-11T10:23:54.484+03:00"
+                sku="eqsusutho"
+                sku_x0040_LastModified="{Date}2026-06-11T10:23:54.513+03:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="356c28b3-297a-4d34-ac02-2fdee1f7d4b3"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/equipment/surfing/the-neutrino"
+                _x0040_string_x0040_uuid="64f457e1-a5cf-439c-a89b-0590f0ebf75e"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}695.0"
+                string_x0040_description="With its pronounced rocker, the Neutrino is a natural choice for steep faces and on-rail surfing. Single concave gives the board plenty of drive for critical situations."
+                string_x0040_features="&#xd;&#xa;Polyurethane, Balsa Wood&#xd;&#xa;Hand shaped&#xd;&#xa;High gloss finish"
+                string_x0040_identifier="eqsusutho"
+                string_x0040_name="The Neutrino"
+                string_x0040_rating="5"
+                string_x0040_reviews="This item is not yet reviewed. Be the first to write a review"
+                string_x0040_sku="eqsusutho"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/equipment/surfing/the-neutrino_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

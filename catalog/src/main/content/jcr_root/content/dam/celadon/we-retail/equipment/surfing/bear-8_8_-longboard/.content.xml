@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="9c2065d0-4163-4861-9e03-2703da24ceb1">
+    <jcr:content
+        jcr:lastModified="{Date}2026-06-11T10:23:54.372+03:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Bear 8'8&quot; Longboard"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/we-retail/settings/dam/cfm/models/product"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                additionalCategories_x0040_LastModified="{Date}2026-06-11T10:23:54.338+03:00"
+                color_x0040_LastModified="{Date}2026-06-11T10:23:54.338+03:00"
+                configurableOptions_x0040_LastModified="{Date}2026-06-11T10:23:54.338+03:00"
+                description="Whether you are looking for nose-riding time with smooth turns or making big cuts in smaller waves this board delivers. The board has great versatility for a longboard. Because the board is 8'8&quot; it is small enough to handle slightly bigger waves but still"
+                description_x0040_ContentType="text/html"
+                description_x0040_LastModified="{Date}2026-06-11T10:23:54.358+03:00"
+                description_x0040_LastModifiedBy="admin"
+                features="Polyurethane foam. &#xd;&#xa;Super heavy glass with a nice gloss coat gives this board some durability and weight."
+                features_x0040_LastModified="{Date}2026-06-11T10:23:54.359+03:00"
+                features_x0040_LastModifiedBy="admin"
+                identifier="eqsusubed"
+                identifier_x0040_LastModified="{Date}2026-06-11T10:23:54.358+03:00"
+                identifier_x0040_LastModifiedBy="admin"
+                image="[/content/dam/celadon/we-retail/equipment/surfing/bear-8_8_-longboard_img_0.jpeg]"
+                image_x0040_LastModified="{Date}2026-06-11T10:23:54.372+03:00"
+                image_x0040_LastModifiedBy="admin"
+                name="Bear 8'8&quot; Longboard"
+                name_x0040_LastModified="{Date}2026-06-11T10:23:54.357+03:00"
+                name_x0040_LastModifiedBy="admin"
+                price="{Double}1100.0"
+                price_x0040_LastModified="{Date}2026-06-11T10:23:54.358+03:00"
+                price_x0040_LastModifiedBy="admin"
+                rating="5"
+                rating_x0040_LastModified="{Date}2026-06-11T10:23:54.359+03:00"
+                rating_x0040_LastModifiedBy="admin"
+                reviews="By Plasma&#xa;from San Jose, CA&#xa;Great all round longboard. Good paddling and turning. Better in good waves due to large amount of rocker. Plenty of volume. Thick rails but the tail rocker means it turns well."
+                reviews_x0040_LastModified="{Date}2026-06-11T10:23:54.359+03:00"
+                reviews_x0040_LastModifiedBy="admin"
+                size_x0040_LastModified="{Date}2026-06-11T10:23:54.338+03:00"
+                sku="eqsusubed"
+                sku_x0040_LastModified="{Date}2026-06-11T10:23:54.357+03:00"
+                sku_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="d235b10e-ca94-4d94-a812-aed823a53377"
+                _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/product"
+                _x0040_string_x0040_path="/content/dam/celadon/we-retail/equipment/surfing/bear-8_8_-longboard"
+                _x0040_string_x0040_uuid="9c2065d0-4163-4861-9e03-2703da24ceb1"
+                _x0040_stringArray_x0040_variations="[]"
+                double_x0040_price="{Double}1100.0"
+                string_x0040_description="Whether you are looking for nose-riding time with smooth turns or making big cuts in smaller waves this board delivers. The board has great versatility for a longboard. Because the board is 8'8&quot; it is small enough to handle slightly bigger waves but still"
+                string_x0040_features="Polyurethane foam. &#xd;&#xa;Super heavy glass with a nice gloss coat gives this board some durability and weight."
+                string_x0040_identifier="eqsusubed"
+                string_x0040_name="Bear 8'8&quot; Longboard"
+                string_x0040_rating="5"
+                string_x0040_reviews="By Plasma&#xa;from San Jose, CA&#xa;Great all round longboard. Good paddling and turning. Better in good waves due to large amount of rocker. Plenty of volume. Thick rails but the tail rocker means it turns well."
+                string_x0040_sku="eqsusubed"
+                stringArray_x0040_image="[/content/dam/celadon/we-retail/equipment/surfing/bear-8_8_-longboard_img_0.jpeg]"/>
+        </indexedData>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>
