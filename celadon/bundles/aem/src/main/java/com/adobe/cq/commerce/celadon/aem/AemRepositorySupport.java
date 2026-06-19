@@ -31,10 +31,14 @@ import org.apache.sling.api.resource.ResourceResolver;
 
 public final class AemRepositorySupport {
 
+    static final String CELADON_ROOT_TITLE = "Celadon Product Catalogs";
+
+    public static final String MANIFEST_FOLDER_TITLE = "Attribute Manifest";
+
     private AemRepositorySupport() {
     }
 
-    static Resource ensureOrderedFolder(ResourceResolver resolver, String absolutePath, String title) throws PersistenceException {
+    public static Resource ensureOrderedFolder(ResourceResolver resolver, String absolutePath, String title) throws PersistenceException {
         Resource folder = ensurePath(resolver, absolutePath, "sling:OrderedFolder");
         Resource jcrContent = ensureChild(resolver, folder, "jcr:content", Map.of("jcr:primaryType", "nt:unstructured"));
         ModifiableValueMap properties = jcrContent.adaptTo(ModifiableValueMap.class);

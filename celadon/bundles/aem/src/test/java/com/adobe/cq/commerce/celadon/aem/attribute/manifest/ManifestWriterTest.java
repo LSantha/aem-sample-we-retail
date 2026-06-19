@@ -59,5 +59,8 @@ public class ManifestWriterTest {
                 AttributeManifest.empty("venia"));
 
         assertNotNull(context.resourceResolver().getResource("/content/dam/celadon/venia/_manifest"));
+        assertEquals(com.adobe.cq.commerce.celadon.aem.AemRepositorySupport.MANIFEST_FOLDER_TITLE,
+                context.resourceResolver().getResource("/content/dam/celadon/venia/_manifest/jcr:content")
+                        .getValueMap().get("jcr:title", String.class));
     }
 }

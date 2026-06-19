@@ -247,7 +247,7 @@ public class CatalogAuthoringServiceImpl implements CatalogAuthoringService {
     public String createCatalog(ResourceResolver resolver, String catalog) throws AuthoringException {
         requireCatalogName(catalog);
         try {
-            AemRepositorySupport.ensureOrderedFolder(resolver, CELADON_ROOT, "celadon");
+            AemRepositorySupport.ensureOrderedFolder(resolver, CELADON_ROOT, AemRepositorySupport.CELADON_ROOT_TITLE);
             AemRepositorySupport.ensureOrderedFolder(resolver, catalogRoot(catalog), catalog);
             AemRepositorySupport.ensureAttributeModel(resolver, catalog);
             AemRepositorySupport.ensureOptionDefinitionModel(resolver, catalog);

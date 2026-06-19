@@ -165,4 +165,64 @@ public class LegacyBlueprintCategoriesTest {
         assertEquals("equipment/hiking", res.primary());
         assertEquals(List.of("men/shorts"), res.additionalCategories());
     }
+
+    /**
+     * Three departments: {@code women} (leaves all share {@code gender/women} -> coherent invariant),
+     * {@code equipment} (distinct activities -> empty invariant), and {@code seasonal} (summer vs winter
+     * -> empty invariant). Used to exercise the tier-2 department fallback.
+     */
+    private static Map<String, Object> departmentBlueprint() {
+        return m(
+                "jcr:primaryType", "cq:Page",
+                "jcr:content", content("Catalog", null),
+                "women", page(content("Women", null), m(
+                        "coats", page(content("Coats",
+                                List.of("we-retail:gender/women", "we-retail:apparel/coat")), m()),
+                        "pants", page(content("Pants",
+                                List.of("we-retail:gender/women", "we-retail:apparel/pants")), m()))),
+                "equipment", page(content("Equipment", null), m(
+                        "biking", page(content("Biking",
+                                List.of("we-retail:activity/biking")), m()),
+                        "hiking", page(content("Hiking",
+                                List.of("we-retail:activity/hiking")), m()))),
+                "seasonal", page(content("Seasonal", null), m(
+                        "summer", page(content("Summer", null), m(
+                                "apparel", page(content("Apparel", null), m(
+                                        "hats", page(content("Hats",
+                                                List.of("we-retail:season/summer", "we-retail:apparel/hat")), m()))))),
+                        "winter", page(content("Winter", null), m(
+                                "apparel", page(content("Apparel", null), m(
+                                        "scarves", page(content("Scarves",
+                                                List.of("we-retail:season/winter", "we-retail:apparel/scarf")), m()))))))));
+    }
+
+    @Test
+    public void resolve_departmentFallbackHomesUnderTaggedProductInDepartment() {
+        // gender/women + season/winter, no apparel type: no leaf matches (tier 1); the women subtree
+        // invariant (gender/women) catches it (tier 2), so it homes in women rather than the root.
+        CategoryResolution res = LegacyBlueprintCategories.parse(departmentBlueprint())
+                .resolve("", product(List.of("we-retail:gender/women", "we-retail:season/winter")));
+        assertEquals("women", res.primary());
+        assertEquals(List.of(), res.additionalCategories());
+    }
+
+    @Test
+    public void resolve_departmentFallbackSkippedWhenLeafMatches() {
+        // A fully tagged coat full-matches women/coats in tier 1, so the department fallback never fires
+        // and the broad women department does not appear as a redundant ancestor.
+        CategoryResolution res = LegacyBlueprintCategories.parse(departmentBlueprint())
+                .resolve("", product(List.of("we-retail:gender/women", "we-retail:apparel/coat")));
+        assertEquals("women/coats", res.primary());
+        assertEquals(List.of(), res.additionalCategories());
+    }
+
+    @Test
+    public void resolve_heterogeneousDepartmentNeverCatches() {
+        // season/winter alone matches no leaf, and seasonal's leaves (summer vs winter) share no common
+        // tag -> empty invariant -> the product falls through to the folder (root) fallback.
+        CategoryResolution res = LegacyBlueprintCategories.parse(departmentBlueprint())
+                .resolve("", product(List.of("we-retail:season/winter")));
+        assertEquals("", res.primary());
+        assertEquals(List.of(), res.additionalCategories());
+    }
 }

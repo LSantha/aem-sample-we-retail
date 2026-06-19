@@ -59,6 +59,14 @@ public class CatalogAuthoringServiceImplTest {
     }
 
     @Test
+    public void createCatalogTitlesRootFolderWithCeladonProductCatalogs() throws Exception {
+        service.createCatalog(context.resourceResolver(), "demo");
+
+        assertEquals(AemRepositorySupport.CELADON_ROOT_TITLE, context.resourceResolver()
+                .getResource("/content/dam/celadon/jcr:content").getValueMap().get("jcr:title", String.class));
+    }
+
+    @Test
     public void listCatalogsReturnsChildrenExcludingJcr() throws Exception {
         service.createCatalog(context.resourceResolver(), "demo");
         service.createCatalog(context.resourceResolver(), "other");

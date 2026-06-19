@@ -16,12 +16,12 @@
 package com.adobe.cq.commerce.celadon.aem.attribute.manifest;
 
 import com.adobe.cq.commerce.celadon.aem.AemContentFragmentSupport;
+import com.adobe.cq.commerce.celadon.aem.AemRepositorySupport;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeEntry;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceUtil;
 
 /**
  * Writes per-attribute manifest Content Fragments under
@@ -50,8 +50,8 @@ public final class ManifestWriter {
             resolver.delete(existing);
         }
 
-        Resource manifestFolder = ResourceUtil.getOrCreateResource(
-                resolver, manifestPath, "sling:OrderedFolder", "sling:OrderedFolder", false);
+        Resource manifestFolder = AemRepositorySupport.ensureOrderedFolder(
+                resolver, manifestPath, AemRepositorySupport.MANIFEST_FOLDER_TITLE);
 
         String modelPath = "/conf/" + manifest.catalog() + "/settings/dam/cfm/models/celadon-attribute";
         Resource model = resolver.getResource(modelPath);

@@ -33,6 +33,16 @@ import java.util.Map;
  * satisfied by an equal or descendant product tag. Sections without {@code matchTags} are pure
  * navigation containers — materialised as folders but never matched against products.
  *
+ * <p>Resolution is two-tiered. Tier 1 is the strict leaf match described above. When it yields
+ * nothing — a product carries only some of the dimensions every leaf demands (e.g. a women's item
+ * tagged by gender and season but missing the {@code apparel/*} type) — a tier-2 <em>department
+ * fallback</em> homes it in the nearest meaningful top-level section instead of the catalog root.
+ * Each top-level section's <em>invariant</em> is the intersection of {@code matchTags} across all
+ * its filter-bearing descendant leaves; a product satisfying that invariant lands in the department.
+ * Heterogeneous departments (whose leaves share no common tag, e.g. {@code equipment}) have an empty
+ * invariant and never catch products. Well-tagged products never reach tier 2 (their leaf matches in
+ * tier 1), so the fallback is purely additive and cannot move an existing placement.
+ *
  * <p>Section paths are catalog-relative and escaped via {@link AemRepositorySupport#escapeNodeName}
  * so they are byte-identical to the folders the pre-pass creates. Primary selection and
  * additional-category reduction are delegated to {@link LegacyTagCategories#pickPrimary} and
@@ -47,9 +57,11 @@ public final class LegacyBlueprintCategories {
     }
 
     private final List<Section> sections;
+    private final List<Section> departments;
 
     private LegacyBlueprintCategories(List<Section> sections) {
         this.sections = sections;
+        this.departments = computeDepartments(sections);
     }
 
     /** Pre-ordered (parents before children) sections, suitable for folder materialisation. */
@@ -69,8 +81,9 @@ public final class LegacyBlueprintCategories {
     /**
      * Resolves a product to a blueprint primary + additional set. Sections whose {@code matchTags}
      * are all satisfied by the product's tags are collected; the deepest is primary and the rest are
-     * reduced to a minimal antichain. Falls back to {@code folderPrimary} (empty additional) when no
-     * section matches.
+     * reduced to a minimal antichain. When no section matches, a department fallback (top-level sections
+     * whose subtree invariant the product satisfies) is tried; failing that it falls back to
+     * {@code folderPrimary} (empty additional).
      */
     public CategoryResolution resolve(String folderPrimary, Map<String, Object> product) {
         return resolve(folderPrimary, null, product);
@@ -93,10 +106,68 @@ public final class LegacyBlueprintCategories {
             }
         }
         if (matched.isEmpty()) {
+            // Tier 2: department fallback. Home the product in any top-level section whose subtree
+            // invariant it satisfies, before bailing to the (root) folder fallback.
+            for (Section department : departments) {
+                if (satisfies(productTags, department.matchTags())) {
+                    matched.add(department.path());
+                }
+            }
+        }
+        if (matched.isEmpty()) {
             return new CategoryResolution(folderPrimary, List.of());
         }
         String primary = LegacyTagCategories.pickPrimary(matched, sourceFolderPath);
         return new CategoryResolution(primary, CategoryMembership.deriveAdditionalCategories(matched, primary));
+    }
+
+    /**
+     * Computes the department fallback table: one pseudo-section per top-level blueprint section whose
+     * filter-bearing descendant leaves share a common required tag. The match tags of each returned
+     * section are the <em>invariant</em> — the AND-intersection of {@code matchTags} across every
+     * descendant leaf that carries any (pure navigation containers and empty catch-alls are skipped so
+     * they cannot poison an otherwise coherent department). Top-level sections whose leaves are
+     * heterogeneous (empty intersection) are omitted, so they never catch products.
+     */
+    private static List<Section> computeDepartments(List<Section> sections) {
+        List<Section> departments = new ArrayList<>();
+        for (Section top : sections) {
+            if (top.path().contains("/")) {
+                continue;
+            }
+            String prefix = top.path() + "/";
+            List<String> invariant = null;
+            for (Section section : sections) {
+                if (!section.path().startsWith(prefix) || section.matchTags().isEmpty()) {
+                    continue;
+                }
+                invariant = invariant == null
+                        ? new ArrayList<>(section.matchTags())
+                        : intersect(invariant, section.matchTags());
+                if (invariant.isEmpty()) {
+                    break;
+                }
+            }
+            if (invariant != null && !invariant.isEmpty()) {
+                departments.add(new Section(top.path(), top.title(), invariant));
+            }
+        }
+        return departments;
+    }
+
+    /** Tags present in both lists, compared trimmed/case-insensitively, preserving {@code a}'s form/order. */
+    private static List<String> intersect(List<String> a, List<String> b) {
+        List<String> result = new ArrayList<>();
+        for (String x : a) {
+            String nx = x.trim().toLowerCase();
+            for (String y : b) {
+                if (nx.equals(y.trim().toLowerCase())) {
+                    result.add(x);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     private static void collect(Map<String, Object> node, String parentPath, List<Section> out) {

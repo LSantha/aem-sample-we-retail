@@ -108,7 +108,7 @@ public class CeladonCatalogServlet extends SlingAllMethodsServlet implements Cat
                               String endpoint,
                               String root,
                               Map<String, String> headers) throws Exception {
-        Resource catalogRoot = AemRepositorySupport.ensureOrderedFolder(resolver, "/content/dam/celadon", "celadon");
+        Resource catalogRoot = AemRepositorySupport.ensureOrderedFolder(resolver, "/content/dam/celadon", AemRepositorySupport.CELADON_ROOT_TITLE);
         Resource targetRoot = AemRepositorySupport.ensureOrderedFolder(resolver, catalogRoot.getPath() + "/" + AemRepositorySupport.escapeNodeName(root), root);
         resolver.commit();
 

@@ -115,7 +115,7 @@ public class CeladonLegacyImportServlet extends SlingAllMethodsServlet {
                                      LegacyTagCategories.CategoryMode mode,
                                      String catalogBlueprintPath,
                                      String productPageTreePath) throws Exception {
-        Resource catalogRoot = AemRepositorySupport.ensureOrderedFolder(resolver, "/content/dam/celadon", "celadon");
+        Resource catalogRoot = AemRepositorySupport.ensureOrderedFolder(resolver, "/content/dam/celadon", AemRepositorySupport.CELADON_ROOT_TITLE);
         Resource targetRoot = AemRepositorySupport.ensureOrderedFolder(catalogRoot.getResourceResolver(),
                 catalogRoot.getPath() + "/" + AemRepositorySupport.escapeNodeName(targetCatalog),
                 targetCatalog);
@@ -295,26 +295,31 @@ public class CeladonLegacyImportServlet extends SlingAllMethodsServlet {
                                      LegacyProductSlugs productSlugs,
                                      Set<String> usedProductNodeNames) throws Exception {
         String productSku = legacyBaseSku(product, productKey);
-        // BLUEPRINT with a harvested slug map names the CF after the authored editorial slug; every other
-        // path keeps the SKU-derived node name. The catalog-wide guard then enforces uniqueness for all
-        // modes (slug collisions get the SKU appended, then a numeric suffix as a last resort).
-        String slug = (mode == LegacyTagCategories.CategoryMode.BLUEPRINT && productSlugs != null)
-                ? productSlugs.slugFor(productKey)
-                : null;
-        String baseName = (slug != null && !slug.isBlank())
-                ? AemRepositorySupport.escapeNodeName(slug)
-                : AemRepositorySupport.escapeNodeName(productKey);
-        String nodeName = ensureUniqueNodeName(baseName, productSku, usedProductNodeNames);
         String title = firstNonBlank(stringValue(product.get("jcr:title")), productKey);
 
         // Resolve category placement for the selected mode. FOLDER yields the folder parent and an empty
         // additional set, keeping this path byte-identical to before tag support. BLUEPRINT defers to the
         // authored blueprint resolver; all other modes use the data-only LegacyTagCategories resolver.
+        // Computed before the slug because BLUEPRINT slug selection aligns candidate pages to the primary.
         String folderPrimary = relativeToCatalog(targetRoot, categoryResource);
         LegacyTagCategories.CategoryResolution resolution =
                 (mode == LegacyTagCategories.CategoryMode.BLUEPRINT && blueprint != null)
                         ? blueprint.resolve(folderPrimary, sourceFolderPath, product)
                         : LegacyTagCategories.resolve(mode, folderPrimary, product);
+
+        // BLUEPRINT with a harvested slug map names the CF after the authored editorial slug; every other
+        // path keeps the SKU-derived node name. The catalog-wide guard then enforces uniqueness for all
+        // modes (slug collisions get the SKU appended, then a numeric suffix as a last resort). When a
+        // product is referenced by several authored pages with differing slugs, the canonical page is
+        // chosen by primary-category alignment, then page-title match, then source order.
+        String slug = (mode == LegacyTagCategories.CategoryMode.BLUEPRINT && productSlugs != null)
+                ? productSlugs.slugFor(productKey, resolution.primary(), stringValue(product.get("jcr:title")),
+                        AemRepositorySupport::escapeNodeName)
+                : null;
+        String baseName = (slug != null && !slug.isBlank())
+                ? AemRepositorySupport.escapeNodeName(slug)
+                : AemRepositorySupport.escapeNodeName(productKey);
+        String nodeName = ensureUniqueNodeName(baseName, productSku, usedProductNodeNames);
         // TAG and BLUEPRINT place the CF under the resolved primary section; FOLDER/HYBRID keep it
         // under its physical folder parent. In BLUEPRINT mode categoryResource is the catalog root
         // (no source folders are created), so a product matching no section lands at the root.
