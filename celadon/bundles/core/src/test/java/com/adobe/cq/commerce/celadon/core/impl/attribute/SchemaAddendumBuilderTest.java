@@ -20,6 +20,7 @@ import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeScope;
 import com.adobe.cq.commerce.celadon.core.api.attribute.NormalizedType;
 import java.util.List;
+import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -75,5 +76,55 @@ public class SchemaAddendumBuilderTest {
                         AttributeScope.PRODUCT, true, true, 50)));
         String s = SchemaAddendumBuilder.fromManifest(m);
         assertTrue(s.contains("in_stock: FilterEqualTypeInput"));
+    }
+
+    @Test
+    public void outputFieldsExtendInterfaceAndEveryImplementor() {
+        AttributeManifest m = new AttributeManifest("venia", List.of(
+                AttributeEntry.of("material", "Material", NormalizedType.STRING,
+                        AttributeScope.PRODUCT, false, false, 40)));
+        String s = SchemaAddendumBuilder.productOutputFields(
+                m, Set.of(), List.of("SimpleProduct", "ConfigurableProduct"));
+        assertTrue(s.contains("extend interface ProductInterface {"));
+        assertTrue(s.contains("extend type SimpleProduct {"));
+        assertTrue(s.contains("extend type ConfigurableProduct {"));
+        assertTrue(s.contains("material: String"));
+    }
+
+    @Test
+    public void outputFieldsEmptyWhenAllReserved() {
+        AttributeManifest m = new AttributeManifest("venia", List.of(
+                AttributeEntry.of("sku", "SKU", NormalizedType.STRING,
+                        AttributeScope.PRODUCT, false, false, 10)));
+        String s = SchemaAddendumBuilder.productOutputFields(
+                m, Set.of("sku"), List.of("SimpleProduct"));
+        assertEquals("", s.trim());
+    }
+
+    @Test
+    public void outputFieldsCoerceScalarTypes() {
+        AttributeManifest m = new AttributeManifest("venia", List.of(
+                AttributeEntry.of("weight", "Weight", NormalizedType.INT,
+                        AttributeScope.PRODUCT, false, false, 10),
+                AttributeEntry.of("rating", "Rating", NormalizedType.FLOAT,
+                        AttributeScope.PRODUCT, false, false, 20),
+                AttributeEntry.of("featured", "Featured", NormalizedType.BOOLEAN,
+                        AttributeScope.PRODUCT, false, false, 30),
+                AttributeEntry.of("activities", "Activities", NormalizedType.MULTISELECT,
+                        AttributeScope.PRODUCT, false, false, 40)));
+        String s = SchemaAddendumBuilder.productOutputFields(m, Set.of(), List.of("SimpleProduct"));
+        assertTrue(s.contains("weight: Int"));
+        assertTrue(s.contains("rating: Float"));
+        assertTrue(s.contains("featured: Boolean"));
+        assertTrue(s.contains("activities: [String]"));
+    }
+
+    @Test
+    public void outputFieldsIncludeUnfilterableEntries() {
+        AttributeManifest m = new AttributeManifest("venia", List.of(
+                AttributeEntry.of("care_instructions", "Care", NormalizedType.TEXT,
+                        AttributeScope.PRODUCT, false, false, 5)));
+        String s = SchemaAddendumBuilder.productOutputFields(m, Set.of(), List.of("SimpleProduct"));
+        assertTrue(s.contains("care_instructions: String"));
     }
 }

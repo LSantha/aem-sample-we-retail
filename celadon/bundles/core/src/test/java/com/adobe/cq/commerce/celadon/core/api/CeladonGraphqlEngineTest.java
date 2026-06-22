@@ -144,6 +144,93 @@ public class CeladonGraphqlEngineTest {
         Assert.assertEquals("sku", items.getFirst().get("attribute_code"));
     }
 
+    @Test
+    public void shouldSelectManifestAttributesOnProductOutput() {
+        CeladonGraphqlEngine engine = TestCatalogFixtures.engineWithCustomAttributes();
+
+        Map<String, Object> response = engine.execute(
+                "{ products(filter:{ sku:{ eq:\"angelina-tank-dress-sku\" } }) { items { sku material activities } } }",
+                null,
+                null
+        );
+
+        Assert.assertNull("custom attribute selection must not raise errors", response.get("errors"));
+        List<Map<String, Object>> items = castList(castMap(castMap(response.get("data")).get("products")).get("items"));
+        Map<String, Object> product = items.getFirst();
+        Assert.assertEquals("angelina-tank-dress-sku", product.get("sku"));
+        Assert.assertEquals("Cotton", product.get("material"));
+        Assert.assertEquals(List.of("Hiking", "Camping"), product.get("activities"));
+    }
+
+    @Test
+    public void shouldCoerceNumericAndBooleanManifestAttributes() {
+        CeladonGraphqlEngine engine = TestCatalogFixtures.engineWithTypedCustomAttributes();
+
+        Map<String, Object> response = engine.execute(
+                "{ products(filter:{ sku:{ eq:\"angelina-tank-dress-sku\" } }) { items { sku units_per_pack rating msrp featured tags activities } } }",
+                null,
+                null
+        );
+
+        Assert.assertNull("typed custom attribute selection must not raise errors", response.get("errors"));
+        List<Map<String, Object>> items = castList(castMap(castMap(response.get("data")).get("products")).get("items"));
+        Map<String, Object> product = items.getFirst();
+        Assert.assertEquals(Integer.valueOf(3), product.get("units_per_pack"));
+        Assert.assertEquals(Double.valueOf(4.5), product.get("rating"));
+        Assert.assertEquals(Double.valueOf(42.0), product.get("msrp"));
+        Assert.assertEquals(Boolean.TRUE, product.get("featured"));
+        Assert.assertEquals(List.of("Summer", "Floral", "New"), product.get("tags"));
+        Assert.assertEquals(List.of("Hiking", "Camping"), product.get("activities"));
+    }
+
+    @Test
+    public void shouldSelectManifestAttributesOnVariants() {
+        CeladonGraphqlEngine engine = TestCatalogFixtures.engineWithTypedCustomAttributes();
+
+        Map<String, Object> response = engine.execute(
+                "{ products(filter:{ sku:{ eq:\"candace-dress-sku\" } }) { items { sku __typename ... on ConfigurableProduct { material variants { product { sku material } } } } } }",
+                null,
+                null
+        );
+
+        Assert.assertNull("variant custom attribute selection must not raise errors", response.get("errors"));
+        List<Map<String, Object>> items = castList(castMap(castMap(response.get("data")).get("products")).get("items"));
+        Map<String, Object> product = items.getFirst();
+        Assert.assertEquals("ConfigurableProduct", product.get("__typename"));
+        Assert.assertEquals("Polyester", product.get("material"));
+
+        List<Map<String, Object>> variants = castList(product.get("variants"));
+        Map<String, String> materialBySku = new java.util.HashMap<>();
+        for (Map<String, Object> variant : variants) {
+            Map<String, Object> variantProduct = castMap(variant.get("product"));
+            materialBySku.put(
+                    String.valueOf(variantProduct.get("sku")),
+                    (String) variantProduct.get("material")
+            );
+        }
+        Assert.assertEquals("per-variation value must win", "Silk", materialBySku.get("candace-dress-lilac-l"));
+        Assert.assertEquals("missing per-variation value must fall back to master", "Polyester",
+                materialBySku.get("candace-dress-peach-l"));
+    }
+
+    @Test
+    public void shouldNotOverwriteReservedFieldWithManifestAttribute() {
+        CeladonGraphqlEngine engine = TestCatalogFixtures.engineWithTypedCustomAttributes();
+
+        Map<String, Object> response = engine.execute(
+                "{ products(filter:{ sku:{ eq:\"angelina-tank-dress-sku\" } }) { items { sku name } } }",
+                null,
+                null
+        );
+
+        Assert.assertNull(response.get("errors"));
+        List<Map<String, Object>> items = castList(castMap(castMap(response.get("data")).get("products")).get("items"));
+        Map<String, Object> product = items.getFirst();
+        Assert.assertEquals("angelina-tank-dress-sku", product.get("sku"));
+        Assert.assertEquals("manifest 'name' (INT) must not overwrite the reserved base field",
+                "Angelina Tank Dress", product.get("name"));
+    }
+
     @SuppressWarnings("unchecked")
     private static Map<String, Object> castMap(Object value) {
         return (Map<String, Object>) value;

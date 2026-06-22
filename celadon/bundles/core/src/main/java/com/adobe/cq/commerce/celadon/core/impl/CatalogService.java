@@ -19,6 +19,7 @@ import com.adobe.cq.commerce.celadon.core.api.CatalogGateway;
 import com.adobe.cq.commerce.celadon.core.api.JsonSupport;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeEntry;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
+import com.adobe.cq.commerce.celadon.core.api.attribute.NormalizedType;
 import graphql.GraphqlErrorException;
 import graphql.schema.DataFetchingEnvironment;
 import java.io.IOException;
@@ -41,13 +42,22 @@ public final class CatalogService {
     private static final Logger LOG = Logger.getLogger(CatalogService.class.getName());
 
     private final AttributeManifest manifest;
+    // Field names already declared on the base product output types. Manifest codes
+    // that collide with these are NOT injected into the result maps, since the base
+    // schema already owns those fields (e.g. sku, name, price).
+    private final Set<String> reservedFields;
 
     public CatalogService() {
-        this(AttributeManifest.empty(""));
+        this(AttributeManifest.empty(""), Set.of());
     }
 
     public CatalogService(AttributeManifest manifest) {
+        this(manifest, Set.of());
+    }
+
+    public CatalogService(AttributeManifest manifest, Set<String> reservedFields) {
         this.manifest = manifest == null ? AttributeManifest.empty("") : manifest;
+        this.reservedFields = reservedFields == null ? Set.of() : Set.copyOf(reservedFields);
     }
 
     AttributeManifest manifest() {
@@ -493,6 +503,103 @@ public final class CatalogService {
     }
 
     /**
+     * Injects every manifest attribute that is selectable in the output (i.e. not a
+     * reserved base-schema field) into {@code target}, shaping the stored CF value to
+     * match the GraphQL scalar declared by {@link SchemaAddendumBuilder}. For variants
+     * the per-variation value is preferred, falling back to the master element value.
+     */
+    private void populateManifestAttributes(Map<String, Object> target, CatalogProduct product, String variationId) {
+        for (AttributeEntry entry : manifest.entries()) {
+            String code = entry.code();
+            if (reservedFields.contains(code)) {
+                continue;
+            }
+            Object rawValue = readManifestValue(product, entry, variationId);
+            target.put(code, shapeOutputValue(entry.type(), rawValue));
+        }
+    }
+
+    private Object readManifestValue(CatalogProduct product, AttributeEntry entry, String variationId) {
+        String elementName = entry.cfElementName();
+        Object value = null;
+        if (variationId != null) {
+            value = product.elementVariationMap(elementName, variationId).get("value");
+        }
+        if (value == null) {
+            value = product.elementMap(elementName).get("value");
+        }
+        return value;
+    }
+
+    /**
+     * Coerces a raw CF value to the Java type matching the field's declared GraphQL
+     * scalar: INT to {@link Integer}, FLOAT/PRICE to {@link Double}, BOOLEAN to
+     * {@link Boolean}, MULTISELECT to {@code List<String>}, everything else to a plain
+     * {@link String}. A {@code null} raw value (or an unparseable number) yields {@code null}.
+     */
+    private static Object shapeOutputValue(NormalizedType type, Object rawValue) {
+        if (rawValue == null) {
+            return null;
+        }
+        return switch (type) {
+            case INT -> integerOrNull(rawValue);
+            case FLOAT, PRICE -> doubleOrNull(rawValue);
+            case BOOLEAN -> Boolean.parseBoolean(rawValue.toString().trim());
+            case MULTISELECT -> multiSelectList(rawValue);
+            case STRING, TEXT, SELECT, DATE, IMAGE_URL -> rawValue.toString();
+        };
+    }
+
+    private static Integer integerOrNull(Object value) {
+        if (value instanceof Number number) {
+            return number.intValue();
+        }
+        try {
+            return (int) Math.round(Double.parseDouble(value.toString().trim()));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static Double doubleOrNull(Object value) {
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        try {
+            return Double.parseDouble(value.toString().trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static List<String> multiSelectList(Object rawValue) {
+        List<String> result = new ArrayList<>();
+        if (rawValue instanceof Collection<?> collection) {
+            for (Object entry : collection) {
+                if (entry != null && !entry.toString().isBlank()) {
+                    result.add(entry.toString());
+                }
+            }
+        } else if (rawValue.getClass().isArray()) {
+            int length = java.lang.reflect.Array.getLength(rawValue);
+            for (int index = 0; index < length; index++) {
+                Object entry = java.lang.reflect.Array.get(rawValue, index);
+                if (entry != null && !entry.toString().isBlank()) {
+                    result.add(entry.toString());
+                }
+            }
+        } else {
+            for (String part : rawValue.toString().split(",")) {
+                String trimmed = part.trim();
+                if (!trimmed.isEmpty()) {
+                    result.add(trimmed);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Resolves the CF element name for a given attribute code.
      *
      * <p>Manifest entries are consulted first. If the manifest is empty (pre-Phase 9-10
@@ -778,6 +885,7 @@ public final class CatalogService {
             result.put("related_products", List.of());
             result.put("crosssell_products", List.of());
             result.put("upsell_products", List.of());
+            populateManifestAttributes(result, product, null);
             result.put("__typename", variantProduct ? "SimpleProduct" : type);
             result.put("__resolveType", variantProduct ? "SimpleProduct" : type);
             return result;
@@ -904,6 +1012,7 @@ public final class CatalogService {
             variantProduct.put("price_range", PriceRange.single(price).toMap());
             variantProduct.put("categories", buildProductCategories(requestContext, snapshot, product.categoryPath(), product.additionalCategories()));
             variantProduct.put("staged", false);
+            populateManifestAttributes(variantProduct, product, variationId);
             variantProduct.put("__typename", "SimpleProduct");
             variantProduct.put("__resolveType", "SimpleProduct");
             variants.add(Map.of(

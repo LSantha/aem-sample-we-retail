@@ -51,11 +51,58 @@ public final class SchemaAddendumBuilder {
         return b.toString();
     }
 
+    /**
+     * Builds the SDL that makes manifest attributes selectable in the product
+     * output. graphql-java requires that every object type implementing
+     * {@code ProductInterface} declares the same fields as the interface, so the
+     * addendum emits one {@code extend interface ProductInterface} block plus a
+     * matching {@code extend type <impl>} block for each concrete implementor.
+     *
+     * @param manifest       the catalog attribute manifest
+     * @param reservedFields field names already present on the interface or any
+     *                       implementor; these are skipped to avoid redefinition
+     * @param implementors   the names of the concrete types implementing
+     *                       {@code ProductInterface}
+     */
+    public static String productOutputFields(AttributeManifest manifest,
+                                             Set<String> reservedFields,
+                                             List<String> implementors) {
+        List<AttributeEntry> selectable = manifest.entries().stream()
+                .filter(e -> !reservedFields.contains(e.code()))
+                .toList();
+        if (selectable.isEmpty()) return "";
+
+        StringBuilder b = new StringBuilder();
+        appendFieldBlock(b, "extend interface ProductInterface", selectable);
+        for (String impl : implementors) {
+            appendFieldBlock(b, "extend type " + impl, selectable);
+        }
+        return b.toString();
+    }
+
+    private static void appendFieldBlock(StringBuilder b, String header, List<AttributeEntry> entries) {
+        b.append(header).append(" {\n");
+        for (AttributeEntry e : entries) {
+            b.append("  ").append(e.code()).append(": ").append(outputTypeFor(e.type())).append("\n");
+        }
+        b.append("}\n");
+    }
+
     private static String inputTypeFor(NormalizedType type) {
         return switch (type) {
             case INT, FLOAT, PRICE, DATE -> "FilterRangeTypeInput";
             case SELECT, MULTISELECT, BOOLEAN -> "FilterEqualTypeInput";
             case STRING, TEXT, IMAGE_URL -> "FilterMatchTypeInput";
+        };
+    }
+
+    private static String outputTypeFor(NormalizedType type) {
+        return switch (type) {
+            case INT -> "Int";
+            case FLOAT, PRICE -> "Float";
+            case BOOLEAN -> "Boolean";
+            case MULTISELECT -> "[String]";
+            case STRING, TEXT, SELECT, DATE, IMAGE_URL -> "String";
         };
     }
 }

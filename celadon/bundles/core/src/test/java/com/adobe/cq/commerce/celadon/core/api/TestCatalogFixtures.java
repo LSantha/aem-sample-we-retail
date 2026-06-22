@@ -15,6 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.commerce.celadon.core.api;
 
+import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeEntry;
+import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
+import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeScope;
+import com.adobe.cq.commerce.celadon.core.api.attribute.NormalizedType;
 import com.google.gson.GsonBuilder;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,6 +36,52 @@ final class TestCatalogFixtures {
     static CeladonGraphqlEngine engineWithLegacyLabelVariants() {
         FetcherContext context = new FetcherContext("http://localhost:4502/api/assets/", "celadon/venia", "Basic test");
         return new CeladonGraphqlEngine(context, new GsonBuilder().serializeNulls().create(), new FixtureCatalogGateway(context, true));
+    }
+
+    /**
+     * Engine whose manifest declares non-reserved custom attributes ({@code material} STRING,
+     * {@code activities} MULTISELECT). The simple product fixture carries matching CF elements,
+     * so these attributes are selectable on the product output types.
+     */
+    static CeladonGraphqlEngine engineWithCustomAttributes() {
+        FetcherContext context = new FetcherContext("http://localhost:4502/api/assets/", "celadon/venia", "Basic test");
+        AttributeManifest manifest = new AttributeManifest("venia", List.of(
+                AttributeEntry.of("material", "Material", NormalizedType.STRING,
+                        AttributeScope.PRODUCT, false, false, 10),
+                AttributeEntry.of("activities", "Activities", NormalizedType.MULTISELECT,
+                        AttributeScope.PRODUCT, false, false, 20)));
+        return new CeladonGraphqlEngine(context, new GsonBuilder().serializeNulls().create(),
+                CatalogGatewayFactory.fixed(new FixtureCatalogGateway(context)), manifest);
+    }
+
+    /**
+     * Engine whose manifest exercises every output coercion path: numeric ({@code weight} INT,
+     * {@code rating} FLOAT, {@code msrp} PRICE), {@code featured} BOOLEAN, {@code tags}
+     * MULTISELECT (from a comma string), {@code material} STRING (master + per-variation), and
+     * {@code activities} MULTISELECT (from a list). It also declares {@code name} INT, whose code
+     * collides with a reserved base field, to verify the data-level reserved-field guard.
+     */
+    static CeladonGraphqlEngine engineWithTypedCustomAttributes() {
+        FetcherContext context = new FetcherContext("http://localhost:4502/api/assets/", "celadon/venia", "Basic test");
+        AttributeManifest manifest = new AttributeManifest("venia", List.of(
+                AttributeEntry.of("material", "Material", NormalizedType.STRING,
+                        AttributeScope.BOTH, false, false, 10),
+                AttributeEntry.of("activities", "Activities", NormalizedType.MULTISELECT,
+                        AttributeScope.PRODUCT, false, false, 20),
+                AttributeEntry.of("tags", "Tags", NormalizedType.MULTISELECT,
+                        AttributeScope.PRODUCT, false, false, 30),
+                AttributeEntry.of("units_per_pack", "Units Per Pack", NormalizedType.INT,
+                        AttributeScope.PRODUCT, false, false, 40),
+                AttributeEntry.of("rating", "Rating", NormalizedType.FLOAT,
+                        AttributeScope.PRODUCT, false, false, 50),
+                AttributeEntry.of("msrp", "MSRP", NormalizedType.PRICE,
+                        AttributeScope.PRODUCT, false, false, 60),
+                AttributeEntry.of("featured", "Featured", NormalizedType.BOOLEAN,
+                        AttributeScope.PRODUCT, false, false, 70),
+                AttributeEntry.of("name", "Name", NormalizedType.INT,
+                        AttributeScope.PRODUCT, false, false, 80)));
+        return new CeladonGraphqlEngine(context, new GsonBuilder().serializeNulls().create(),
+                CatalogGatewayFactory.fixed(new FixtureCatalogGateway(context)), manifest);
     }
 
     static final class FixtureCatalogGateway implements CatalogGateway {
@@ -305,6 +355,12 @@ final class TestCatalogFixtures {
                                             "variations", map(
                                                     "var-fashion_color-92-fashion_size-137", map("value", "/content/dam/celadon/venia/venia-dresses/candace-dress_lilac.jpeg")
                                             )
+                                    ),
+                                    "material", map(
+                                            "value", "Polyester",
+                                            "variations", map(
+                                                    "var-fashion_color-92-fashion_size-137", map("value", "Silk")
+                                            )
                                     )
                             )
                     )
@@ -323,6 +379,13 @@ final class TestCatalogFixtures {
                                     "description", map("value", "Tank dress with floral pattern."),
                                     "price", map("value", 35.0),
                                     "image", map("value", List.of("/content/dam/celadon/venia/venia-dresses/angelina-tank-dress_img_1.jpeg")),
+                                    "material", map("value", "Cotton"),
+                                    "activities", map("value", List.of("Hiking", "Camping")),
+                                    "tags", map("value", "Summer, Floral , New"),
+                                    "units_per_pack", map("value", "3"),
+                                    "rating", map("value", "4.5"),
+                                    "msrp", map("value", 42.0),
+                                    "featured", map("value", "true"),
                                     "additionalCategories", map("value", List.of("venia-tops"))
                             )
                     )

@@ -43,10 +43,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public final class CeladonGraphqlEngine {
     /**
@@ -214,11 +217,43 @@ public final class CeladonGraphqlEngine {
         if (!manifestAddendum.isBlank()) {
             registry.merge(new SchemaParser().parse(manifestAddendum));
         }
-        CatalogService catalogService = new CatalogService(manifest);
+        // Make manifest attributes selectable on the product output types. The set of
+        // fields already declared on ProductInterface (and its concrete implementors)
+        // is reserved so the addendum never re-declares a base field, and the same set
+        // tells CatalogService which manifest codes to inject into the result maps.
+        ProductOutputContext outputContext = productOutputContext(registry);
+        String outputAddendum = SchemaAddendumBuilder.productOutputFields(
+                manifest, outputContext.reservedFields(), outputContext.implementors());
+        if (!outputAddendum.isBlank()) {
+            registry.merge(new SchemaParser().parse(outputAddendum));
+        }
+        CatalogService catalogService = new CatalogService(manifest, outputContext.reservedFields());
         RuntimeWiring wiring = RuntimeWiring.newRuntimeWiring()
                 .wiringFactory(new CeladonWiringFactory(catalogService, buildAttributeMetadata(registry)))
                 .build();
         return new SchemaGenerator().makeExecutableSchema(registry, wiring);
+    }
+
+    private record ProductOutputContext(List<String> implementors, Set<String> reservedFields) {
+    }
+
+    /**
+     * Collects the concrete types implementing {@code ProductInterface} and the union
+     * of all field names declared on the interface and those implementors in the base
+     * schema. The field names are reserved so the manifest output addendum cannot
+     * redefine an existing field (which graphql-java rejects).
+     */
+    private ProductOutputContext productOutputContext(TypeDefinitionRegistry registry) {
+        Set<String> reserved = new LinkedHashSet<>();
+        List<String> implementors = new ArrayList<>();
+        if (registry.getType("ProductInterface").orElse(null) instanceof InterfaceTypeDefinition productInterface) {
+            productInterface.getFieldDefinitions().forEach(field -> reserved.add(field.getName()));
+            for (ObjectTypeDefinition implementor : registry.getImplementationsOf(productInterface)) {
+                implementors.add(implementor.getName());
+                implementor.getFieldDefinitions().forEach(field -> reserved.add(field.getName()));
+            }
+        }
+        return new ProductOutputContext(List.copyOf(implementors), Set.copyOf(reserved));
     }
 
     private Map<String, Object> buildIntrospectionMap() {
