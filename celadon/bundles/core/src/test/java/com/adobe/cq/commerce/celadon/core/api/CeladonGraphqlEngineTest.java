@@ -93,7 +93,7 @@ public class CeladonGraphqlEngineTest {
         List<Map<String, Object>> roots = castList(castMap(response.get("data")).get("categoryList"));
         Assert.assertEquals("venia-dresses", roots.getFirst().get("uid"));
         Assert.assertEquals(
-                "http://localhost:4502/content/dam/celadon/venia/venia-dresses/jcr:content/folderThumbnail",
+                "/content/dam/celadon/venia/venia-dresses/jcr:content/folderThumbnail",
                 roots.getFirst().get("image")
         );
     }
@@ -110,7 +110,7 @@ public class CeladonGraphqlEngineTest {
         List<Map<String, Object>> roots = castList(castMap(response.get("data")).get("categoryList"));
         Assert.assertEquals("venia-tops", roots.getFirst().get("uid"));
         Assert.assertEquals(
-                "http://localhost:4502/content/dam/celadon/venia/venia-tops/jcr:content/manualThumbnail.jpg",
+                "/content/dam/celadon/venia/venia-tops/jcr:content/manualThumbnail.jpg",
                 roots.getFirst().get("image")
         );
     }

@@ -18,18 +18,12 @@ package com.adobe.cq.commerce.celadon.core.api;
 import java.util.Objects;
 
 public final class FetcherContext {
-    private final String baseUrl;
     private final String basePath;
     private final String authorizationHeader;
 
-    public FetcherContext(String baseUrl, String basePath, String authorizationHeader) {
-        this.baseUrl = normalizeBaseUrl(baseUrl);
+    public FetcherContext(String basePath, String authorizationHeader) {
         this.basePath = normalizeBasePath(basePath);
         this.authorizationHeader = authorizationHeader == null ? "" : authorizationHeader.trim();
-    }
-
-    public String baseUrl() {
-        return baseUrl;
     }
 
     public String basePath() {
@@ -38,15 +32,6 @@ public final class FetcherContext {
 
     public String authorizationHeader() {
         return authorizationHeader;
-    }
-
-    public static String normalizeBaseUrl(String value) {
-        Objects.requireNonNull(value, "baseUrl");
-        String normalized = value.trim();
-        if (!normalized.endsWith("/")) {
-            normalized += "/";
-        }
-        return normalized;
     }
 
     public static String normalizeBasePath(String value) {

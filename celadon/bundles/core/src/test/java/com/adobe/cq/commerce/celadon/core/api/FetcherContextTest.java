@@ -21,9 +21,8 @@ import org.junit.Test;
 public class FetcherContextTest {
     @Test
     public void shouldRetainConfiguredValues() {
-        FetcherContext context = new FetcherContext("http://localhost:4502/api/assets", "/celadon/venia/", "Basic abc");
+        FetcherContext context = new FetcherContext("/celadon/venia/", "Basic abc");
 
-        Assert.assertEquals("http://localhost:4502/api/assets/", context.baseUrl());
         Assert.assertEquals("celadon/venia", context.basePath());
         Assert.assertEquals("Basic abc", context.authorizationHeader());
     }

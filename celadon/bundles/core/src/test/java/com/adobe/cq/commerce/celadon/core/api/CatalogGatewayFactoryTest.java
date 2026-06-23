@@ -24,7 +24,7 @@ import org.junit.Test;
 public class CatalogGatewayFactoryTest {
     @Test
     public void shouldCreateAndClosePublicSpiGatewayPerExecution() {
-        FetcherContext context = new FetcherContext("http://localhost:4502/api/assets/", "celadon/venia", "Basic test");
+        FetcherContext context = new FetcherContext("celadon/venia", "Basic test");
         AtomicInteger created = new AtomicInteger();
         AtomicInteger closed = new AtomicInteger();
         AtomicInteger listings = new AtomicInteger();
@@ -47,7 +47,7 @@ public class CatalogGatewayFactoryTest {
 
     @Test
     public void shouldCloseProvidedGatewayAfterExecution() {
-        FetcherContext context = new FetcherContext("http://localhost:4502/api/assets/", "celadon/venia", "Basic test");
+        FetcherContext context = new FetcherContext("celadon/venia", "Basic test");
         AtomicInteger created = new AtomicInteger();
         AtomicInteger closed = new AtomicInteger();
         AtomicInteger listings = new AtomicInteger();

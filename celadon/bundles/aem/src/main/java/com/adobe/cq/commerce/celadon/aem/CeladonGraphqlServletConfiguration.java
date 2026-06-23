@@ -23,9 +23,6 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
         description = "Configures Celadon's AEM-backed GraphQL endpoint"
 )
 public @interface CeladonGraphqlServletConfiguration {
-    @AttributeDefinition(name = "Base URL")
-    String baseUrl() default "http://localhost:4502/api/assets/";
-
     @AttributeDefinition(name = "Base Path")
     String basePath() default "celadon/venia";
 

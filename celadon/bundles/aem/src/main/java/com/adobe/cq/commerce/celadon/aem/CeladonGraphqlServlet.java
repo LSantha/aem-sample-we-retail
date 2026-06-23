@@ -71,7 +71,6 @@ public class CeladonGraphqlServlet extends HttpServlet implements ResourceChange
     @Activate
     protected void activate(CeladonGraphqlServletConfiguration configuration) {
         this.fetcherContext = new FetcherContext(
-                configuration.baseUrl(),
                 configuration.basePath(),
                 configuration.authorizationHeader()
         );

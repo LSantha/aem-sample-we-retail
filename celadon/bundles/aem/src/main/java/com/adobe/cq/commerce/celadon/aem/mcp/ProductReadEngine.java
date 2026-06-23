@@ -33,14 +33,12 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = ProductReadEngine.class)
 public class ProductReadEngine {
 
-    static final String DEFAULT_BASE_URL = "http://localhost:4502/api/assets/";
-
     /** Execute a GraphQL query for the given catalog; returns the raw result map. */
     public Map<String, Object> execute(ResourceResolver resolver, String catalog,
                                        String query, Map<String, Object> variables) {
         AttributeManifest manifest = new ManifestReaderImpl().read(resolver, catalog)
                 .orElse(AttributeManifest.empty(catalog));
-        FetcherContext context = new FetcherContext(DEFAULT_BASE_URL, "celadon/" + catalog, "");
+        FetcherContext context = new FetcherContext("celadon/" + catalog, "");
         CeladonGraphqlEngine engine = new CeladonGraphqlEngine(context, manifest);
         // closeResourceResolver=false: the request resolver is owned by the caller.
         AemCatalogGateway gateway = new AemCatalogGateway(resolver, context, false);

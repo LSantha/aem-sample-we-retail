@@ -24,7 +24,6 @@ import com.adobe.cq.dam.cfm.FragmentData;
 import com.adobe.cq.dam.cfm.VariationDef;
 import com.day.cq.dam.api.Asset;
 import java.lang.reflect.Array;
-import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -257,12 +256,9 @@ public final class AemCatalogGateway implements CatalogGateway {
         if (imagePath == null || imagePath.isBlank()) {
             return "";
         }
-        String normalizedPath = imagePath.startsWith("/") ? imagePath : "/" + imagePath;
-        String baseUrl = context.baseUrl().replace("/api/assets/", "/");
-        if (!baseUrl.endsWith("/")) {
-            baseUrl += "/";
-        }
-        return URI.create(baseUrl).resolve(normalizedPath.substring(1)).toString();
+        // Host-less, root-relative path so image URLs resolve against whatever
+        // host/port serves the storefront (author, publish, custom port).
+        return imagePath.startsWith("/") ? imagePath : "/" + imagePath;
     }
 
     @Override
