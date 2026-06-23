@@ -32,6 +32,7 @@ must render empty; product recommendations are deferred (no-op stubs only).
 | `config` | `we.retail.config` | OSGi configs, incl. CIF/Celadon `osgiconfig` |
 | `commons.content.slim` | `we.retail.commons.content.slim` | Shared commons content |
 | `all` | `we.retail.all` | Combined package embedding all subpackages |
+| `all-deps` | `we.retail.all.deps` | Self-contained package: embeds Core WCM, CIF Core, GraphQL client + Magento GraphQL bundles and the `all` subpackage. Only the AEM Commerce Add-on must be pre-installed |
 
 Key versions (in `parent/pom.xml`): UberJar `6.4.4`, Core WCM Components `2.29.0`,
 Core CIF Components `2.18.0`, GraphQL client `1.10.0`, Magento GraphQL `9.1.0-magento242ee`.
@@ -95,6 +96,27 @@ Common single-module deploy from within a content module:
 
 ```bash
 mvn clean install -PautoInstallPackage         # deploy that module's package
+```
+
+### One-click deploy (`all-deps`)
+
+For a fresh instance that has **only** the AEM Commerce Add-on pre-installed, deploy the
+self-contained `all-deps` package — it brings its own Core WCM, CIF Core, GraphQL client
+and Magento GraphQL bundles plus the `all` subpackage, so no other dependency packages
+are needed. Build the full reactor first (so the embedded artifacts exist), then install
+just `all-deps`:
+
+```bash
+export JAVA_HOME=/path/to/jdk-21
+mvn clean install                                          # build the whole reactor once
+mvn clean install -PautoInstallSinglePackage -pl all-deps  # deploy all-deps to AEM
+```
+
+Target a non-default instance with `-Daem.host` / `-Daem.port`:
+
+```bash
+mvn clean install -PautoInstallSinglePackage -pl all-deps \
+  -Daem.host=localhost -Daem.port=4602
 ```
 
 ### Target AEM instance

@@ -42,6 +42,7 @@
         <module>catalog</module>
         <module>commons.content.slim</module>
         <module>all</module>
+        <module>all-deps</module>
     </modules>
 
     <scm>
