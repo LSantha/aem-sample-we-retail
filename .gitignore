@@ -64,3 +64,4 @@ src/main/content/META-INF/vault/properties.xml
 /output/
 /.claude/
 /.clawdea/
+/local/
