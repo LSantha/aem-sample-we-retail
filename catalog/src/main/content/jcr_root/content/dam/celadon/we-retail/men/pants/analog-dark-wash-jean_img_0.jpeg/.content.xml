@@ -2,16 +2,16 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:exif="http://ns.adobe.com/exif/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="8b78cfae-991b-4044-93db-4c3fe6cc5a5c">
+    jcr:uuid="7fbfcda0-6f18-40e4-b22b-43c4fe8b787f">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2026-06-11T11:16:10.992+03:00"
+        jcr:lastModified="{Date}2026-06-24T12:58:19.210+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             cq:productReference="/etc/commerce/products/geometrixx-outdoors-screens/me/meot/meotsuann"
             dam:Bitsperpixel="{Long}24"
-            dam:extracted="{Date}2026-06-11T11:16:10.912+03:00"
+            dam:extracted="{Date}2026-06-24T12:58:18.815+03:00"
             dam:Fileformat="JPEG"
             dam:MIMEtype="image/jpeg"
             dam:Numberofimages="{Long}1"

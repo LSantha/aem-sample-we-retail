@@ -2,16 +2,16 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="07ee55e5-d72c-473d-8385-7217bb03dabb">
+    jcr:uuid="342d29ba-b9e2-42a3-9c11-28ce922db3d8">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2026-06-11T11:16:08.781+03:00"
+        jcr:lastModified="{Date}2026-06-24T12:58:16.162+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             cq:productReference="/etc/commerce/products/we-retail/eq/running/basa_mp3_player"
             dam:Bitsperpixel="{Long}24"
-            dam:extracted="{Date}2026-06-11T11:16:08.711+03:00"
+            dam:extracted="{Date}2026-06-24T12:58:16.050+03:00"
             dam:Fileformat="JPEG"
             dam:MIMEtype="image/jpeg"
             dam:Numberofimages="{Long}1"

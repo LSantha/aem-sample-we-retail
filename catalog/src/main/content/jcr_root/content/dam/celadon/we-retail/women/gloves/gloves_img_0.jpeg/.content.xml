@@ -2,16 +2,16 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="f1fe7658-d70f-45ad-a8e4-e815e592d916">
+    jcr:uuid="df31d1ee-f025-42f0-8f6f-b98ea98406b2">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2026-06-11T11:16:08.086+03:00"
+        jcr:lastModified="{Date}2026-06-24T12:58:15.526+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             cq:productReference="/etc/commerce/products/we-retail/wo/gloves/gloves"
             dam:Bitsperpixel="{Long}24"
-            dam:extracted="{Date}2026-06-11T11:16:07.983+03:00"
+            dam:extracted="{Date}2026-06-24T12:58:15.340+03:00"
             dam:Fileformat="JPEG"
             dam:MIMEtype="image/jpeg"
             dam:Numberofimages="{Long}1"

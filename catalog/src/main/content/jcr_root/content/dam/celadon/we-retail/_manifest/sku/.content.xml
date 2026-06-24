@@ -2,9 +2,9 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="eb3ccffa-640c-4163-bd15-0315f67244bd">
+    jcr:uuid="57616993-a489-4555-befa-14a9e20d9313">
     <jcr:content
-        jcr:lastModified="{Date}2026-06-11T11:16:07.502+03:00"
+        jcr:lastModified="{Date}2026-06-24T12:58:14.592+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="SKU"
@@ -12,42 +12,40 @@
         <data
             cq:model="/conf/we-retail/settings/dam/cfm/models/celadon-attribute"
             jcr:primaryType="nt:unstructured"
-            _strucVersion="{Long}2">
+            _strucVersion="{Long}1">
             <master
                 jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
                 jcr:primaryType="nt:unstructured"
                 aggregatable="{Boolean}false"
-                aggregatable_x0040_LastModified="{Date}2026-06-11T11:16:07.502+03:00"
+                aggregatable_x0040_LastModified="{Date}2026-06-24T12:58:14.592+03:00"
                 aggregatable_x0040_LastModifiedBy="admin"
                 code="sku"
-                code_x0040_LastModified="{Date}2026-06-11T11:16:07.500+03:00"
+                code_x0040_LastModified="{Date}2026-06-24T12:58:14.591+03:00"
                 code_x0040_LastModifiedBy="admin"
                 filterable="{Boolean}true"
-                filterable_x0040_LastModified="{Date}2026-06-11T11:16:07.502+03:00"
+                filterable_x0040_LastModified="{Date}2026-06-24T12:58:14.592+03:00"
                 filterable_x0040_LastModifiedBy="admin"
                 label="SKU"
-                label_x0040_LastModified="{Date}2026-06-11T11:16:07.501+03:00"
+                label_x0040_LastModified="{Date}2026-06-24T12:58:14.591+03:00"
                 label_x0040_LastModifiedBy="admin"
-                optionDefinition_x0040_LastModified="{Date}2026-06-11T11:16:07.492+03:00"
+                optionDefinition_x0040_LastModified="{Date}2026-06-24T12:58:14.587+03:00"
                 ordering="{Long}0"
-                ordering_x0040_LastModified="{Date}2026-06-11T11:16:07.502+03:00"
+                ordering_x0040_LastModified="{Date}2026-06-24T12:58:14.592+03:00"
                 ordering_x0040_LastModifiedBy="admin"
                 scope="BOTH"
-                scope_x0040_LastModified="{Date}2026-06-11T11:16:07.501+03:00"
+                scope_x0040_LastModified="{Date}2026-06-24T12:58:14.592+03:00"
                 scope_x0040_LastModifiedBy="admin"
-                sourceHint_x0040_LastModified="{Date}2026-06-11T11:16:07.492+03:00"
+                sourceHint_x0040_LastModified="{Date}2026-06-24T12:58:14.587+03:00"
                 type="STRING"
-                type_x0040_LastModified="{Date}2026-06-11T11:16:07.501+03:00"
+                type_x0040_LastModified="{Date}2026-06-24T12:58:14.591+03:00"
                 type_x0040_LastModifiedBy="admin"/>
         </data>
         <indexedData jcr:primaryType="nt:unstructured">
             <master
                 jcr:mixinTypes="[dam:IndexedFragmentData]"
                 jcr:primaryType="nt:unstructured"
-                jcr:uuid="cc9a51ec-c623-48ba-a9ee-3387f5ddc5e4"
+                jcr:uuid="0dd78553-0c56-4264-a8b6-0ca8e8bed0be"
                 _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/celadon-attribute"
-                _x0040_string_x0040_path="/content/dam/celadon/we-retail/_manifest/sku"
-                _x0040_string_x0040_uuid="eb3ccffa-640c-4163-bd15-0315f67244bd"
                 _x0040_stringArray_x0040_variations="[]"
                 boolean_x0040_aggregatable="{Boolean}false"
                 boolean_x0040_filterable="{Boolean}true"

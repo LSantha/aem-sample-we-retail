@@ -2,9 +2,9 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="7ca53657-8341-45e0-b4b8-0aa08e331bf9">
+    jcr:uuid="b6f502e8-51cb-449e-ab25-f6cf7868f442">
     <jcr:content
-        jcr:lastModified="{Date}2026-06-11T11:16:11.885+03:00"
+        jcr:lastModified="{Date}2026-06-24T12:58:19.099+03:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="color: red, orange, Cuzco Blue, green, ... (9 values)"
@@ -12,33 +12,31 @@
         <data
             cq:model="/conf/we-retail/settings/dam/cfm/models/celadon-option-definition"
             jcr:primaryType="nt:unstructured"
-            _strucVersion="{Long}2">
+            _strucVersion="{Long}1">
             <master
                 jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
                 jcr:primaryType="nt:unstructured"
                 attributeCode="color"
-                attributeCode_x0040_LastModified="{Date}2026-06-11T11:16:11.885+03:00"
+                attributeCode_x0040_LastModified="{Date}2026-06-24T12:58:19.098+03:00"
                 attributeCode_x0040_LastModifiedBy="admin"
                 label="color"
-                label_x0040_LastModified="{Date}2026-06-11T11:16:11.884+03:00"
+                label_x0040_LastModified="{Date}2026-06-24T12:58:19.098+03:00"
                 label_x0040_LastModifiedBy="admin"
                 productField="color"
-                productField_x0040_LastModified="{Date}2026-06-11T11:16:11.885+03:00"
+                productField_x0040_LastModified="{Date}2026-06-24T12:58:19.099+03:00"
                 productField_x0040_LastModifiedBy="admin"
-                swatchType_x0040_LastModified="{Date}2026-06-11T11:16:11.885+03:00"
+                swatchType_x0040_LastModified="{Date}2026-06-24T12:58:19.099+03:00"
                 swatchType_x0040_LastModifiedBy="admin"
                 values="[1;red,2;orange,3;Cuzco Blue,4;green,5;blue,6;darkgreen,7;yellow,8;purple,9;Cuzco Orange]"
-                values_x0040_LastModified="{Date}2026-06-11T11:16:11.885+03:00"
+                values_x0040_LastModified="{Date}2026-06-24T12:58:19.099+03:00"
                 values_x0040_LastModifiedBy="admin"/>
         </data>
         <indexedData jcr:primaryType="nt:unstructured">
             <master
                 jcr:mixinTypes="[dam:IndexedFragmentData]"
                 jcr:primaryType="nt:unstructured"
-                jcr:uuid="7bb05759-2646-4f2d-841b-2f51890e61d5"
+                jcr:uuid="e7f4251f-f172-4626-87d4-302d8cbd21fd"
                 _x0040_string_x0040_model="/conf/we-retail/settings/dam/cfm/models/celadon-option-definition"
-                _x0040_string_x0040_path="/content/dam/celadon/we-retail/_options/color--red-orange-cuzco-blue-green-plus5"
-                _x0040_string_x0040_uuid="7ca53657-8341-45e0-b4b8-0aa08e331bf9"
                 _x0040_stringArray_x0040_variations="[]"
                 string_x0040_attributeCode="color"
                 string_x0040_label="color"
