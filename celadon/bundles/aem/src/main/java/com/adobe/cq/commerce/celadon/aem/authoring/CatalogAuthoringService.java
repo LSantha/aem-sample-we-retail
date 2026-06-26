@@ -22,7 +22,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 
 /**
  * Transport-agnostic catalog authoring API. Every method takes the caller's
- * {@link ResourceResolver} (run-as-user) and a catalog name (e.g. "venia", stored
+ * {@link ResourceResolver} (run-as-user) and a catalog name (e.g. "we-retail", stored
  * under {@code /content/dam/celadon/<catalog>}). Implementations commit on success.
  *
  * <p>Operations that create Content Fragments require a live AEM Content Fragment

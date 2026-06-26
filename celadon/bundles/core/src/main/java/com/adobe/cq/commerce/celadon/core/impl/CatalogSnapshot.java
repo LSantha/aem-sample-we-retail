@@ -157,7 +157,7 @@ public final class CatalogSnapshot {
      * If {@code value} is a base64-encoded run of ASCII digits (the Magento
      * category uid scheme, e.g. "Mg==" → "2", "NjU1" → "655"), returns the
      * decoded digit string; otherwise returns null. Guards against treating
-     * path-style uids like "venia-dresses" as base64.
+     * path-style uids like "mens-coats" as base64.
      */
     private static String decodeBase64NumericId(String value) {
         if (!value.matches("[A-Za-z0-9+/]+={0,2}") || value.length() % 4 != 0) {

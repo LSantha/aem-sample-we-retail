@@ -229,9 +229,20 @@ public final class CeladonGraphqlEngine {
         }
         CatalogService catalogService = new CatalogService(manifest, outputContext.reservedFields());
         RuntimeWiring wiring = RuntimeWiring.newRuntimeWiring()
-                .wiringFactory(new CeladonWiringFactory(catalogService, buildAttributeMetadata(registry)))
+                .wiringFactory(new CeladonWiringFactory(catalogService, buildAttributeMetadata(registry), catalogName()))
                 .build();
         return new SchemaGenerator().makeExecutableSchema(registry, wiring);
+    }
+
+    /**
+     * Derives the storefront catalog name from the configured {@code basePath}
+     * (e.g. {@code celadon/we-retail} → {@code we-retail}), so storefront metadata
+     * such as {@code store_name}/{@code store_url} self-adjusts to the served catalog.
+     */
+    private String catalogName() {
+        String basePath = fetcherContext.basePath();
+        int idx = basePath.lastIndexOf('/');
+        return idx >= 0 ? basePath.substring(idx + 1) : basePath;
     }
 
     private record ProductOutputContext(List<String> implementors, Set<String> reservedFields) {

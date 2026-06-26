@@ -27,10 +27,12 @@ import java.util.Map;
 
 public final class CeladonWiringFactory implements WiringFactory {
     private final CatalogService catalogService;
+    private final String catalog;
     private final Map<String, DataFetcher<?>> queryFetchers;
 
-    public CeladonWiringFactory(CatalogService catalogService, Map<String, Map<String, String>> metadata) {
+    public CeladonWiringFactory(CatalogService catalogService, Map<String, Map<String, String>> metadata, String catalog) {
         this.catalogService = catalogService;
+        this.catalog = catalog == null || catalog.isBlank() ? "we-retail" : catalog;
         this.queryFetchers = new LinkedHashMap<>();
         queryFetchers.put("products", environment -> catalogService.products(environment));
         queryFetchers.put("categoryList", environment -> catalogService.categoryList(environment));
@@ -134,7 +136,7 @@ public final class CeladonWiringFactory implements WiringFactory {
         config.put("configurable_thumbnail_source", "itself");
         config.put("secure_base_media_url", "http://localhost:4502/");
         config.put("secure_base_url", "http://localhost:4502/");
-        config.put("store_name", "Venia");
+        config.put("store_name", catalog);
         return config;
     }
 
@@ -145,8 +147,8 @@ public final class CeladonWiringFactory implements WiringFactory {
         context.put("environment_id", "celadon");
         context.put("store_code", "default");
         context.put("store_id", "1");
-        context.put("store_name", "Venia");
-        context.put("store_url", "http://localhost:4502/content/venia/us/en.html");
+        context.put("store_name", catalog);
+        context.put("store_url", "http://localhost:4502/content/" + catalog + "/us/en.html");
         context.put("store_view_code", "default");
         context.put("store_view_id", "1");
         context.put("store_view_name", "Default Store View");

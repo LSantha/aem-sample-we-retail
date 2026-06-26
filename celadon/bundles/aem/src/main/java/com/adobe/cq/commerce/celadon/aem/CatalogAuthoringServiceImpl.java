@@ -67,7 +67,7 @@ public class CatalogAuthoringServiceImpl implements CatalogAuthoringService {
 
     static final String CELADON_ROOT = "/content/dam/celadon";
     static final String GRAPHQL_SERVLET_PID = "com.adobe.cq.commerce.celadon.aem.CeladonGraphqlServlet";
-    static final String DEFAULT_CATALOG = "venia";
+    static final String DEFAULT_CATALOG = "we-retail";
 
     @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC,
             policyOption = ReferencePolicyOption.GREEDY)

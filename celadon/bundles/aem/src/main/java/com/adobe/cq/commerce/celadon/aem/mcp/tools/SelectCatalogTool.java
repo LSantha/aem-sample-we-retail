@@ -48,14 +48,14 @@ public class SelectCatalogTool extends GatedTool {
     @Override
     public String description() {
         return "Change which catalog the GraphQL endpoint serves by updating the servlet's OSGi "
-                + "basePath (e.g. 'celadon/venia'). Instance-wide; triggers a servlet re-activation "
+                + "basePath (e.g. 'celadon/we-retail'). Instance-wide; triggers a servlet re-activation "
                 + "that reloads the manifest. Gated (preview/confirm).";
     }
 
     @Override
     public String inputSchema() {
         return "{\"type\":\"object\",\"properties\":{"
-                + "\"basePath\":{\"type\":\"string\",\"description\":\"e.g. celadon/venia\"},"
+                + "\"basePath\":{\"type\":\"string\",\"description\":\"e.g. celadon/we-retail\"},"
                 + "\"confirmToken\":{\"type\":\"string\"}},"
                 + "\"required\":[\"basePath\"],\"additionalProperties\":false}";
     }

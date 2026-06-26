@@ -24,7 +24,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 )
 public @interface CeladonGraphqlServletConfiguration {
     @AttributeDefinition(name = "Base Path")
-    String basePath() default "celadon/venia";
+    String basePath() default "celadon/we-retail";
 
     @AttributeDefinition(name = "Authorization Header")
     String authorizationHeader() default "Basic YWRtaW46YWRtaW4=";
