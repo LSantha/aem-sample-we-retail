@@ -19,6 +19,18 @@
             <artifactId>celadon-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Declared before uber-jar so the real gson wins on the (flat) surefire
+             test classpath. The AEM uber-jar embeds a partial older com.google.gson
+             (Gson.class without a matching internal ConstructorConstructor); if it
+             came first it would split-version-clash with gson 2.11.0 when an engine
+             builds its Gson (NoSuchMethodError ConstructorConstructor.<init>(Map)).
+             No production/OSGi impact: there gson resolves via Import-Package. -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
@@ -65,12 +77,6 @@
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.service.cm</artifactId>
             <version>1.6.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

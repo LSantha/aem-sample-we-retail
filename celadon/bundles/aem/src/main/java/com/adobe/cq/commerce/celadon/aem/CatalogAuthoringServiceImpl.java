@@ -85,11 +85,11 @@ public class CatalogAuthoringServiceImpl implements CatalogAuthoringService {
         try {
             Configuration cfg = configurationAdmin.getConfiguration(GRAPHQL_SERVLET_PID, null);
             Dictionary<String, Object> props = cfg.getProperties();
-            Object basePath = props == null ? null : props.get("basePath");
-            if (basePath == null) {
+            Object defaultCatalog = props == null ? null : props.get("defaultCatalog");
+            if (defaultCatalog == null) {
                 return DEFAULT_CATALOG;
             }
-            String path = basePath.toString();
+            String path = defaultCatalog.toString();
             int slash = path.lastIndexOf('/');
             return slash >= 0 ? path.substring(slash + 1) : path;
         } catch (Exception e) {

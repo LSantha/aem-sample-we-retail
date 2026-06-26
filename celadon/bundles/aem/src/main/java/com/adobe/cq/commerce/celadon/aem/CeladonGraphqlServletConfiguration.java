@@ -24,8 +24,9 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 )
 public @interface CeladonGraphqlServletConfiguration {
     @AttributeDefinition(
-            name = "Catalog",
-            description = "Catalog name served by the endpoint. Celadon catalogs live under "
-                    + "/content/dam/celadon, so this is just the catalog folder name (e.g. 'we-retail').")
-    String basePath() default "we-retail";
+            name = "Default Catalog",
+            description = "Catalog served at the bare /apps/celadon/graphql endpoint (requests with no "
+                    + "/<catalog> path segment). Celadon catalogs live under /content/dam/celadon, so this "
+                    + "is just the catalog folder name (e.g. 'we-retail').")
+    String defaultCatalog() default "we-retail";
 }

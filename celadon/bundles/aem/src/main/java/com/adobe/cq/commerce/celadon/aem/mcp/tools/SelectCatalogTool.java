@@ -28,9 +28,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Changes which catalog the GraphQL servlet serves by updating its OSGi
- * {@code basePath}. The servlet has @Activate and no @Modified, so the update
- * triggers a full re-activation that reloads basePath and the manifest.
+ * Changes which catalog the GraphQL servlet serves at its bare endpoint by
+ * updating its OSGi {@code defaultCatalog}. The servlet has @Activate and no
+ * @Modified, so the update triggers a full re-activation that reloads the
+ * default catalog and the manifest.
  */
 @Component(service = McpTool.class)
 public class SelectCatalogTool extends GatedTool {
@@ -47,36 +48,36 @@ public class SelectCatalogTool extends GatedTool {
 
     @Override
     public String description() {
-        return "Change which catalog the GraphQL endpoint serves by updating the servlet's OSGi "
-                + "basePath, the catalog name under /content/dam/celadon (e.g. 'we-retail'). "
-                + "Instance-wide; triggers a servlet re-activation that reloads the manifest. "
+        return "Change which catalog the GraphQL endpoint serves at its bare path by updating the "
+                + "servlet's OSGi defaultCatalog, the catalog name under /content/dam/celadon (e.g. "
+                + "'we-retail'). Instance-wide; triggers a servlet re-activation that reloads the manifest. "
                 + "Gated (preview/confirm).";
     }
 
     @Override
     public String inputSchema() {
         return "{\"type\":\"object\",\"properties\":{"
-                + "\"basePath\":{\"type\":\"string\",\"description\":\"catalog name under /content/dam/celadon, e.g. we-retail\"},"
+                + "\"defaultCatalog\":{\"type\":\"string\",\"description\":\"catalog name under /content/dam/celadon, e.g. we-retail\"},"
                 + "\"confirmToken\":{\"type\":\"string\"}},"
-                + "\"required\":[\"basePath\"],\"additionalProperties\":false}";
+                + "\"required\":[\"defaultCatalog\"],\"additionalProperties\":false}";
     }
 
     @Override
     protected String catalogOf(JsonObject args) {
-        return args.has("basePath") ? args.get("basePath").getAsString() : "";
+        return args.has("defaultCatalog") ? args.get("defaultCatalog").getAsString() : "";
     }
 
     @Override
     protected String preview(ResourceResolver resolver, JsonObject args) throws Exception {
         Configuration cfg = configAdmin.getConfiguration(PID, null);
-        Object current = cfg.getProperties() == null ? "(default)" : cfg.getProperties().get("basePath");
-        return "Will change served catalog basePath from '" + current + "' to '"
-                + ToolArgs.require(args, "basePath") + "'. The GraphQL servlet will re-activate.";
+        Object current = cfg.getProperties() == null ? "(default)" : cfg.getProperties().get("defaultCatalog");
+        return "Will change the served default catalog from '" + current + "' to '"
+                + ToolArgs.require(args, "defaultCatalog") + "'. The GraphQL servlet will re-activate.";
     }
 
     @Override
     protected String execute(ResourceResolver resolver, JsonObject args) throws Exception {
-        String basePath = ToolArgs.require(args, "basePath");
+        String defaultCatalog = ToolArgs.require(args, "defaultCatalog");
         Configuration cfg = configAdmin.getConfiguration(PID, null);
         Dictionary<String, Object> props = cfg.getProperties();
         Dictionary<String, Object> merged = new Hashtable<>();
@@ -87,8 +88,8 @@ public class SelectCatalogTool extends GatedTool {
                 merged.put(k, props.get(k));
             }
         }
-        merged.put("basePath", basePath);
+        merged.put("defaultCatalog", defaultCatalog);
         cfg.update(merged);
-        return "served catalog basePath set to '" + basePath + "'";
+        return "served default catalog set to '" + defaultCatalog + "'";
     }
 }
