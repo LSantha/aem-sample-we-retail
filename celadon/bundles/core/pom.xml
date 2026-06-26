@@ -73,7 +73,6 @@
                             com.google.j2objc.annotations;resolution:=optional,
                             javax.annotation.meta;resolution:=optional,
                             org.checkerframework.checker.nullness.qual;resolution:=optional,
-                            org.codehaus.mojo.animal_sniffer;resolution:=optional,
                             org.jspecify.annotations;resolution:=optional,
                             *
                         </Import-Package>
