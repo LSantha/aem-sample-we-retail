@@ -29,12 +29,12 @@ final class TestCatalogFixtures {
     }
 
     static CeladonGraphqlEngine engine() {
-        FetcherContext context = new FetcherContext("celadon/venia", "Basic test");
+        FetcherContext context = new FetcherContext("celadon/venia");
         return new CeladonGraphqlEngine(context, new GsonBuilder().serializeNulls().create(), new FixtureCatalogGateway(context));
     }
 
     static CeladonGraphqlEngine engineWithLegacyLabelVariants() {
-        FetcherContext context = new FetcherContext("celadon/venia", "Basic test");
+        FetcherContext context = new FetcherContext("celadon/venia");
         return new CeladonGraphqlEngine(context, new GsonBuilder().serializeNulls().create(), new FixtureCatalogGateway(context, true));
     }
 
@@ -44,7 +44,7 @@ final class TestCatalogFixtures {
      * so these attributes are selectable on the product output types.
      */
     static CeladonGraphqlEngine engineWithCustomAttributes() {
-        FetcherContext context = new FetcherContext("celadon/venia", "Basic test");
+        FetcherContext context = new FetcherContext("celadon/venia");
         AttributeManifest manifest = new AttributeManifest("venia", List.of(
                 AttributeEntry.of("material", "Material", NormalizedType.STRING,
                         AttributeScope.PRODUCT, false, false, 10),
@@ -62,7 +62,7 @@ final class TestCatalogFixtures {
      * collides with a reserved base field, to verify the data-level reserved-field guard.
      */
     static CeladonGraphqlEngine engineWithTypedCustomAttributes() {
-        FetcherContext context = new FetcherContext("celadon/venia", "Basic test");
+        FetcherContext context = new FetcherContext("celadon/venia");
         AttributeManifest manifest = new AttributeManifest("venia", List.of(
                 AttributeEntry.of("material", "Material", NormalizedType.STRING,
                         AttributeScope.BOTH, false, false, 10),

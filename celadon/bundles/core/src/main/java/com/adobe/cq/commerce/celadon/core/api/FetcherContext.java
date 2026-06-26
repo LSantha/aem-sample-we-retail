@@ -19,19 +19,13 @@ import java.util.Objects;
 
 public final class FetcherContext {
     private final String basePath;
-    private final String authorizationHeader;
 
-    public FetcherContext(String basePath, String authorizationHeader) {
+    public FetcherContext(String basePath) {
         this.basePath = normalizeBasePath(basePath);
-        this.authorizationHeader = authorizationHeader == null ? "" : authorizationHeader.trim();
     }
 
     public String basePath() {
         return basePath;
-    }
-
-    public String authorizationHeader() {
-        return authorizationHeader;
     }
 
     public static String normalizeBasePath(String value) {

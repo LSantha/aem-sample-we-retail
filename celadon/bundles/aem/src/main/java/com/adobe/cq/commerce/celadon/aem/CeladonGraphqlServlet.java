@@ -24,8 +24,6 @@ import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +60,9 @@ import org.osgi.service.metatype.annotations.Designate;
 @HttpWhiteboardServletPattern("/apps/celadon/graphql")
 @HttpWhiteboardContextSelect("(osgi.http.whiteboard.context.name=org.osgi.service.http)")
 public class CeladonGraphqlServlet extends HttpServlet implements ResourceChangeListener {
+    /** Subservice name mapped to the {@code celadon-catalog-reader} system user. */
+    private static final String SUBSERVICE_CATALOG_READER = "catalog-reader";
+
     @Reference
     private ResourceResolverFactory resourceResolverFactory;
 
@@ -70,10 +71,7 @@ public class CeladonGraphqlServlet extends HttpServlet implements ResourceChange
 
     @Activate
     protected void activate(CeladonGraphqlServletConfiguration configuration) {
-        this.fetcherContext = new FetcherContext(
-                configuration.basePath(),
-                configuration.authorizationHeader()
-        );
+        this.fetcherContext = new FetcherContext(configuration.basePath());
         AttributeManifest manifest = loadManifest(configuration.basePath());
         this.engine = new CeladonGraphqlEngine(fetcherContext, manifest);
     }
@@ -86,7 +84,7 @@ public class CeladonGraphqlServlet extends HttpServlet implements ResourceChange
         // basePath looks like "celadon/<catalog>"; ManifestReaderImpl expects just "<catalog>"
         int slash = normalized.lastIndexOf('/');
         String catalog = slash < 0 ? normalized : normalized.substring(slash + 1);
-        try (ResourceResolver resolver = resourceResolverFactory.getResourceResolver(resourceResolverAuthInfo())) {
+        try (ResourceResolver resolver = resourceResolverFactory.getServiceResourceResolver(serviceAuthInfo())) {
             return new ManifestReaderImpl().read(resolver, catalog)
                     .orElse(AttributeManifest.empty(catalog));
         } catch (LoginException e) {
@@ -205,30 +203,14 @@ public class CeladonGraphqlServlet extends HttpServlet implements ResourceChange
 
     private ResourceResolver openCatalogResolver() {
         try {
-            return resourceResolverFactory.getResourceResolver(resourceResolverAuthInfo());
+            return resourceResolverFactory.getServiceResourceResolver(serviceAuthInfo());
         } catch (LoginException e) {
             throw new IllegalStateException("Failed to open catalog resource resolver for direct AEM backend", e);
         }
     }
 
-    private Map<String, Object> resourceResolverAuthInfo() {
-        String authorizationHeader = fetcherContext.authorizationHeader();
-        if (authorizationHeader == null || authorizationHeader.isBlank()) {
-            return Map.of();
-        }
-        if (!authorizationHeader.regionMatches(true, 0, "Basic ", 0, 6)) {
-            return Map.of();
-        }
-        String token = authorizationHeader.substring(6).trim();
-        String decoded = new String(Base64.getDecoder().decode(token), StandardCharsets.UTF_8);
-        int separator = decoded.indexOf(':');
-        if (separator < 0) {
-            throw new IllegalStateException("Authorization header must contain user and password");
-        }
-        Map<String, Object> authInfo = new HashMap<>();
-        authInfo.put(ResourceResolverFactory.USER, decoded.substring(0, separator));
-        authInfo.put(ResourceResolverFactory.PASSWORD, decoded.substring(separator + 1).toCharArray());
-        return authInfo;
+    private Map<String, Object> serviceAuthInfo() {
+        return Map.of(ResourceResolverFactory.SUBSERVICE, SUBSERVICE_CATALOG_READER);
     }
 
     private record RequestPayload(String query, String operationName, Map<String, Object> variables) {

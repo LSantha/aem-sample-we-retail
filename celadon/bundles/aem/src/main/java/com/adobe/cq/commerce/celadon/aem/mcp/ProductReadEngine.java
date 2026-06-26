@@ -38,7 +38,7 @@ public class ProductReadEngine {
                                        String query, Map<String, Object> variables) {
         AttributeManifest manifest = new ManifestReaderImpl().read(resolver, catalog)
                 .orElse(AttributeManifest.empty(catalog));
-        FetcherContext context = new FetcherContext("celadon/" + catalog, "");
+        FetcherContext context = new FetcherContext("celadon/" + catalog);
         CeladonGraphqlEngine engine = new CeladonGraphqlEngine(context, manifest);
         // closeResourceResolver=false: the request resolver is owned by the caller.
         AemCatalogGateway gateway = new AemCatalogGateway(resolver, context, false);

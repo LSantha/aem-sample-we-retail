@@ -96,6 +96,9 @@
                     <instructions>
                         <Bundle-SymbolicName>com.adobe.commerce.cif.celadon-aem</Bundle-SymbolicName>
                         <Bundle-Name>Celadon AEM</Bundle-Name>
+                        <Sling-Initial-Content>
+                            SLING-INF/content/apps/celadon/install;path:=/apps/celadon/install;overwrite:=true;ignoreImportProviders:=json
+                        </Sling-Initial-Content>
                         <Export-Package>com.adobe.cq.commerce.celadon.aem.*</Export-Package>
                         <Import-Package>
                             com.adobe.cq.dam.cfm,
