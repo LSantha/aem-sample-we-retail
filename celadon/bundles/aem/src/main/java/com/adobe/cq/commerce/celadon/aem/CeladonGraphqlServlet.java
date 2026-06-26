@@ -77,13 +77,11 @@ public class CeladonGraphqlServlet extends HttpServlet implements ResourceChange
     }
 
     private AttributeManifest loadManifest(String basePath) {
-        String normalized = FetcherContext.normalizeBasePath(basePath);
-        if (normalized == null || normalized.isBlank()) {
+        // basePath is the catalog name; catalogs live under /content/dam/celadon/<catalog>.
+        String catalog = FetcherContext.normalizeBasePath(basePath);
+        if (catalog == null || catalog.isBlank()) {
             return AttributeManifest.empty(basePath);
         }
-        // basePath looks like "celadon/<catalog>"; ManifestReaderImpl expects just "<catalog>"
-        int slash = normalized.lastIndexOf('/');
-        String catalog = slash < 0 ? normalized : normalized.substring(slash + 1);
         try (ResourceResolver resolver = resourceResolverFactory.getServiceResourceResolver(serviceAuthInfo())) {
             return new ManifestReaderImpl().read(resolver, catalog)
                     .orElse(AttributeManifest.empty(catalog));

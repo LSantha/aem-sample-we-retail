@@ -23,6 +23,9 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
         description = "Configures Celadon's AEM-backed GraphQL endpoint"
 )
 public @interface CeladonGraphqlServletConfiguration {
-    @AttributeDefinition(name = "Base Path")
-    String basePath() default "celadon/we-retail";
+    @AttributeDefinition(
+            name = "Catalog",
+            description = "Catalog name served by the endpoint. Celadon catalogs live under "
+                    + "/content/dam/celadon, so this is just the catalog folder name (e.g. 'we-retail').")
+    String basePath() default "we-retail";
 }

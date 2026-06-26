@@ -243,7 +243,7 @@ public final class AemCatalogGateway implements CatalogGateway {
 
     @Override
     public boolean isCatalogReady() {
-        String contentPath = "/content/dam/" + FetcherContext.normalizeBasePath(context.basePath()) + "/jcr:content";
+        String contentPath = "/content/dam/celadon/" + FetcherContext.normalizeBasePath(context.basePath()) + "/jcr:content";
         Resource content = resourceResolver.getResource(contentPath);
         if (content == null) {
             return false;
@@ -388,7 +388,7 @@ public final class AemCatalogGateway implements CatalogGateway {
 
     private String folderPath(String relativePath) {
         String normalized = normalizeRelativePath(relativePath);
-        StringBuilder path = new StringBuilder("/content/dam/")
+        StringBuilder path = new StringBuilder("/content/dam/celadon/")
                 .append(FetcherContext.normalizeBasePath(context.basePath()));
         if (!normalized.isBlank()) {
             path.append('/').append(normalized);
