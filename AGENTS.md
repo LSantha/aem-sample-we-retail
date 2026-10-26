@@ -17,7 +17,8 @@ Celadon is built in-reactor as the `celadon` module and deployed alongside We.Re
 
 See `cif_migration.md` for the full migration specification, scope, principles, and
 acceptance criteria. Cart, checkout, and order history are explicitly out of scope and
-must render empty; product recommendations are deferred (the component renders a placeholder).
+must render empty. Product recommendations ("You may also like" on the product page) are
+CIF related products served by Celadon's tag-based provider (see below).
 
 ## Modules
 
@@ -46,6 +47,14 @@ HTTP integration tests, e.g. `WeRetailBlueprintFidelityIT`). It compiles with
 `maven.compiler.release=21`, which is why the full reactor requires JDK 21 (see Build &
 Deploy). The we.retail bundle (`core`) still targets Java 8 bytecode.
 
+Celadon resolves `related_products` through the optional `RelatedProductsProvider` service
+(`bundles/core` API); `crosssell_products` and `upsell_products` stay empty. The AEM bundle's
+`TagRelatedProductsProvider` ranks the other catalog products by the number of `cq:tags`
+they share with the product (fragment `metadata/cq:tags`), keeping catalog order on ties,
+and returns up to `maxResults` (default 6). All tag logic stays in that provider. Candidates
+and shared-tag counts match classic We.Retail exactly; classic sorted them ascending and so
+showed the least similar products first, which is intentionally not reproduced.
+
 ### CIF adapter layer (`core`)
 
 New CIF code lives under `we.retail.core.commerce.cif` (`CategoryNames`,
@@ -72,6 +81,11 @@ elsewhere search covers the whole catalog.
 Breadcrumbs keep the classic `we-retail-product-page` policy (start level 5, current page
 hidden); `CatalogBreadcrumb` applies it to the trail the CIF breadcrumb builds on category
 and product pages.
+
+The product page recommendations (`weretail/components/structure/productrecommendation`)
+are server-rendered by `ProductRecommendations`, which adapts the CIF related products
+model to the classic recommendation cards (`max`, default 6). Without a product, e.g. on the
+template, the component shows "No product recommendations available".
 
 ### CIF/Celadon OSGi config (`config`)
 

@@ -13,8 +13,24 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */-->
-<div class="recommendations-viewer we-product-grid-container" data-relationship-type="${resource.relationshipType}" data-max-count="${resource.max}">
-    <sly data-sly-include="defaultcontent.html"/>
-    <sly data-sly-include="producttemplate.html"/>
-    <ul class="recommendations-content foundation-ordered-list-container products-grid"></ul>
+<div class="recommendations-viewer we-product-grid-container" data-sly-use.recommendations="we.retail.core.model.ProductRecommendations">
+    <sly data-sly-test="${!recommendations.products}" data-sly-include="defaultcontent.html"/>
+    <ul data-sly-test="${recommendations.products}" data-sly-list.product="${recommendations.products}"
+        class="recommendations-content foundation-ordered-list-container products-grid">
+        <li class="foundation-list-item">
+            <div class="we-ProductsGrid-item">
+                <div class="we-ProductsGrid-item-image img-center">
+                    <img src="${product.image}" alt="${product.name}"/>
+                </div>
+                <h3 class="we-ProductsGrid-item-title h4">${product.name}</h3>
+                <strong class="we-ProductsGrid-item-price">
+                    <span>${product.price}</span>
+                    <span class="we-ProductsGrid-item-price-new"></span>
+                    <s class="we-ProductsGrid-item-price-old"></s>
+                </strong>
+                <span class="we-ProductsGrid-item-discount hidden"><span></span>${ 'off' @ i18n, context='html' }</span>
+                <a href="${product.path}" class="we-ProductsGrid-item-link"></a>
+            </div>
+        </li>
+    </ul>
 </div>

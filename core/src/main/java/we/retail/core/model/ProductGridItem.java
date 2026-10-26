@@ -18,6 +18,7 @@ package we.retail.core.model;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -83,8 +84,8 @@ public class ProductGridItem {
         }
 
         if (product instanceof ConfigurableProduct) {
-            ConfigurableProduct configurableProduct = (ConfigurableProduct) product;
-            for (ConfigurableProductOptions option : configurableProduct.getConfigurableOptions()) {
+            List<ConfigurableProductOptions> options = ((ConfigurableProduct) product).getConfigurableOptions();
+            for (ConfigurableProductOptions option : options != null ? options : Collections.<ConfigurableProductOptions>emptyList()) {
                 if ("color".equals(option.getAttributeCode())) {
                     for (ConfigurableProductOptionsValues value : option.getValues()) {
                         productFilters.setColor(StringUtils.lowerCase(value.getLabel()));
