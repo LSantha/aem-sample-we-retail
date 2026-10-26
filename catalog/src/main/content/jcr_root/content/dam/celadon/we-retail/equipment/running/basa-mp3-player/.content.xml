@@ -45,7 +45,7 @@
                 size="one"
                 size_x0040_LastModified="{Date}2026-06-24T12:58:15.554+03:00"
                 size_x0040_LastModifiedBy="admin"
-                sku="30941863"
+                sku="30941863-one"
                 sku_x0040_LastModified="{Date}2026-06-24T12:58:15.552+03:00"
                 sku_x0040_LastModifiedBy="admin"/>
         </data>
@@ -62,7 +62,7 @@
                 string_x0040_name="Basa MP3 Player"
                 string_x0040_short_description="equipment"
                 string_x0040_size="one"
-                string_x0040_sku="30941863"/>
+                string_x0040_sku="30941863-one"/>
         </indexedData>
         <metadata
             cq:tags="[we-retail:equipment,we-retail:activity/running]"

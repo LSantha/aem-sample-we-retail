@@ -35,6 +35,14 @@
         });
     }
 
+    function decodeHash(hash) {
+        try {
+            return decodeURIComponent(hash);
+        } catch (e) {
+            return hash;
+        }
+    }
+
     Vue.component('we-product-variant', {
         props: [
             'isBase',
@@ -152,7 +160,7 @@
                     var self = this;
                     var done = false;
                     if (window.location.hash) {
-                        var sku = window.location.hash.slice(1);
+                        var sku = decodeHash(window.location.hash.slice(1));
                         self.variants.forEach(function (product) {
                             if (done) {
                                 return;

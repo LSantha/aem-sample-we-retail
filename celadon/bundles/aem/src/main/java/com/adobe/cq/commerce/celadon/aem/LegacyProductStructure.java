@@ -127,6 +127,18 @@ public final class LegacyProductStructure {
     }
 
     /**
+     * The SKU classic We.Retail exposes for a product or variant: its {@code identifier}, followed by
+     * {@code -} and its {@code size} when it has one, unchanged. Variants inherit both from their
+     * parent variants and their product. Blank when there is no identifier.
+     */
+    public static String classicSku(String identifier, String size) {
+        if (identifier == null || identifier.isBlank()) {
+            return "";
+        }
+        return size == null || size.isEmpty() ? identifier : identifier + "-" + size;
+    }
+
+    /**
      * Whether a product fragment the import did not write should be removed: always when the import
      * wrote its SKU elsewhere, and for any other product only when pruning.
      */

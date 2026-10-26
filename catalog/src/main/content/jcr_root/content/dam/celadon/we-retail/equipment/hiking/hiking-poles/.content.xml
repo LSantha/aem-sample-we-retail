@@ -47,7 +47,7 @@
                 size="Regular"
                 size_x0040_LastModified="{Date}2026-06-24T12:58:15.748+03:00"
                 size_x0040_LastModifiedBy="admin"
-                sku="170227049"
+                sku="170227049-Regular"
                 sku_x0040_LastModified="{Date}2026-06-24T12:58:15.746+03:00"
                 sku_x0040_LastModifiedBy="admin"/>
         </data>
@@ -65,7 +65,7 @@
                 string_x0040_name="Hiking Poles"
                 string_x0040_short_description="Increase your hiking time with the ease and comfort of hiking poles.  Rust proof and added traction make this a versatile essential for any hiker."
                 string_x0040_size="Regular"
-                string_x0040_sku="170227049"/>
+                string_x0040_sku="170227049-Regular"/>
         </indexedData>
         <metadata
             cq:tags="[we-retail:activity/hiking,we-retail:equipment]"

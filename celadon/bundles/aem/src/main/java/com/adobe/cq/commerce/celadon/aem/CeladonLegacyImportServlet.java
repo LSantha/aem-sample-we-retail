@@ -517,8 +517,8 @@ public class CeladonLegacyImportServlet extends SlingAllMethodsServlet {
         List<Map<String, Object>> leafVariants = new ArrayList<>();
         if (!variantAxes.isEmpty()) {
             collectLeafVariants(product, AemRepositorySupport.map(
-                    "_resolvedSkuBase", productSku,
-                    "_resolvedSkuBaseOwn", true
+                    "_skuIdentifier", firstNonBlank(stringValue(product.get("identifier")), productSku),
+                    "_skuSize", stringValue(product.get("size"))
             ), leafVariants);
         }
         List<String> optionPaths = buildManifestOptionReferences(optionWriter, leafVariants,
@@ -997,15 +997,15 @@ public class CeladonLegacyImportServlet extends SlingAllMethodsServlet {
             hasChildVariant = true;
             Map<String, Object> merged = new LinkedHashMap<>(inherited);
             merged.putAll(child);
-            merged.put("_parentResolvedSkuBase", stringValue(inherited.get("_resolvedSkuBase")));
-            String ownSkuBase = firstNonBlank(
-                    stringValue(child.get("sku")),
-                    stringValue(child.get("identifier"))
-            );
-            merged.put("_resolvedSkuBase", ownSkuBase.isBlank()
-                    ? stringValue(inherited.get("_resolvedSkuBase"))
-                    : ownSkuBase);
-            merged.put("_resolvedSkuBaseOwn", !ownSkuBase.isBlank());
+            merged.put("_skuIdentifier", firstNonBlank(
+                    stringValue(child.get("identifier")),
+                    stringValue(inherited.get("_skuIdentifier"))
+            ));
+            merged.put("_skuSize", firstNonBlank(
+                    stringValue(child.get("size")),
+                    stringValue(inherited.get("_skuSize"))
+            ));
+            merged.put("_ownSku", stringValue(child.get("sku")));
             merged.put("_variantKey", entry.getKey());
             collectLeafVariants(child, merged, leaves);
         }
@@ -1032,7 +1032,7 @@ public class CeladonLegacyImportServlet extends SlingAllMethodsServlet {
     private String legacyBaseSku(Map<String, Object> product, String productKey) {
         return firstNonBlank(
                 stringValue(product.get("sku")),
-                stringValue(product.get("identifier")),
+                LegacyProductStructure.classicSku(stringValue(product.get("identifier")), stringValue(product.get("size"))),
                 productKey
         );
     }
@@ -1065,7 +1065,7 @@ public class CeladonLegacyImportServlet extends SlingAllMethodsServlet {
                                           String productSku,
                                           String variationName,
                                           Set<String> seenVariantSkus) {
-        String candidate = legacyVariantSku(product, variant, productSku, variationName);
+        String candidate = legacyVariantSku(variant, variationName);
         if (seenVariantSkus.add(candidate)) {
             return candidate;
         }
@@ -1077,42 +1077,20 @@ public class CeladonLegacyImportServlet extends SlingAllMethodsServlet {
         return fallback;
     }
 
-    private String legacyVariantSku(Map<String, Object> product,
-                                    Map<String, Object> variant,
-                                    String productSku,
-                                    String variationName) {
-        String resolvedBase = firstNonBlank(
-                stringValue(variant.get("_resolvedSkuBase")),
-                stringValue(product.get("identifier")),
-                stringValue(product.get("sku")),
-                productSku
+    private String legacyVariantSku(Map<String, Object> variant, String variationName) {
+        String sku = firstNonBlank(
+                stringValue(variant.get("_ownSku")),
+                LegacyProductStructure.classicSku(stringValue(variant.get("_skuIdentifier")),
+                        stringValue(variant.get("_skuSize")))
         );
-        boolean ownResolvedBase = booleanValue(variant.get("_resolvedSkuBaseOwn"));
-        String parentResolvedBase = stringValue(variant.get("_parentResolvedSkuBase"));
-        String size = sanitizeVariationValue(stringValue(variant.get("size")));
-        if (!resolvedBase.isBlank() && !size.isBlank()) {
-            if (!ownResolvedBase || resolvedBase.equals(parentResolvedBase)) {
-                return resolvedBase + "-" + size;
-            }
-        }
-        if (!resolvedBase.isBlank()) {
-            return resolvedBase;
+        if (!sku.isBlank()) {
+            return sku;
         }
         String variantKey = sanitizeVariationValue(stringValue(variant.get("_variantKey")));
         if (!variantKey.isBlank()) {
             return variantKey;
         }
         return "legacy-" + sanitizeVariationValue(variationName);
-    }
-
-    private boolean booleanValue(Object value) {
-        if (value instanceof Boolean bool) {
-            return bool;
-        }
-        if (value == null) {
-            return false;
-        }
-        return Boolean.parseBoolean(value.toString());
     }
 
     private Map<String, Object> fetchJson(String url, String authorization) throws Exception {

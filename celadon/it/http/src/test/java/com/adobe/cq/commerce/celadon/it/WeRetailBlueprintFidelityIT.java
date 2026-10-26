@@ -54,7 +54,7 @@ public class WeRetailBlueprintFidelityIT extends GraphqlITBase {
     private static final String HIKING_PANTS_SKU = "331050524";
     private static final String HIKING_PANTS_URL_KEY = "hiking-pants";
     // Declares no cq:productVariantAxes and references its image through assets/* instead of image.
-    private static final String HIKING_POLES_SKU = "170227049";
+    private static final String HIKING_POLES_SKU = "170227049-Regular";
 
     /**
      * Golden ground truth for the complete blueprint catalog (60 products), captured from the live
@@ -65,8 +65,8 @@ public class WeRetailBlueprintFidelityIT extends GraphqlITBase {
      */
     private static final String[] CATALOG = {
             "116138647|S|faba-running-pants|equipment,equipment/running,women,women/pants",
-            "170227049|S|hiking-poles|equipment,equipment/hiking",
-            "30941863|S|basa-mp3-player|equipment,equipment/running",
+            "170227049-Regular|S|hiking-poles|equipment,equipment/hiking",
+            "30941863-one|S|basa-mp3-player|equipment,equipment/running",
             "331050524|S|hiking-pants|equipment,equipment/hiking,women,women/pants",
             "84391210|S|spixa-runners|equipment,equipment/running",
             "90019930|S|gloves|women,women/gloves",
@@ -272,6 +272,19 @@ public class WeRetailBlueprintFidelityIT extends GraphqlITBase {
         postQuery(Queries.WR_PRODUCT_BY_URL_KEY_RELATED, Map.of("urlKey", "el-gordo-down-jacket"))
                 .body("data.products.items[0].related_products.sku",
                         contains("woskwislt", "meotwipot", "meotwibrt", "meotwidot", "meotwislt", "meskwimis"));
+    }
+
+    /**
+     * SKUs are the ones classic We.Retail exposes: the identifier followed by the size, unchanged. A
+     * simple product whose master has a size carries it too.
+     */
+    @Test
+    public void shouldKeepTheClassicSkus() {
+        postQuery(Queries.WR_PRODUCT_BY_URL_KEY_VARIANTS, Map.of("urlKey", "pro-series-swim-goggles"))
+                .body("data.products.items[0].variants.product.sku",
+                        contains("eqswsuprs.1-One size", "eqswsuprs.2-One size", "eqswsuprs.3-One size"));
+        postQuery(Queries.WR_PRODUCT_BY_URL_KEY_VARIANTS, Map.of("urlKey", "basa-mp3-player"))
+                .body("data.products.items[0].sku", equalTo("30941863-one"));
     }
 
     /**

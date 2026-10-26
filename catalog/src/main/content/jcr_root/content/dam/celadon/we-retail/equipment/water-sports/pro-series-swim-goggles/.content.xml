@@ -98,7 +98,7 @@
                 size="One size"
                 size_x0040_LastModified="{Date}2026-06-24T12:58:16.384+03:00"
                 size_x0040_LastModifiedBy="admin"
-                sku="eqswsuprs.1-Onesize"
+                sku="eqswsuprs.1-One size"
                 sku_x0040_LastModified="{Date}2026-06-24T12:58:16.384+03:00"
                 sku_x0040_LastModifiedBy="admin"/>
             <var-identifier-eqswsuprs2-size-onesize-color-green
@@ -145,7 +145,7 @@
                 size="One size"
                 size_x0040_LastModified="{Date}2026-06-24T12:58:16.402+03:00"
                 size_x0040_LastModifiedBy="admin"
-                sku="eqswsuprs.2-Onesize"
+                sku="eqswsuprs.2-One size"
                 sku_x0040_LastModified="{Date}2026-06-24T12:58:16.401+03:00"
                 sku_x0040_LastModifiedBy="admin"/>
             <var-identifier-eqswsuprs3-size-onesize-color-yellow
@@ -192,7 +192,7 @@
                 size="One size"
                 size_x0040_LastModified="{Date}2026-06-24T12:58:16.481+03:00"
                 size_x0040_LastModifiedBy="admin"
-                sku="eqswsuprs.3-Onesize"
+                sku="eqswsuprs.3-One size"
                 sku_x0040_LastModified="{Date}2026-06-24T12:58:16.481+03:00"
                 sku_x0040_LastModifiedBy="admin"/>
         </data>
@@ -228,7 +228,7 @@
                 string_x0040_reviews="&#xa;By Bjornar&#xa;from The Burbs of MN&#xa;&#xa;These are my first goggles I bought last year and I have probably 20+ miles in them at this point. They are still keeping out leaks and fitting well. I first tried the foam gasket bargain goggles--those were bad, very bad. The rubber gasket does it's job so well I have lines afterward on my face. The tinted lenses are not too dark to use indoors in the pool but will give decent sun coverage outdoors. Range of vision is good and the fit is nice and snug. Obviously they will fog up if mistreated or simply because of the head of your body, but that's not the end of the world. You don't need to be able to find pennies on the bottom of the pool or anything."
                 string_x0040_short_description="equipment"
                 string_x0040_size="One size"
-                string_x0040_sku="eqswsuprs.1-Onesize"
+                string_x0040_sku="eqswsuprs.1-One size"
                 stringArray_x0040_configurableOptions="[/content/dam/celadon/we-retail/_options/color--blue-green-yellow,/content/dam/celadon/we-retail/_options/size--one-size]"/>
             <var-identifier-eqswsuprs2-size-onesize-color-green
                 jcr:mixinTypes="[dam:IndexedFragmentData]"
@@ -245,7 +245,7 @@
                 string_x0040_reviews="&#xa;By Bjornar&#xa;from The Burbs of MN&#xa;&#xa;These are my first goggles I bought last year and I have probably 20+ miles in them at this point. They are still keeping out leaks and fitting well. I first tried the foam gasket bargain goggles--those were bad, very bad. The rubber gasket does it's job so well I have lines afterward on my face. The tinted lenses are not too dark to use indoors in the pool but will give decent sun coverage outdoors. Range of vision is good and the fit is nice and snug. Obviously they will fog up if mistreated or simply because of the head of your body, but that's not the end of the world. You don't need to be able to find pennies on the bottom of the pool or anything."
                 string_x0040_short_description="equipment"
                 string_x0040_size="One size"
-                string_x0040_sku="eqswsuprs.2-Onesize"
+                string_x0040_sku="eqswsuprs.2-One size"
                 stringArray_x0040_configurableOptions="[/content/dam/celadon/we-retail/_options/color--blue-green-yellow,/content/dam/celadon/we-retail/_options/size--one-size]"/>
             <var-identifier-eqswsuprs3-size-onesize-color-yellow
                 jcr:mixinTypes="[dam:IndexedFragmentData]"
@@ -262,7 +262,7 @@
                 string_x0040_reviews="&#xa;By Bjornar&#xa;from The Burbs of MN&#xa;&#xa;These are my first goggles I bought last year and I have probably 20+ miles in them at this point. They are still keeping out leaks and fitting well. I first tried the foam gasket bargain goggles--those were bad, very bad. The rubber gasket does it's job so well I have lines afterward on my face. The tinted lenses are not too dark to use indoors in the pool but will give decent sun coverage outdoors. Range of vision is good and the fit is nice and snug. Obviously they will fog up if mistreated or simply because of the head of your body, but that's not the end of the world. You don't need to be able to find pennies on the bottom of the pool or anything."
                 string_x0040_short_description="equipment"
                 string_x0040_size="One size"
-                string_x0040_sku="eqswsuprs.3-Onesize"
+                string_x0040_sku="eqswsuprs.3-One size"
                 stringArray_x0040_configurableOptions="[/content/dam/celadon/we-retail/_options/color--blue-green-yellow,/content/dam/celadon/we-retail/_options/size--one-size]"/>
         </indexedData>
         <metadata

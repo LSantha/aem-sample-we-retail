@@ -109,10 +109,13 @@ fresh deploy, with **no import step**:
 - Blueprint-mode catalog content under `content/dam/celadon/we-retail/`: the authored
   category tree (`women`, `men`, `equipment`) plus `_manifest` and `_options`. Product
   fragments live under their blueprint categories and carry editorial slugs used for
-  PDP/PLP URLs. `description` holds the classic `summary` (the product page summary) and
-  `short_description` the classic `jcr:description` (the label above the product name and
-  the product card subtitle). Product fragments carry the classic product tags in
-  `metadata/cq:tags`, mirrored onto each variation.
+  PDP/PLP URLs. Product and variant SKUs are the ones classic We.Retail exposes: the
+  `identifier`, followed by `-` and the size when there is one (e.g. `eqswsuprs.2-One size`,
+  `170227049-Regular`); the product page decodes the `#<sku>` it keeps in the URL, so
+  SKUs with spaces select their variant. `description` holds the classic `summary` (the
+  product page summary) and `short_description` the classic `jcr:description` (the label
+  above the product name and the product card subtitle). Product fragments carry the
+  classic product tags in `metadata/cq:tags`, mirrored onto each variation.
 - The tags those products use, under `content/_cq_tags/we-retail/`, as the importer
   creates them from the classic taxonomy, one `.content.xml` per tag.
 

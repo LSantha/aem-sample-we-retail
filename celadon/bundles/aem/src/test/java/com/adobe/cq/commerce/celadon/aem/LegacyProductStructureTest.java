@@ -171,4 +171,23 @@ public class LegacyProductStructureTest {
         assertTrue(LegacyProductStructure.isStaleProduct("RETIRED-1", imported, true));
         assertTrue(LegacyProductStructure.isStaleProduct("", imported, true));
     }
+
+    @Test
+    public void classicSku_appendsTheSizeUnchangedLikeClassicWeRetail() {
+        assertEquals("eqswsuprs.2-One size", LegacyProductStructure.classicSku("eqswsuprs.2", "One size"));
+        assertEquals("170227049-Regular", LegacyProductStructure.classicSku("170227049", "Regular"));
+        assertEquals("meskwielt.1-XS", LegacyProductStructure.classicSku("meskwielt.1", "XS"));
+    }
+
+    @Test
+    public void classicSku_isTheIdentifierWithoutASize() {
+        assertEquals("eqrusubpe", LegacyProductStructure.classicSku("eqrusubpe", ""));
+        assertEquals("eqrusubpe", LegacyProductStructure.classicSku("eqrusubpe", null));
+    }
+
+    @Test
+    public void classicSku_isBlankWithoutAnIdentifier() {
+        assertEquals("", LegacyProductStructure.classicSku("", "XS"));
+        assertEquals("", LegacyProductStructure.classicSku(null, "XS"));
+    }
 }
