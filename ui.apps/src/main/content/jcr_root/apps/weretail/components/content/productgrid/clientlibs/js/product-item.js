@@ -53,11 +53,7 @@
                 if (vm[filter]) {
                     switch (filter) {
                         case 'price':
-                            var pricesList = vm[filter].split(',');
-
-                            pricesList.forEach(function (price, index) {
-                                pricesList[index] = parsePrice(price);
-                            });
+                            var pricesList = parsePrices(vm[filter]);
 
                             vm[filter] = pricesList;
 
@@ -147,34 +143,33 @@
     });
 
     function getPriceList(prices) {
-        var list = [],
-            maxPrice,
-            step = 50;
-
-        maxPrice = Math.max.apply(null, prices);
-
-        for (var i = 0; i < maxPrice / step; i++) {
-            list[i] = {
-                label: '$' + (step * i) + ' - $' + (step * (i+1) - 1),
-                list: []
-            };
-        }
+        var step = 50,
+            buckets = {};
 
         prices.forEach(function (price) {
             var pos = Math.floor(price / step);
-            if (list[pos]) {
-                list[pos].list.push(price);
-            }
+            buckets[pos] = buckets[pos] || [];
+            buckets[pos].push(price);
         });
 
-        return list;
+        return Object.keys(buckets).map(Number).sort(function (a, b) {
+            return a - b;
+        }).map(function (pos) {
+            return {
+                label: formatPrice(step * pos) + ' - ' + formatPrice(step * (pos + 1) - 1),
+                list: buckets[pos]
+            };
+        });
     }
 
-    function parsePrice(price) {
-        var r = /(\d+(?:.\d{1,2}))/
-            , e = r.exec(price);
+    function parsePrices(value) {
+        return (String(value).match(/\d+(?:,\d{3})*(?:\.\d+)?/g) || []).map(function (price) {
+            return parseFloat(price.replace(/,/g, ''));
+        });
+    }
 
-        return e ? parseFloat(e[0]) : price;
+    function formatPrice(amount) {
+        return '$' + amount.toLocaleString('en-US');
     }
 
     function sortSizes(sizes) {

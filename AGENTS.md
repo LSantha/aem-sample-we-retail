@@ -69,7 +69,10 @@ loads all picked SKUs in one query; a picked variant keeps the label and filters
 product. Product links are the CIF product list items' URLs.
 
 Product search: `ProductGrid` shows CIF search results only on the configured
-`cq:cifSearchResultsPage` (`?search_query=`). The header search pop-up adds a products
+`cq:cifSearchResultsPage` (`?search_query=`). Like category pages, the search results page
+(`/content/we-retail/us/en/products/search`) has the client-side product filters (color,
+price, size), built from the listed products; the price filter lists only the $50 ranges
+that contain a listed product. The header search pop-up adds a products
 section and a "see all results" link from
 `we.retail.core.commerce.cif.search.ProductSuggestionsServlet`
 (`<page>.productsuggestions.json?search_query=`); its script lives in the

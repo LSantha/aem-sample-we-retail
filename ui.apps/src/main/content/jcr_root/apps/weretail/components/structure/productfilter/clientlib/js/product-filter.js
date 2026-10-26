@@ -33,8 +33,8 @@
     we.filterStore = we.filterStore || new FiltersStore();
 
     function priceLowerBound(label) {
-        var match = /\$(\d+)/.exec(label || '');
-        return match ? match[1] : null;
+        var match = /\$([\d,]+)/.exec(label || '');
+        return match ? match[1].replace(/,/g, '') : null;
     }
 
     function writeFiltersToHash(activeFilters) {
