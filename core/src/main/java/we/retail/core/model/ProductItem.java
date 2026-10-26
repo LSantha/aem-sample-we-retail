@@ -100,8 +100,23 @@ public class ProductItem {
                     resolvedImage, valueLookup, request));
             }
         } else {
-            variants.add(this);
+            variants.add(new ProductItem(this));
         }
+    }
+
+    private ProductItem(ProductItem product) {
+        path = product.path;
+        pagePath = product.pagePath;
+        sku = product.sku;
+        title = product.title;
+        description = product.description;
+        price = product.price;
+        summary = product.summary;
+        imageUrl = product.imageUrl;
+        thumbnailUrl = product.thumbnailUrl;
+        variants = Collections.emptyList();
+        variantsAxesValues = Collections.emptyMap();
+        variantAxesMap = Collections.emptyMap();
     }
 
     private ProductItem(Variant variant, String resolvedPagePath, String resolvedDescription, String resolvedSummary,

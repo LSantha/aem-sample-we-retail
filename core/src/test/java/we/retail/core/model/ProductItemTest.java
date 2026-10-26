@@ -39,6 +39,7 @@ import com.adobe.cq.commerce.magento.graphql.ProductInterfaceQuery;
 import org.apache.sling.api.SlingHttpServletRequest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -69,6 +70,27 @@ public class ProductItemTest {
             item.getVariants().get(0).getPagePath());
         assertEquals("9", item.getVariants().get(0).getVariantValueForAxis("size"));
         assertTrue(item.getVariantsAxesValues().get("size").contains("9"));
+    }
+
+    @Test
+    public void testListsASimpleProductAsItsOnlyVariantWithoutSubVariants() {
+        SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
+        when(request.getRequestURI()).thenReturn("/content/we-retail/us/en/products/product-page.html/equipment/hiking/hiking-poles.html");
+        Product product = createProduct("170227049", "unused");
+        when(product.getVariants()).thenReturn(Collections.<Variant>emptyList());
+        when(product.getVariantAttributes()).thenReturn(Collections.<VariantAttribute>emptyList());
+
+        ProductItem item = new ProductItem(product, request, null);
+
+        assertEquals(1, item.getVariants().size());
+        ProductItem variant = item.getVariants().get(0);
+        assertNotSame(item, variant);
+        assertTrue(variant.getVariants().isEmpty());
+        assertEquals("170227049", variant.getSku());
+        assertEquals("Sussex Rain Boots", variant.getTitle());
+        assertEquals("$65.00", variant.getPrice());
+        assertEquals(item.getPagePath(), variant.getPagePath());
+        assertEquals(item.getImageUrl(), variant.getImageUrl());
     }
 
     @Test
