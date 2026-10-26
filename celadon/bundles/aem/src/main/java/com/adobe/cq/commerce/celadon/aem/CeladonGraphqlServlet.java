@@ -20,6 +20,7 @@ import com.adobe.cq.commerce.celadon.aem.catalog.AemCatalogGateway;
 import com.adobe.cq.commerce.celadon.core.api.CeladonGraphqlEngine;
 import com.adobe.cq.commerce.celadon.core.api.FetcherContext;
 import com.adobe.cq.commerce.celadon.core.api.JsonSupport;
+import com.adobe.cq.commerce.celadon.core.api.RelatedProductsProvider;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,6 +42,9 @@ import org.apache.sling.api.resource.observation.ResourceChangeListener;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardContextSelect;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPattern;
 import org.osgi.service.metatype.annotations.Designate;
@@ -75,6 +79,11 @@ public class CeladonGraphqlServlet extends HttpServlet implements ResourceChange
     @Reference
     private ResourceResolverFactory resourceResolverFactory;
 
+    /** Serves {@code related_products}; without one the field is empty. */
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC,
+            policyOption = ReferencePolicyOption.GREEDY)
+    private volatile RelatedProductsProvider relatedProductsProvider;
+
     /** One engine per catalog, each owning its own schema + snapshot cache. */
     final Map<String, CeladonGraphqlEngine> engines = new ConcurrentHashMap<>();
 
@@ -93,7 +102,12 @@ public class CeladonGraphqlServlet extends HttpServlet implements ResourceChange
     /** Builds (or returns the cached) engine for {@code catalog}. */
     private CeladonGraphqlEngine engineFor(String catalog) {
         return engines.computeIfAbsent(catalog, c ->
-                new CeladonGraphqlEngine(new FetcherContext(c), loadManifest(c)));
+                new CeladonGraphqlEngine(new FetcherContext(c), loadManifest(c), this::relatedProducts));
+    }
+
+    private List<String> relatedProducts(String product, List<String> candidates) {
+        RelatedProductsProvider provider = relatedProductsProvider;
+        return provider == null ? List.of() : provider.relatedProducts(product, candidates);
     }
 
     private AttributeManifest loadManifest(String catalog) {

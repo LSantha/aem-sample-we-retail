@@ -17,6 +17,7 @@ package com.adobe.cq.commerce.celadon.core.impl;
 
 import com.adobe.cq.commerce.celadon.core.api.CatalogGateway;
 import com.adobe.cq.commerce.celadon.core.api.JsonSupport;
+import com.adobe.cq.commerce.celadon.core.api.RelatedProductsProvider;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeEntry;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
 import com.adobe.cq.commerce.celadon.core.api.attribute.NormalizedType;
@@ -39,6 +40,8 @@ import java.util.logging.Logger;
 
 public final class CatalogService {
     private static final String REQUEST_CONTEXT_KEY = "celadonRequestContext";
+    // Hidden key on product payloads: lets field fetchers find the catalog product behind a payload.
+    private static final String SOURCE_PRODUCT_KEY = "__celadonProduct";
     private static final Logger LOG = Logger.getLogger(CatalogService.class.getName());
 
     private final AttributeManifest manifest;
@@ -46,6 +49,7 @@ public final class CatalogService {
     // that collide with these are NOT injected into the result maps, since the base
     // schema already owns those fields (e.g. sku, name, price).
     private final Set<String> reservedFields;
+    private final RelatedProductsProvider relatedProductsProvider;
 
     public CatalogService() {
         this(AttributeManifest.empty(""), Set.of());
@@ -56,12 +60,49 @@ public final class CatalogService {
     }
 
     public CatalogService(AttributeManifest manifest, Set<String> reservedFields) {
+        this(manifest, reservedFields, null);
+    }
+
+    public CatalogService(AttributeManifest manifest, Set<String> reservedFields, RelatedProductsProvider relatedProductsProvider) {
         this.manifest = manifest == null ? AttributeManifest.empty("") : manifest;
         this.reservedFields = reservedFields == null ? Set.of() : Set.copyOf(reservedFields);
+        this.relatedProductsProvider = relatedProductsProvider;
     }
 
     AttributeManifest manifest() {
         return manifest;
+    }
+
+    /**
+     * Resolves {@code related_products} through the {@link RelatedProductsProvider}, so the products are only
+     * looked up when a query selects the field.
+     */
+    List<Map<String, Object>> relatedProducts(DataFetchingEnvironment environment) throws IOException, InterruptedException {
+        Object source = environment.getSource() instanceof Map<?, ?> map ? map.get(SOURCE_PRODUCT_KEY) : null;
+        if (relatedProductsProvider == null || !(source instanceof CatalogProduct product)) {
+            return List.of();
+        }
+        GraphqlRequestContext requestContext = requestContext(environment);
+        CatalogSnapshot snapshot = requestContext.snapshot();
+        List<String> related;
+        try {
+            related = relatedProductsProvider.relatedProducts(product.repositoryPath(), snapshot.productPaths());
+        } catch (RuntimeException e) {
+            LOG.log(Level.WARNING, "Related products of " + product.repositoryPath() + " could not be resolved", e);
+            return List.of();
+        }
+        if (related == null) {
+            return List.of();
+        }
+        List<Map<String, Object>> result = new ArrayList<>();
+        Set<String> seen = new LinkedHashSet<>();
+        for (String path : related) {
+            CatalogProduct relatedProduct = snapshot.productsByPath().get(path);
+            if (relatedProduct != null && relatedProduct != product && seen.add(path)) {
+                result.add(buildProductMap(requestContext, snapshot, relatedProduct, false));
+            }
+        }
+        return result;
     }
 
     Map<String, Object> products(DataFetchingEnvironment environment) throws IOException, InterruptedException {
@@ -883,12 +924,14 @@ public final class CatalogService {
             result.put("meta_title", "");
             result.put("special_price", null);
             result.put("special_to_date", null);
-            result.put("related_products", List.of());
             result.put("crosssell_products", List.of());
             result.put("upsell_products", List.of());
             populateManifestAttributes(result, product, null);
             result.put("__typename", variantProduct ? "SimpleProduct" : type);
             result.put("__resolveType", variantProduct ? "SimpleProduct" : type);
+            if (!variantProduct) {
+                result.put(SOURCE_PRODUCT_KEY, product);
+            }
             return result;
         } catch (IOException | InterruptedException e) {
             throw new IllegalStateException("Failed to build product payload", e);

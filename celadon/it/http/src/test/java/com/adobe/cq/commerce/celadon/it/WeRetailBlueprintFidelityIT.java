@@ -264,6 +264,17 @@ public class WeRetailBlueprintFidelityIT extends GraphqlITBase {
     }
 
     /**
+     * Related products are the products sharing the most classic tags, up to six. The El Gordo
+     * jacket gets the other winter coats and the skiing gloves.
+     */
+    @Test
+    public void shouldRelateProductsSharingTheMostTags() {
+        postQuery(Queries.WR_PRODUCT_BY_URL_KEY_RELATED, Map.of("urlKey", "el-gordo-down-jacket"))
+                .body("data.products.items[0].related_products.sku",
+                        contains("woskwislt", "meotwipot", "meotwibrt", "meotwidot", "meotwislt", "meskwimis"));
+    }
+
+    /**
      * A master that declares no {@code cq:productVariantAxes} is a simple product even though it has
      * a variant child, and an image referenced through {@code assets/*} is imported like an
      * {@code image} child. The Hiking Poles carry both legacy shapes.

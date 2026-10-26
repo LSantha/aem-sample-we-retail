@@ -45,6 +45,8 @@ final class Queries {
     static final String WR_PRODUCT_BY_URL_KEY_DESCRIPTIONS = "query($urlKey:String!){ products(filter:{ url_key:{ eq:$urlKey } }) { items { sku description { html } short_description { html } } } }";
     // Product by url_key with the name of every variant — classic colour-level variant titles.
     static final String WR_PRODUCT_BY_URL_KEY_VARIANT_NAMES = "query($urlKey:String!){ products(filter:{ url_key:{ eq:$urlKey } }) { items { sku name ... on ConfigurableProduct { variants { product { sku name } } } } } }";
+    // Product by url_key with its related products — the tag-based related products provider.
+    static final String WR_PRODUCT_BY_URL_KEY_RELATED = "query($urlKey:String!){ products(filter:{ url_key:{ eq:$urlKey } }) { items { sku related_products { sku } } } }";
     // Whole-catalog probe: every product with its type, editorial url_key, full category membership
     // and (for configurables) variant axes + flattened variants — drives all-product verification.
     static final String WR_ALL_PRODUCTS = "{ products(filter:{}, currentPage:1, pageSize:100){ total_count items { __typename sku url_key categories { url_path } ... on ConfigurableProduct { configurable_options { attribute_code } variants { product { sku } } } } } }";

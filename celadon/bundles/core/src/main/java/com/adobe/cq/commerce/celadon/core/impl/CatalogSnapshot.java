@@ -19,6 +19,7 @@ import com.adobe.cq.commerce.celadon.core.api.CatalogGateway;
 import com.adobe.cq.commerce.celadon.core.api.JsonSupport;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -32,6 +33,8 @@ public final class CatalogSnapshot {
     private final StableIdRegistry stableIdRegistry;
     private final Map<String, CatalogProduct> productsBySku;
     private final Map<String, Set<CatalogProduct>> productsByCategoryPath;
+    private final Map<String, CatalogProduct> productsByPath;
+    private final List<String> productPaths;
 
     private CatalogSnapshot(Map<String, CatalogCategory> categoriesByPath,
                             List<CatalogProduct> products,
@@ -43,6 +46,12 @@ public final class CatalogSnapshot {
         this.stableIdRegistry = stableIdRegistry;
         this.productsBySku = productsBySku;
         this.productsByCategoryPath = productsByCategoryPath;
+        Map<String, CatalogProduct> byPath = new LinkedHashMap<>();
+        for (CatalogProduct product : products) {
+            byPath.putIfAbsent(product.repositoryPath(), product);
+        }
+        this.productsByPath = Collections.unmodifiableMap(byPath);
+        this.productPaths = List.copyOf(byPath.keySet());
     }
 
     static CatalogSnapshot load(CatalogGateway gateway) throws IOException, InterruptedException {
@@ -112,6 +121,16 @@ public final class CatalogSnapshot {
 
     List<CatalogProduct> products() {
         return products;
+    }
+
+    /** Products by repository path, in catalog order. */
+    Map<String, CatalogProduct> productsByPath() {
+        return productsByPath;
+    }
+
+    /** Repository paths of the products, in catalog order. */
+    List<String> productPaths() {
+        return productPaths;
     }
 
     StableIdRegistry stableIdRegistry() {

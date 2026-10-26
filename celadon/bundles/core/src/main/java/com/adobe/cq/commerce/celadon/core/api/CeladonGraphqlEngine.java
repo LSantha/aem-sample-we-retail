@@ -87,6 +87,7 @@ public final class CeladonGraphqlEngine {
     private final GraphQL graphQL;
     private final CatalogGatewayFactory catalogGatewayFactory;
     private final AttributeManifest manifest;
+    private final RelatedProductsProvider relatedProductsProvider;
     // Shared, catalog-keyed snapshot cache for the engine's lifetime. The catalog
     // is immutable until a re-import + bundle restart (per the import design), so
     // caching the built snapshot avoids reloading the whole catalog from JCR on
@@ -112,6 +113,15 @@ public final class CeladonGraphqlEngine {
         this(fetcherContext, new GsonBuilder().serializeNulls().create(), catalogGatewayFactory, manifest);
     }
 
+    /**
+     * @param relatedProductsProvider resolves {@code related_products}; without one the field is empty
+     */
+    public CeladonGraphqlEngine(FetcherContext fetcherContext,
+                                AttributeManifest manifest,
+                                RelatedProductsProvider relatedProductsProvider) {
+        this(fetcherContext, new GsonBuilder().serializeNulls().create(), null, manifest, relatedProductsProvider);
+    }
+
     CeladonGraphqlEngine(FetcherContext fetcherContext, Gson gson, CatalogGateway catalogGateway) {
         this(fetcherContext, gson, catalogGateway == null ? null : CatalogGatewayFactory.fixed(catalogGateway), null);
     }
@@ -124,6 +134,14 @@ public final class CeladonGraphqlEngine {
                          Gson gson,
                          CatalogGatewayFactory catalogGatewayFactory,
                          AttributeManifest manifest) {
+        this(fetcherContext, gson, catalogGatewayFactory, manifest, null);
+    }
+
+    CeladonGraphqlEngine(FetcherContext fetcherContext,
+                         Gson gson,
+                         CatalogGatewayFactory catalogGatewayFactory,
+                         AttributeManifest manifest,
+                         RelatedProductsProvider relatedProductsProvider) {
         this.fetcherContext = Objects.requireNonNull(fetcherContext, "fetcherContext");
         this.gson = gson == null ? new GsonBuilder().serializeNulls().create() : gson;
         // The core bundle ships no default gateway: the only implementation,
@@ -140,6 +158,7 @@ public final class CeladonGraphqlEngine {
         this.manifest = manifest == null
                 ? AttributeManifest.empty(this.fetcherContext.basePath())
                 : manifest;
+        this.relatedProductsProvider = relatedProductsProvider;
         GraphQLSchema schema = buildSchema();
         this.graphQL = GraphQL.newGraphQL(schema).build();
     }
@@ -227,7 +246,7 @@ public final class CeladonGraphqlEngine {
         if (!outputAddendum.isBlank()) {
             registry.merge(new SchemaParser().parse(outputAddendum));
         }
-        CatalogService catalogService = new CatalogService(manifest, outputContext.reservedFields());
+        CatalogService catalogService = new CatalogService(manifest, outputContext.reservedFields(), relatedProductsProvider);
         RuntimeWiring wiring = RuntimeWiring.newRuntimeWiring()
                 .wiringFactory(new CeladonWiringFactory(catalogService, buildAttributeMetadata(registry), catalogName()))
                 .build();

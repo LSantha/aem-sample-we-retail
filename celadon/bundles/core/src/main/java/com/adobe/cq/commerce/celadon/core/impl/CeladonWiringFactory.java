@@ -61,6 +61,9 @@ public final class CeladonWiringFactory implements WiringFactory {
         if ("Query".equals(typeName)) {
             return queryFetchers.getOrDefault(fieldName, ignored -> Map.of("id", "1"));
         }
+        if ("related_products".equals(fieldName)) {
+            return catalogService::relatedProducts;
+        }
         return dataEnvironment -> defaultFieldValue(dataEnvironment.getSource(), fieldName);
     }
 

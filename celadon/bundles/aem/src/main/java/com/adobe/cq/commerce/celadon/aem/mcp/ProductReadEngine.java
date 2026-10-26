@@ -19,10 +19,15 @@ import com.adobe.cq.commerce.celadon.aem.attribute.manifest.ManifestReaderImpl;
 import com.adobe.cq.commerce.celadon.aem.catalog.AemCatalogGateway;
 import com.adobe.cq.commerce.celadon.core.api.CeladonGraphqlEngine;
 import com.adobe.cq.commerce.celadon.core.api.FetcherContext;
+import com.adobe.cq.commerce.celadon.core.api.RelatedProductsProvider;
 import com.adobe.cq.commerce.celadon.core.api.attribute.AttributeManifest;
 import java.util.Map;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * Runs read-only GraphQL queries against a catalog by reusing the production
@@ -33,13 +38,17 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = ProductReadEngine.class)
 public class ProductReadEngine {
 
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC,
+            policyOption = ReferencePolicyOption.GREEDY)
+    private volatile RelatedProductsProvider relatedProductsProvider;
+
     /** Execute a GraphQL query for the given catalog; returns the raw result map. */
     public Map<String, Object> execute(ResourceResolver resolver, String catalog,
                                        String query, Map<String, Object> variables) {
         AttributeManifest manifest = new ManifestReaderImpl().read(resolver, catalog)
                 .orElse(AttributeManifest.empty(catalog));
         FetcherContext context = new FetcherContext(catalog);
-        CeladonGraphqlEngine engine = new CeladonGraphqlEngine(context, manifest);
+        CeladonGraphqlEngine engine = new CeladonGraphqlEngine(context, manifest, relatedProductsProvider);
         // closeResourceResolver=false: the request resolver is owned by the caller.
         AemCatalogGateway gateway = new AemCatalogGateway(resolver, context, false);
         return engine.execute(query, null, variables == null ? Map.of() : variables, gateway);

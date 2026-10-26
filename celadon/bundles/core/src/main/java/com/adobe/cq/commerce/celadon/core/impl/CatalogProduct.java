@@ -55,6 +55,12 @@ final class CatalogProduct {
         return categoryPath.isBlank() ? nodeName : categoryPath + "/" + nodeName;
     }
 
+    /** The repository path of the product's content fragment if the gateway lists it, {@link #fullPath()} otherwise. */
+    String repositoryPath() {
+        Object path = properties.get("path");
+        return path == null || String.valueOf(path).isBlank() ? fullPath() : String.valueOf(path);
+    }
+
     @SuppressWarnings("unchecked")
     Map<String, Object> elements() {
         Object value = properties.get("elements");
