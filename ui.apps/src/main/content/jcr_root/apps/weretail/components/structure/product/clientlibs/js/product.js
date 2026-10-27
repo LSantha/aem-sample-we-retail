@@ -174,7 +174,7 @@
                         });
                     }
 
-                    if (!done) {
+                    if (!done && self.product) {
                         history.replaceState(null, null, '#' + self.product.sku);
                     }
                 }
