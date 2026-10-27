@@ -71,6 +71,10 @@ public class ProductModel {
         return productItem;
     }
 
+    Product getCifProduct() {
+        return cifProduct;
+    }
+
     public boolean hasVariants() {
         return productItem != null && !productItem.getVariants().isEmpty();
     }

@@ -121,6 +121,10 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
         return Collections.unmodifiableList(items);
     }
 
+    ProductList getCifProductList() {
+        return cifProductList;
+    }
+
     @Override
     public Collection<ListItem> getListItems() {
         return delegate != null ? delegate.getListItems() : Collections.<ListItem>emptyList();

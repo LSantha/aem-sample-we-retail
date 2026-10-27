@@ -32,7 +32,6 @@ import org.apache.sling.models.factory.ModelFactory;
 import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
-import com.adobe.granite.ui.components.ValueMapResourceWrapper;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.Template;
 
@@ -42,8 +41,6 @@ import we.retail.core.commerce.cif.CatalogPlaceholders;
 public class PageHeadMetadata {
     private static final String WERETAIL_PRODUCT_RESOURCE_TYPE = "weretail/components/structure/product";
     private static final String WERETAIL_PRODUCT_GRID_RESOURCE_TYPE = "weretail/components/content/productgrid";
-    private static final String CIF_PRODUCT_RESOURCE_TYPE = "core/cif/components/commerce/product/v2/product";
-    private static final String CIF_PRODUCT_LIST_RESOURCE_TYPE = "core/cif/components/commerce/productlist/v2/productlist";
 
     @Self
     private SlingHttpServletRequest request;
@@ -75,16 +72,17 @@ public class PageHeadMetadata {
         Resource pageContent = currentPage.getContentResource();
         Resource templateStructure = getTemplateStructureResource();
 
+        // Reuse the models of the components on the page, so their GraphQL queries are the same and are only sent once.
         if (siteStructure.isProductPage(currentPage)) {
-            productModel = adaptComponent(pageContent, templateStructure, WERETAIL_PRODUCT_RESOURCE_TYPE, CIF_PRODUCT_RESOURCE_TYPE,
-                Product.class);
+            ProductModel product = adaptComponent(pageContent, templateStructure, WERETAIL_PRODUCT_RESOURCE_TYPE, ProductModel.class);
+            productModel = product != null ? product.getCifProduct() : null;
             return;
         }
 
         if (siteStructure.isCategoryPage(currentPage)) {
-            productListModel = adaptComponent(pageContent, templateStructure, WERETAIL_PRODUCT_GRID_RESOURCE_TYPE,
-                CIF_PRODUCT_LIST_RESOURCE_TYPE,
-                ProductList.class);
+            ProductGrid productGrid = adaptComponent(pageContent, templateStructure, WERETAIL_PRODUCT_GRID_RESOURCE_TYPE,
+                ProductGrid.class);
+            productListModel = productGrid != null ? productGrid.getCifProductList() : null;
         }
     }
 
@@ -129,19 +127,17 @@ public class PageHeadMetadata {
         return StringUtils.EMPTY;
     }
 
-    private <T> T adaptComponent(Resource contentRoot, Resource templateRoot, String sourceResourceType, String targetResourceType,
-        Class<T> adapterType) {
-        Resource component = findDescendantByResourceType(contentRoot, sourceResourceType);
+    private <T> T adaptComponent(Resource contentRoot, Resource templateRoot, String resourceType, Class<T> adapterType) {
+        Resource component = findDescendantByResourceType(contentRoot, resourceType);
         if (component == null) {
-            component = findDescendantByResourceType(templateRoot, sourceResourceType);
+            component = findDescendantByResourceType(templateRoot, resourceType);
         }
         if (component == null) {
             return null;
         }
 
         try {
-            ValueMapResourceWrapper wrappedResource = new ValueMapResourceWrapper(component, targetResourceType);
-            return modelFactory.getModelFromWrappedRequest(request, wrappedResource, adapterType);
+            return modelFactory.getModelFromWrappedRequest(request, component, adapterType);
         } catch (RuntimeException e) {
             return null;
         }
