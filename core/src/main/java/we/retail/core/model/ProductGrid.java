@@ -68,7 +68,7 @@ public class ProductGrid implements com.adobe.cq.wcm.core.components.models.List
     @SlingObject
     private Resource resource;
 
-    @Self
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Via(type = ResourceSuperType.class)
     private com.adobe.cq.wcm.core.components.models.List delegate;
 

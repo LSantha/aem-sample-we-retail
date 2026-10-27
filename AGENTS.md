@@ -81,6 +81,16 @@ category suffix (`category-page.productsuggestions.json/men.html`), and the serv
 both the suggestions and the "see all results" link to that category with `category_uid`;
 elsewhere search covers the whole catalog.
 
+`CatalogPage` gives the product of a product page and the product list of a category page,
+taken from the We.Retail product and product grid component models on the page or in its
+template; `PageHeadMetadata` builds the title, description and canonical URL from it. Because
+the components' own models are reused, their GraphQL queries are identical and CIF's
+per-request response cache sends each only once. A product or category page whose URL names
+a product or category the catalog does not have answers with a 404 in every WCM mode, like
+classic We.Retail: `we.retail.core.commerce.cif.CatalogPageNotFoundFilter` asks `CatalogPage`
+(CIF's own filter does not find the We.Retail components). The template pages, which name
+none, keep CIF's rule: 404 on publish, CIF's placeholder data on author, so they stay editable.
+
 Breadcrumbs keep the classic `we-retail-product-page` policy (start level 5, current page
 hidden); `CatalogBreadcrumb` applies it to the trail the CIF breadcrumb builds on category
 and product pages.

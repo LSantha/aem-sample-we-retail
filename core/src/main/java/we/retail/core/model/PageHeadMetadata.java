@@ -19,70 +19,37 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.factory.ModelFactory;
 
-import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.Template;
 
 import we.retail.core.commerce.cif.CatalogPlaceholders;
 
 @Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class PageHeadMetadata {
-    private static final String WERETAIL_PRODUCT_RESOURCE_TYPE = "weretail/components/structure/product";
-    private static final String WERETAIL_PRODUCT_GRID_RESOURCE_TYPE = "weretail/components/content/productgrid";
 
     @Self
     private SlingHttpServletRequest request;
-
-    @SlingObject
-    private Resource resource;
-
-    @SlingObject
-    private ResourceResolver resourceResolver;
 
     @ScriptVariable
     private Page currentPage;
 
     @Self
-    private SiteStructure siteStructure;
-
-    @OSGiService
-    private ModelFactory modelFactory;
+    private CatalogPage catalogPage;
 
     private Product productModel;
     private ProductList productListModel;
 
     @PostConstruct
     private void initModel() {
-        if (modelFactory == null || request == null || siteStructure == null || currentPage == null) {
-            return;
-        }
-
-        Resource pageContent = currentPage.getContentResource();
-        Resource templateStructure = getTemplateStructureResource();
-
-        // Reuse the models of the components on the page, so their GraphQL queries are the same and are only sent once.
-        if (siteStructure.isProductPage(currentPage)) {
-            ProductModel product = adaptComponent(pageContent, templateStructure, WERETAIL_PRODUCT_RESOURCE_TYPE, ProductModel.class);
-            productModel = product != null ? product.getCifProduct() : null;
-            return;
-        }
-
-        if (siteStructure.isCategoryPage(currentPage)) {
-            ProductGrid productGrid = adaptComponent(pageContent, templateStructure, WERETAIL_PRODUCT_GRID_RESOURCE_TYPE,
-                ProductGrid.class);
-            productListModel = productGrid != null ? productGrid.getCifProductList() : null;
+        if (catalogPage != null) {
+            productModel = catalogPage.getProduct();
+            productListModel = catalogPage.getProductList();
         }
     }
 
@@ -125,54 +92,6 @@ public class PageHeadMetadata {
         }
 
         return StringUtils.EMPTY;
-    }
-
-    private <T> T adaptComponent(Resource contentRoot, Resource templateRoot, String resourceType, Class<T> adapterType) {
-        Resource component = findDescendantByResourceType(contentRoot, resourceType);
-        if (component == null) {
-            component = findDescendantByResourceType(templateRoot, resourceType);
-        }
-        if (component == null) {
-            return null;
-        }
-
-        try {
-            return modelFactory.getModelFromWrappedRequest(request, component, adapterType);
-        } catch (RuntimeException e) {
-            return null;
-        }
-    }
-
-    private Resource getTemplateStructureResource() {
-        if (currentPage == null || resourceResolver == null) {
-            return null;
-        }
-
-        Template template = currentPage.getTemplate();
-        if (template == null) {
-            return null;
-        }
-
-        return resourceResolver.getResource(template.getPath() + "/structure/jcr:content");
-    }
-
-    private Resource findDescendantByResourceType(Resource root, String resourceType) {
-        if (root == null) {
-            return null;
-        }
-
-        if (root.isResourceType(resourceType)) {
-            return root;
-        }
-
-        for (Resource child : root.getChildren()) {
-            Resource match = findDescendantByResourceType(child, resourceType);
-            if (match != null) {
-                return match;
-            }
-        }
-
-        return null;
     }
 
     private String firstMeaningful(String... values) {

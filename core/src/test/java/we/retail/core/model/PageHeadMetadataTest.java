@@ -13,19 +13,14 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
 package we.retail.core.model;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collections;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.factory.ModelFactory;
 import org.junit.Test;
 
-import com.adobe.cq.commerce.core.components.models.common.SiteStructure;
 import com.adobe.cq.commerce.core.components.models.product.Product;
 import com.adobe.cq.commerce.core.components.models.productlist.ProductList;
 import com.day.cq.wcm.api.Page;
@@ -36,25 +31,17 @@ import static org.mockito.Mockito.when;
 
 public class PageHeadMetadataTest {
 
-    private static final String PRODUCT_RESOURCE_TYPE = "weretail/components/structure/product";
-    private static final String PRODUCT_GRID_RESOURCE_TYPE = "weretail/components/content/productgrid";
-
     private final SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
-    private final ModelFactory modelFactory = mock(ModelFactory.class);
-    private final SiteStructure siteStructure = mock(SiteStructure.class);
     private final Page currentPage = mock(Page.class);
+    private final CatalogPage catalogPage = mock(CatalogPage.class);
 
     @Test
-    public void testTakesTheProductPageMetadataFromTheProductComponentModel() throws Exception {
-        Resource productComponent = pageWithComponent(PRODUCT_RESOURCE_TYPE);
-        when(siteStructure.isProductPage(currentPage)).thenReturn(true);
-        Product cifProduct = mock(Product.class);
-        when(cifProduct.getMetaTitle()).thenReturn("El Gordo Down Jacket");
-        when(cifProduct.getMetaDescription()).thenReturn("A warm down jacket");
-        when(cifProduct.getCanonicalUrl()).thenReturn("/content/we-retail/us/en/products/product-page.html/el-gordo-down-jacket.html");
-        ProductModel productModel = new ProductModel();
-        setField(productModel, "cifProduct", cifProduct);
-        when(modelFactory.getModelFromWrappedRequest(request, productComponent, ProductModel.class)).thenReturn(productModel);
+    public void testTakesTheProductPageMetadataFromTheProduct() throws Exception {
+        Product product = mock(Product.class);
+        when(product.getMetaTitle()).thenReturn("El Gordo Down Jacket");
+        when(product.getMetaDescription()).thenReturn("A warm down jacket");
+        when(product.getCanonicalUrl()).thenReturn("/content/we-retail/us/en/products/product-page.html/el-gordo-down-jacket.html");
+        when(catalogPage.getProduct()).thenReturn(product);
 
         PageHeadMetadata metadata = metadata();
 
@@ -64,16 +51,12 @@ public class PageHeadMetadataTest {
     }
 
     @Test
-    public void testTakesTheCategoryPageMetadataFromTheProductGridModel() throws Exception {
-        Resource productGrid = pageWithComponent(PRODUCT_GRID_RESOURCE_TYPE);
-        when(siteStructure.isCategoryPage(currentPage)).thenReturn(true);
-        ProductList cifProductList = mock(ProductList.class);
-        when(cifProductList.getMetaTitle()).thenReturn("Coats");
-        when(cifProductList.getMetaDescription()).thenReturn("Coats for men");
-        when(cifProductList.getCanonicalUrl()).thenReturn("/content/we-retail/us/en/products/category-page.html/men/coats.html");
-        ProductGrid productGridModel = new ProductGrid();
-        setField(productGridModel, "cifProductList", cifProductList);
-        when(modelFactory.getModelFromWrappedRequest(request, productGrid, ProductGrid.class)).thenReturn(productGridModel);
+    public void testTakesTheCategoryPageMetadataFromTheProductList() throws Exception {
+        ProductList productList = mock(ProductList.class);
+        when(productList.getMetaTitle()).thenReturn("Coats");
+        when(productList.getMetaDescription()).thenReturn("Coats for men");
+        when(productList.getCanonicalUrl()).thenReturn("/content/we-retail/us/en/products/category-page.html/men/coats.html");
+        when(catalogPage.getProductList()).thenReturn(productList);
 
         PageHeadMetadata metadata = metadata();
 
@@ -83,34 +66,21 @@ public class PageHeadMetadataTest {
     }
 
     @Test
-    public void testFallsBackToThePageWithoutACommerceComponent() throws Exception {
-        pageWithComponent("weretail/components/content/text");
-        when(siteStructure.isProductPage(currentPage)).thenReturn(true);
+    public void testFallsBackToThePageWithoutCommerceData() throws Exception {
         when(currentPage.getTitle()).thenReturn("Summer Sale");
-        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/products/product-page");
+        when(currentPage.getPath()).thenReturn("/content/we-retail/us/en/summer-sale");
 
         PageHeadMetadata metadata = metadata();
 
         assertEquals("Summer Sale", metadata.getTitle());
-        assertEquals("/content/we-retail/us/en/products/product-page.html", metadata.getCanonicalUrl());
-    }
-
-    private Resource pageWithComponent(String resourceType) {
-        Resource component = mock(Resource.class);
-        when(component.isResourceType(resourceType)).thenReturn(true);
-        when(component.getChildren()).thenReturn(Collections.<Resource>emptyList());
-        Resource content = mock(Resource.class);
-        when(content.getChildren()).thenReturn(Collections.singletonList(component));
-        when(currentPage.getContentResource()).thenReturn(content);
-        return component;
+        assertEquals("/content/we-retail/us/en/summer-sale.html", metadata.getCanonicalUrl());
     }
 
     private PageHeadMetadata metadata() throws Exception {
         PageHeadMetadata metadata = new PageHeadMetadata();
         setField(metadata, "request", request);
-        setField(metadata, "modelFactory", modelFactory);
-        setField(metadata, "siteStructure", siteStructure);
         setField(metadata, "currentPage", currentPage);
+        setField(metadata, "catalogPage", catalogPage);
         Method initModel = PageHeadMetadata.class.getDeclaredMethod("initModel");
         initModel.setAccessible(true);
         initModel.invoke(metadata);

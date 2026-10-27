@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -32,7 +33,10 @@ import com.adobe.cq.commerce.core.components.models.retriever.AbstractProductRet
 import com.day.cq.wcm.api.Page;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ProductModelTest {
@@ -65,6 +69,26 @@ public class ProductModelTest {
 
         assertNotNull(productModel.getProductItem());
         assertNotNull(productModel.getProductItem().getTitle());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testRequestsTheShortDescriptionOutsideAProductPage() throws Exception {
+        ProductModel productModel = new ProductModel();
+        Product product = mock(Product.class);
+        AbstractProductRetriever retriever = mock(AbstractProductRetriever.class);
+        when(product.getProductRetriever()).thenReturn(retriever);
+
+        setField(productModel, "currentPage", mock(Page.class));
+        setField(productModel, "siteStructure", mock(SiteStructure.class));
+        setField(productModel, "cifProduct", product);
+
+        Method initMethod = ProductModel.class.getDeclaredMethod("initModel");
+        initMethod.setAccessible(true);
+        initMethod.invoke(productModel);
+
+        verify(retriever).extendProductQueryWith(any(Consumer.class));
+        assertNull(productModel.getProductItem());
     }
 
     private Product createProduct() {

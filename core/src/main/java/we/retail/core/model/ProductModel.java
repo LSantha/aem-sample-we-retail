@@ -53,13 +53,10 @@ public class ProductModel {
 
     @PostConstruct
     private void initModel() {
-        if (siteStructure == null || currentPage == null || !siteStructure.isProductPage(currentPage)) {
-            return;
-        }
-
         try {
             ProductItem.requestShortDescription(cifProduct);
-            if (isUsableRouteProduct(cifProduct)) {
+            if (siteStructure != null && currentPage != null && siteStructure.isProductPage(currentPage)
+                && isUsableRouteProduct(cifProduct)) {
                 productItem = new ProductItem(cifProduct, request, currentPage);
             }
         } catch (RuntimeException e) {
