@@ -82,8 +82,7 @@ public final class LegacyDiscovery {
     }
 
     private static String fetchInfinityJson(String sourceUrl, String authorization) {
-        try {
-            var client = java.net.http.HttpClient.newHttpClient();
+        try (var client = java.net.http.HttpClient.newHttpClient()) {
             String url = sourceUrl.endsWith(".infinity.json") ? sourceUrl : sourceUrl + ".infinity.json";
             var b = java.net.http.HttpRequest.newBuilder(java.net.URI.create(url))
                     .header("Accept", "application/json")

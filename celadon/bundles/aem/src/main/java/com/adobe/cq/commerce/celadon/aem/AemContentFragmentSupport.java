@@ -15,6 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.commerce.celadon.aem;
 
+import com.adobe.cq.dam.cfm.ContentFragment;
+import com.adobe.cq.dam.cfm.FragmentTemplate;
+import com.day.cq.dam.api.AssetManager;
 import com.day.cq.tagging.Tag;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -32,14 +35,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
 public final class AemContentFragmentSupport {
-    private static final String CONTENT_FRAGMENT_CLASS = "com.adobe.cq.dam.cfm.ContentFragment";
-    private static final String FRAGMENT_TEMPLATE_CLASS = "com.adobe.cq.dam.cfm.FragmentTemplate";
-    private static final String CONTENT_ELEMENT_CLASS = "com.adobe.cq.dam.cfm.ContentElement";
-    private static final String CONTENT_VARIATION_CLASS = "com.adobe.cq.dam.cfm.ContentVariation";
-    private static final String FRAGMENT_DATA_CLASS = "com.adobe.cq.dam.cfm.FragmentData";
-    private static final String VARIATION_TEMPLATE_CLASS = "com.adobe.cq.dam.cfm.VariationTemplate";
-    private static final String ASSET_MANAGER_CLASS = "com.day.cq.dam.api.AssetManager";
-
     private AemContentFragmentSupport() {
     }
 
@@ -49,14 +44,14 @@ public final class AemContentFragmentSupport {
                                    String nodeName,
                                    String title) throws Exception {
         Resource existing = parent.getChild(nodeName);
-        if (existing != null && adapt(existing, CONTENT_FRAGMENT_CLASS) == null) {
+        if (existing != null && adapt(existing, ContentFragment.class) == null) {
             resolver.delete(existing);
             resolver.commit();
             existing = null;
         }
 
         if (existing == null) {
-            Object template = adapt(modelResource, FRAGMENT_TEMPLATE_CLASS);
+            Object template = adapt(modelResource, FragmentTemplate.class);
             if (template == null) {
                 throw new IllegalStateException("Product model does not adapt to FragmentTemplate");
             }
@@ -65,7 +60,7 @@ public final class AemContentFragmentSupport {
             existing = parent.getChild(nodeName);
         }
 
-        if (existing == null || adapt(existing, CONTENT_FRAGMENT_CLASS) == null) {
+        if (existing == null || adapt(existing, ContentFragment.class) == null) {
             throw new IllegalStateException("Failed to create content fragment at " + parent.getPath() + "/" + nodeName);
         }
         setFragmentTitle(existing, title);
@@ -134,8 +129,7 @@ public final class AemContentFragmentSupport {
             resolver.delete(existing);
             resolver.commit();
         }
-        Class<?> assetManagerClass = classForName(ASSET_MANAGER_CLASS);
-        Object assetManager = resolver.adaptTo(assetManagerClass);
+        Object assetManager = resolver.adaptTo(AssetManager.class);
         if (assetManager == null) {
             throw new IllegalStateException("AssetManager unavailable");
         }
@@ -231,21 +225,15 @@ public final class AemContentFragmentSupport {
     }
 
     private static Object requireFragment(Resource resource) throws Exception {
-        Object fragment = adapt(resource, CONTENT_FRAGMENT_CLASS);
+        Object fragment = adapt(resource, ContentFragment.class);
         if (fragment == null) {
             throw new IllegalStateException("Resource does not adapt to ContentFragment: " + resource.getPath());
         }
         return fragment;
     }
 
-    @SuppressWarnings("unchecked")
-    private static Object adapt(Resource resource, String className) throws Exception {
-        Class<?> clazz = classForName(className);
-        return resource.adaptTo((Class<Object>) clazz);
-    }
-
-    private static Class<?> classForName(String className) throws ClassNotFoundException {
-        return Class.forName(className);
+    private static Object adapt(Resource resource, Class<?> type) {
+        return resource.adaptTo(type);
     }
 
     private static Object invoke(Object target, String methodName, Object... args) throws Exception {
