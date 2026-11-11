@@ -47,7 +47,8 @@ import we.retail.core.model.CatalogPage;
 /**
  * Answers a product or category page whose product or category the catalog does not have with a 404, like classic
  * We.Retail did for missing product and category pages. CIF's own filter does the same for its product and product
- * list components, but does not find the We.Retail product and product grid components.
+ * list components, but does not find the We.Retail product and product grid components. Only page renders are checked:
+ * requests with selectors, such as the header include, render a part of the page and pass through.
  */
 @Component(
     service = Filter.class,
@@ -91,6 +92,9 @@ public class CatalogPageNotFoundFilter implements Filter {
     public void destroy() {}
 
     private boolean isNotFound(SlingHttpServletRequest request, SlingHttpServletResponse response) {
+        if (request.getRequestPathInfo().getSelectorString() != null) {
+            return false;
+        }
         Page page = request.getResource().adaptTo(Page.class);
         SiteStructure siteStructure = page != null ? page.adaptTo(SiteStructure.class) : null;
         if (siteStructure == null || page.getContentResource() == null

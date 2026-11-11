@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.models.factory.ModelFactory;
@@ -52,12 +53,14 @@ public class CatalogPageNotFoundFilterTest {
     private final SiteStructure siteStructure = mock(SiteStructure.class);
     private final SlingBindings bindings = new SlingBindings();
     private final CatalogPage catalogPage = mock(CatalogPage.class);
+    private final RequestPathInfo requestPathInfo = mock(RequestPathInfo.class);
     private CatalogPageNotFoundFilter filter;
 
     @Before
     public void setUp() throws Exception {
         Resource resource = mock(Resource.class);
         when(request.getResource()).thenReturn(resource);
+        when(request.getRequestPathInfo()).thenReturn(requestPathInfo);
         when(request.getAttribute(SlingBindings.class.getName())).thenReturn(bindings);
         when(resource.adaptTo(Page.class)).thenReturn(page);
         when(page.adaptTo(SiteStructure.class)).thenReturn(siteStructure);
@@ -96,6 +99,20 @@ public class CatalogPageNotFoundFilterTest {
         filter.doFilter(request, response, chain);
 
         verify(chain).doFilter(request, response);
+        verify(modelFactory, never()).getModelFromWrappedRequest(any(SlingHttpServletRequest.class), any(Resource.class),
+            any(Class.class));
+    }
+
+    @Test
+    public void testLeavesSelectorRequestsOfACatalogPageAlone() throws Exception {
+        when(requestPathInfo.getSelectorString()).thenReturn("header_include");
+        when(siteStructure.isCategoryPage(page)).thenReturn(true);
+        when(catalogPage.isNotFound()).thenReturn(true);
+
+        filter.doFilter(request, response, chain);
+
+        verify(chain).doFilter(request, response);
+        verify(response, never()).sendError(anyInt());
         verify(modelFactory, never()).getModelFromWrappedRequest(any(SlingHttpServletRequest.class), any(Resource.class),
             any(Class.class));
     }

@@ -90,6 +90,9 @@ a product or category the catalog does not have answers with a 404 in every WCM 
 classic We.Retail: `we.retail.core.commerce.cif.CatalogPageNotFoundFilter` asks `CatalogPage`
 (CIF's own filter does not find the We.Retail components). The template pages, which name
 none, keep CIF's rule: 404 on publish, CIF's placeholder data on author, so they stay editable.
+Only page renders are checked: requests with selectors render a part of the page and pass
+through, e.g. the header include (`<page>.header_include.html`) the header script loads on
+publish, which has no product or category in its URL.
 
 Breadcrumbs keep the classic `we-retail-product-page` policy (start level 5, current page
 hidden); `CatalogBreadcrumb` applies it to the trail the CIF breadcrumb builds on category
