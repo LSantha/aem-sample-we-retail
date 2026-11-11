@@ -44,6 +44,8 @@
         <magento.graphql.version>9.1.0-magento242ee</magento.graphql.version>
         <celadon.version>0.1.0-SNAPSHOT</celadon.version>
         <test.jvm.opens />
+        <!-- set by jacoco:prepare-agent (Cloud Manager builds), empty otherwise -->
+        <argLine />
     </properties>
 
     <scm>
@@ -269,7 +271,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.18.1</version>
                     <configuration>
-                        <argLine>${test.jvm.opens}</argLine>
+                        <argLine>@{argLine} ${test.jvm.opens}</argLine>
                     </configuration>
                 </plugin>
                 <!-- Maven Failsafe Plugin -->
@@ -278,7 +280,7 @@
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>2.18.1</version>
                     <configuration>
-                        <argLine>${test.jvm.opens}</argLine>
+                        <argLine>@{argLine} ${test.jvm.opens}</argLine>
                     </configuration>
                 </plugin>
                 <!-- Maven Deploy Plugin -->
